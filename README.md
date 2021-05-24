@@ -5,6 +5,7 @@
 - Apache 2.4.49
 - MySQL 5.7.34
 - Git 2.31.1
+- PHPUnit 8.5.14
 - HTML
 - Vanilla JavaScript
 - CSS
