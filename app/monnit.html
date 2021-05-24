@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <script>
+        let init = () => {
+            const jsonData = {
+                "gatewayMessage":{ 
+                    "gatewayID":"949380" 
+                    , "gatewayName":"LTE Gateway - 949380" 
+                    , "accountID":"2", "networkID":"3" 
+                    , "messageType":"0" 
+                    , "power":"0"
+                    , "batteryLevel": "101" 
+                    , "date": "2020-11-05 14:47:54"
+                    , "count":"1"
+                    , "signalStrength": "16"
+                    , "pendingChange": "False" 
+                }
+                ,"sensorMessages":[
+                    { 
+                        "sensorID":"528911" 
+                        , "sensorName":"Temperature - 528911"
+                        , "applicationID":"2"
+                        , "networkID":"3"
+                        , "dataMessageGUID":"cc38918c-00ae-4ae2-b990-afb948f3e27b"
+                        , "state": "17"
+                        , "messageDate": "2020-11-05 14:47:54"
+                        , "rawData":"22.6"
+                        , "dataType": "TemperatureData"
+                        , "dataValue": "22.6"
+                        , "plotValues": "72.68"
+                        , "plotLabels": "Fahrenheit"
+                        , "batteryLevel": "100"
+                        , "signalStrength": "92"
+                        , "pendingChange": "True"
+                        , "voltage": "3.24"
+                    }
+                ]
+            };
+
+            console.log(jsonData.sensorMessages[0].sensorID);
+            /*
+            let xhr = new XMLHttpRequest();
+            xhr.open("GET", "/app/monnit.html", true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            document.write("test");
+            xhr.send(xhr.statusText);
+            */
+            
+        }
+        window.onload = init;
+        
+    </script>
+
+</head>
+<body>
+    
+</body>
+</html>
