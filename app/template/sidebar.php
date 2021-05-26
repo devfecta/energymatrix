@@ -3,15 +3,10 @@
     <div class="position-sticky pt-3">
         <div class="nav flex-column">
             <div class="accordion" id="sidebarMenu">
-                <div class="accordion-item">
-                    <h2 class="accordion-header" id="dashboardHeader">
-                    <button onclick="window.location.href='index.php'" class="btn btn-light m-2 text-nowrap" type="button">
-                        <span class="fas fa-home"></span> Dashboard
-                    </h2>
-                </div>
 
                 <?php if ((float)$_SESSION['type'] == 0) { ?>
                     <!-- User Sidebar -->
+                    <!--
                     <div class="accordion-item" id="sidebarNav">
                         <h2 class="accordion-header" id="sensorsHeader">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sensorMenuItems" aria-expanded="false" aria-controls="sensorMenuItems">
@@ -22,6 +17,7 @@
                             <div id="userSensors" class="accordion-body p-0"></div>
                         </div>
                     </div>
+                    -->
                     <!--
                     <div class="accordion-item">
                         <h2 class="accordion-header" id="placeHolderHeader">
@@ -138,12 +134,6 @@
                     </script>
 
                 <?php } ?>
-                    <div class="accordion-item">
-                        <h2 class="accordion-header" id="logoutHeader">
-                        <button onclick="window.location.href='logout.php'" class="btn btn-light m-2 text-nowrap" type="button">
-                            <span class="fas fa-sign-out-alt"></span> Logout
-                        </h2>
-                    </div>
             </div>
         </div>
     </div>
