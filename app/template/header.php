@@ -43,8 +43,6 @@
             <div class="row">
 
             <?php
-                ob_start();
-                session_start();
                 include("template/sidebar.php");
             ?>
 

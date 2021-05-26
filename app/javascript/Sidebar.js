@@ -1,12 +1,154 @@
-class Sidebar {
+import Services from "./Services.js";
 
-    constructor() {}
+class Sidebar extends Services {
+
+    //apiServices = new Services();
+
+    constructor(sidebarMenu, userType) {
+        // Brings in the extended class.
+        super();
+        
+        console.log(sidebarMenu);
+        console.log(userType);
+        if (userType > 0) {
+            this.getAdminSidebar(sidebarMenu);
+        }
+    }
+    /**
+     * Creates the Add Company button.
+     *
+     * @return  {div}  div element
+     */
+    getAddCompanyButton = () => {
+        const menuButton = document.createElement("div");
+        menuButton.setAttribute("class", "accordion-item");
+        menuButton.setAttribute("id","addCompanyButton");
+
+        //const menuButtonHeader = document.createElement("h2");
+        //menuButtonHeader.setAttribute("class", "accordion-header");
+        //menuButtonHeader.setAttribute("id", "#addCompanyButtonHeader");
+
+        const addCompanyButton = document.createElement("button");
+        addCompanyButton.setAttribute("type", "button");
+        addCompanyButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        addCompanyButton.addEventListener("click", (event) => {
+            //console.log(event);
+            window.location.href = "register.php"
+        }, false);
+        addCompanyButton.innerHTML = '<span class="fas fa-plus-square"></span> Add Company';
+
+        //menuButtonHeader.append(addCompanyButton);
+        menuButton.append(addCompanyButton);
+
+        return menuButton;
+    }
+    /**
+     * Creates the Add Sensor button.
+     *
+     * @return  {div}  div element
+     */
+     getAddSensorButton = (companyId) => {
+        const menuButton = document.createElement("div");
+        menuButton.setAttribute("class", "accordion-item");
+        menuButton.setAttribute("id","addSensorButton");
+
+        const addButton = document.createElement("button");
+        addButton.setAttribute("type", "button");
+        addButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        addButton.addEventListener("click", (event) => {
+            window.location.href = "addSensor.php?userId="+companyId
+        }, false);
+        addButton.innerHTML = '<span class="fas fa-plus-square"></span> Add Sensor';
+
+        menuButton.append(addButton);
+
+        return menuButton;
+    }
+
+    getAdminSidebar = (sidebarMenu) => {
+        sidebarMenu.append(this.getCompaniesMenu());
+    }
+
+    getCompaniesMenu = () => {
+        const menuButton = document.createElement("div");
+        menuButton.setAttribute("class", "accordion-item");
+        menuButton.setAttribute("id","companiesButton");
+
+        const companiesButton = document.createElement("button");
+        companiesButton.setAttribute("type", "button");
+        companiesButton.setAttribute("class", "accordion-button collapsed");
+        companiesButton.setAttribute("data-bs-toggle", "collapse");
+        companiesButton.setAttribute("data-bs-target", "#companies");
+        companiesButton.setAttribute("aria-expanded", "false");
+        companiesButton.setAttribute("aria-controls", "companies");
+        companiesButton.innerHTML = '<span class="fas fa-building pe-1"></span> Companies';
+        // Appends the Companies button.
+        menuButton.append(companiesButton);
+        // Append the whole menuList to the companies button.
+        menuButton.append(this.getCompanyMenuList());
+
+        return menuButton;
+    }
 
     /**
-     * Appends the companies menus to the admin sidebar.
+     * Appends the list of companies to the companies menu in the admin sidebar.
      */
-    getCompaniesMenu = (menu) => {
+    getCompanyMenuList = () => {
 
+        // Creates the sub-menu area for the add companies button and list of companies.
+        const menu = document.createElement("div");
+        menu.setAttribute("id","companies");
+        menu.setAttribute("class", "accordion-collapse collapse");
+        menu.setAttribute("aria-labelledby", "companiesButton");
+        menu.setAttribute("data-bs-parent", "#companiesButton");
+        // Appends the Add Company button.
+        menu.append(this.getAddCompanyButton());
+
+        this.getApi("Users", "getCompanies")
+        .then(companies => {
+            companies.forEach(company => {
+                // Company menu item.
+                const companyMenu = document.createElement('div');
+                companyMenu.setAttribute("class", "accordion-item");
+                companyMenu.setAttribute("id","companyMenu" + company.id);
+                // Company button with the company name.
+                const companyButton = document.createElement('button');
+                companyButton.setAttribute("class", "accordion-button collapsed");
+                companyButton.setAttribute("type", "button");
+                companyButton.setAttribute("data-bs-toggle", "collapse");
+                companyButton.setAttribute("data-bs-target", "#sensorsMenuItems" + company.id);
+                companyButton.setAttribute("aria-expanded", "false");
+                companyButton.setAttribute("aria-controls", "sensorsMenuItems" + company.id);
+                companyButton.innerHTML = company.company + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${company.id})</em>`;
+                // Appends the company button with the company name.                
+                companyMenu.append(companyButton);
+
+
+
+                
+                companyMenu.append(this.getSensorsMenu(company.id));
+
+                
+
+
+                
+                // Pass the specific company menu item to get the sensors.
+                //console.log(this.getSensorMenu(company.id));
+                //companyMenu.append(this.getSensorMenu(company.id));
+
+                //let sensorMenu = companySensorMenu.append();
+
+                
+
+                menu.append(companyMenu);
+            });
+            
+        })
+        .catch(error => console.log(error));
+
+        return menu;
+
+        /*
         getApi("Users", "getCompanies")
         .then(companies => {
             
@@ -141,7 +283,91 @@ class Sidebar {
             });        
         })
         .catch(error => console.log(error));
+        */
     }
+
+
+    getSensorsMenu = (companyId) => {
+
+
+        // Creates the sub-menu area for the add sensor button and list of sensors.
+        const menu = document.createElement("div");
+        menu.setAttribute("id","sensorsMenuItems" + companyId);
+        menu.setAttribute("class", "accordion-collapse collapse");
+        menu.setAttribute("aria-labelledby", "companyMenu" + companyId);
+        menu.setAttribute("data-bs-parent", "#companyMenu" + companyId);
+        menu.append(this.getAddSensorButton());
+
+        const menuButton = document.createElement("div");
+        menuButton.setAttribute("class", "accordion-item");
+        menuButton.setAttribute("id","sensorsButton" + companyId);
+
+        const sensorsButton = document.createElement("button");
+        sensorsButton.setAttribute("type", "button");
+        sensorsButton.setAttribute("class", "accordion-button collapsed");
+        sensorsButton.setAttribute("data-bs-toggle", "collapse");
+        sensorsButton.setAttribute("data-bs-target", "#sensors" + companyId);
+        sensorsButton.setAttribute("aria-expanded", "false");
+        sensorsButton.setAttribute("aria-controls", "sensors" + companyId);
+        sensorsButton.innerHTML = '<span class="fas fa-satellite-dish pe-1"></span> Sensors';
+
+        menuButton.append(sensorsButton);
+        menuButton.append(this.getSensorMenuList(companyId));
+
+
+        menu.append(menuButton);
+
+
+        return menu;
+    }
+
+    getSensorMenuList = (companyId) => {
+
+        const menu = document.createElement("div");
+        menu.setAttribute("id","sensors" + companyId);
+        menu.setAttribute("class", "accordion-collapse collapse");
+        menu.setAttribute("aria-labelledby", "sensorsButton" + companyId);
+        menu.setAttribute("data-bs-parent", "#sensorsButton" + companyId);
+
+        this.getApi("Sensors", "getUserSensors", "userId=" + companyId)
+        .then(sensors => {
+            console.log(sensors);
+
+            sensors.forEach(sensor => {
+                // Sensor Menu Item
+                const sensorsMenuItem = document.createElement('div');
+                sensorsMenuItem.setAttribute("id", "sensorsMenuItem" + sensor.id);
+                sensorsMenuItem.setAttribute("class", "accordion-item d-flex justify-content-between");
+                // View Sensor Button
+                const menuLink = document.createElement('button');
+                menuLink.setAttribute("class", "btn btn-light text-nowrap");
+                menuLink.setAttribute("style", "text-align: left");
+                menuLink.setAttribute("value", companyId)
+                menuLink.addEventListener("click", (e) => {
+                    document.cookie = "userId="+e.target.value;
+                    window.location.href = "sensor.php?sensorId="+sensor.id
+                }, false);
+                menuLink.innerHTML = sensor.sensor_name;
+                // Edit Sensor Button
+                const editLink = document.createElement("button");
+                editLink.setAttribute("class", "btn btn-light text-nowrap align-item-end");
+                editLink.setAttribute("type", "button");
+                editLink.onclick = () => { window.location.href = "editSensor.php?sensorId=" +sensor.id }
+                editLink.innerHTML = `<span class="fas fa-pen-square"></span>`;
+                // Add Sensor Buttons to Menu Item
+                sensorsMenuItem.append(menuLink);
+                sensorsMenuItem.append(editLink);
+                // Add Menu Item to Sensor Group
+                menu.append(sensorsMenuItem);
+            });
+
+        })
+        .catch(error => console.log(error));
+
+        return menu;
+        
+    }
+
     /**
      * Adds menu items to the user's sidebar by creating HTML button elements for specific menu categories.
      */

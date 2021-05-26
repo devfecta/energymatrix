@@ -2,10 +2,17 @@ import Sidebar from "./Sidebar.js";
 
 const init = () => {
 
-    const sidebar = new Sidebar();
-    
     let userType = document.cookie.match(new RegExp('userType=([^=;]+)'));
+
+    const sidebarMenu = document.querySelector('#sidebarMenu');
+
+    const sidebar = new Sidebar(sidebarMenu, userType[1]);
+    
+    /*
     console.log(userType);
+
+    sidebar.getSidebar();
+
     if (userType[1] <= 1) {
         console.log(userType[1]);
         
@@ -14,7 +21,7 @@ const init = () => {
     else {
         sidebar.getCompaniesMenu(document.querySelector("#companiesMenu"));
     }
-    
+    */
    // 
     /*
     const currentDataTime = new Date();

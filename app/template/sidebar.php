@@ -8,7 +8,7 @@
                     <button onclick="window.location.href='index.php'" class="btn btn-light m-2 text-nowrap" type="button">
                         <span class="fas fa-home"></span> Dashboard
                     </h2>
-                </div>     
+                </div>
 
                 <?php if ((float)$_SESSION['type'] == 0) { ?>
                     <!-- User Sidebar -->
@@ -43,6 +43,7 @@
                 <?php } else { ?>
 
                     <!-- Admin Sidebar -->
+                    <!--
                     <div class="accordion-item" id="companiesNav">
                         <h2 class="accordion-header" id="companiesHeader">
                             <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#companies" aria-expanded="false" aria-controls="companies">
@@ -63,6 +64,7 @@
 
                         </div>
                     </div>
+                    -->
                     <!-- REMOVED NOT NEEDED
                     <div class="accordion-item" id="sensorsNav">
                         <h2 class="accordion-header" id="sensorsHeader">
