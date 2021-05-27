@@ -43,7 +43,7 @@
             <div class="row">
 
             <?php
-                include("template/sidebar.php");
+                include("./template/sidebar.php");
             ?>
 
 

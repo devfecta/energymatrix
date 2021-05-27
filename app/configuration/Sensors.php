@@ -95,30 +95,29 @@
                 $statement = $connection->prepare("INSERT INTO `sensors` (
                     `id`,
                     `user_id`,
-                    `sensor_name`,
-                    `attributes`
+                    `sensor_name`
                 ) 
                 VALUES (
                     :sensor_id,
                     :user_id,
-                    :sensor_name,
-                    :attribute
+                    :sensor_name
                 )");
                 // Convert sensor attributes to a string for the database.
                 $sensorAttributes = $data->sensorAttributes;
 
                 $statement->bindParam(":sensor_id", $data->sensorId, PDO::PARAM_INT);
                 $statement->bindParam(":user_id", $data->company, PDO::PARAM_INT);
-                $statement->bindParam(":sensor_name", $data->sensorName, PDO::PARAM_STR);
-                $statement->bindParam(":attribute", $sensorAttributes, PDO::PARAM_STR);
+               // $statement->bindParam(":sensor_name", $data->sensorName, PDO::PARAM_STR);
                 $result = $statement->execute() ? true : false;
 
             }
             catch(PDOException $pdo) {
                 error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                $result = false;
             }
             catch (Exception $e) {
                 error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                $result = false;
             }
             finally {
                 Configuration::closeConnection();

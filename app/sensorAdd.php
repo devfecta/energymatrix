@@ -6,12 +6,16 @@
     require_once('configuration/Users.php');
 ?>
 
+<script type="module" src="./javascript/sensorAdd.js"></script>
+
 <section class="container-fluid row">
     
     <div class="col-md-12">
         <!-- action="api.php?class=Sensors&method=addSensor" -->
         <form class="form-signin needs-validation" method="post" enctype="application/x-www-form-urlencoded" novalidate>
             <h1 class="h3 mb-3 font-weight-normal">Add Sensor</h1>
+
+            <div id="message" class="alert" role="alert"></div>
 
             <div class="row">
                 <div class="col-md-12 form-group">
@@ -22,7 +26,7 @@
                             $companies = $Users->getCompanies();
 
                             foreach ($companies as $company) {
-                                $selected = ($_GET['userId'] == $company->getId()) ? ' selected' : '';
+                                $selected = ($_GET['companyId'] == $company->getId()) ? ' selected' : '';
                                 echo '<option value="' . $company->getId() . '"' . $selected . '>' . $company->getCompany() . '</option>';
                             }
 
@@ -43,17 +47,17 @@
                     <input type="text" class="form-control" id="sensorName" name="sensorName" maxlength="32" required />
                 </div>
             </div>
-
+<!--
             <div class="row">
                 <div class="col-md-12 form-group">
                     <label for="sensorAttributes">Sensor Attributes: (JSON)</label>
                     <input type="text" class="form-control" id="sensorAttributes" name="sensorAttributes" placeholder='{"name": "value", "name": "value"}' maxlength="32" />
                 </div>
             </div>
-
+-->
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <button class="btn btn-lg btn-primary mt-2" onclick="addSensor(this.form.elements);" type="button">Add Sensor</button>
+                    <button type="button" id="addSensorButton" class="btn btn-lg btn-primary mt-2">Add Sensor</button>
                 </div>
             </div>
 

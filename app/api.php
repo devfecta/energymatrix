@@ -66,12 +66,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                                 if ($result->type > 0) {
                                     setcookie("adminId", $result->id, time()+3600);
-                                    setcookie("userType", $result->type, time()+3600);
                                 }
                                 else {
                                     setcookie("userId", $result->id, time()+3600);
-                                    setcookie("userType", $result->type, time()+3600);
                                 }
+
+                                setcookie("userType", $result->type, time()+3600);
 
                                 header("Location: index.php");
 

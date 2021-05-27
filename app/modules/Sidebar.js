@@ -79,8 +79,9 @@ class Sidebar extends Services {
         const addButton = document.createElement("button");
         addButton.setAttribute("type", "button");
         addButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        addButton.setAttribute("value", companyId);
         addButton.addEventListener("click", (event) => {
-            window.location.href = "addSensor.php?userId="+companyId
+            window.location.href = "sensorAdd.php?companyId=" + event.target.value
         }, false);
         addButton.innerHTML = '<span class="fas fa-plus-square"></span> Add Sensor';
 
@@ -178,6 +179,8 @@ class Sidebar extends Services {
         if (document.cookie.includes('; ') && document.cookie.includes('userType')) {
             userType = document.cookie.split('; ').find(c => c.startsWith('userType')).split('=')[1];
         }
+
+        
         // Creates the sub-menu area for the add sensor button and list of sensors.
         const menu = document.createElement("div");
         menu.setAttribute("id","sensorsMenuItems" + companyId);
@@ -185,7 +188,7 @@ class Sidebar extends Services {
             menu.setAttribute("class", "accordion-collapse border-0 collapse");
             menu.setAttribute("aria-labelledby", "companyMenu" + companyId);
             menu.setAttribute("data-bs-parent", "#companyMenu" + companyId);
-            menu.append(this.getAddSensorButton());
+            menu.append(this.getAddSensorButton(companyId));
         }
         else { }
 
@@ -203,7 +206,7 @@ class Sidebar extends Services {
         sensorsButton.innerHTML = '<span class="fas fa-satellite-dish pe-1"></span> Sensors';
 
         menuButton.append(sensorsButton);
-        menuButton.append(this.getSensorMenuList(companyId));
+        menuButton.append(this.getSensorMenuList(companyId, userType));
 
         menu.append(menuButton);
 
@@ -216,7 +219,7 @@ class Sidebar extends Services {
      *
      * @return  {HTMLElement}
      */
-    getSensorMenuList = (companyId) => {
+    getSensorMenuList = (companyId, userType) => {
 
         const menu = document.createElement("div");
         menu.setAttribute("id","sensors" + companyId);
@@ -259,7 +262,11 @@ class Sidebar extends Services {
                 // Add Sensor Buttons to Menu Item
                 sensorsMenuItem.append(menuLink);
                 sensorsMenuItem.append(trendsButton);
-                sensorsMenuItem.append(editButton);
+                if (userType > 0) {
+                    sensorsMenuItem.append(editButton);
+                }
+                else {}
+                
                 // Add Menu Item to Sensor Group
                 menu.append(sensorsMenuItem);
             });
