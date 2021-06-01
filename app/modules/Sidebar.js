@@ -250,14 +250,14 @@ class Sidebar extends Services {
                 editButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
                 editButton.setAttribute("type", "button");
                 editButton.setAttribute("title", "Edit Sensor");
-                editButton.onclick = () => { window.location.href = "sensorEdit.php?sensorId=" +sensor.id }
+                editButton.onclick = () => { window.location.href = "sensorEdit.php?sensorId=" + sensor.id + "&userId=" + companyId }
                 editButton.innerHTML = `<span class="fas fa-pen-square"></span>`;
                 // Sensor Trends Button
                 const trendsButton = document.createElement("button");
                 trendsButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
                 trendsButton.setAttribute("type", "button");
                 trendsButton.setAttribute("title", "View Sensor Trends");
-                trendsButton.onclick = () => { window.location.href = "sensorTrends.php?sensorId=" +sensor.id }
+                trendsButton.onclick = () => { window.location.href = "sensorTrends.php?sensorId=" + sensor.id + "&userId=" + companyId }
                 trendsButton.innerHTML = `<span class="fas fa-chart-line"></span>`;
                 // Add Sensor Buttons to Menu Item
                 sensorsMenuItem.append(menuLink);

@@ -130,10 +130,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     switch ($_POST['method']) {
                         case "addSensor":
                             $result =  $Sensors->addSensor($_POST);
-
-                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $result . "\n", 3, "/var/www/html/app/php-errors.log");
                             echo $result;
-
                             break;
                         default:
                             echo json_encode(array("error" => 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.\n'), JSON_PRETTY_PRINT);
@@ -179,9 +176,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             $userSensors = $Sensors->getUserSensors($_GET['userId']);
 
                             $sensorArray = array();
-                            
+
                             foreach($userSensors as $sensor) {
-                                array_push($sensorArray, array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName()));    
+                                
+                                array_push($sensorArray, array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "user_id" => $sensor->getUserId()));    
                             }
 
                             echo json_encode($sensorArray);
@@ -191,9 +189,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             $sensors = $Sensors->getSensors();
 
                             $sensorsArray = array();
-                            
+
                             foreach($sensors as $sensor) {
-                                array_push($sensorsArray, array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName()));    
+                                array_push($sensorsArray, array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "user_id" => $sensor->getUserId()));    
                             }
 
                             echo json_encode($sensorsArray);
@@ -207,9 +205,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     $sensor = new Sensor();
                     switch ($_GET['method']) {
                         case "getSensor":
-                            $sensor = Sensor::getSensor($_GET['sensorId']);
 
-                            $sensorArray = array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName());
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $_GET['sensorId'] .' = '. $_GET['userId'] . "\n", 3, "/var/www/html/app/php-errors.log");
+                            $sensor = Sensor::getSensor($_GET['sensorId'], $_GET['userId']);
+
+                            $sensorArray = array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "user_id" => $sensor->getUserId());
 
                             echo json_encode($sensorArray);
 

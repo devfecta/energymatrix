@@ -20,14 +20,15 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT `id` FROM `sensors` WHERE `user_id`=:user_id");
+                $statement = $connection->prepare("SELECT `id`, `user_id` FROM `sensors` WHERE `user_id`=:user_id");
                 $statement->bindValue(":user_id", $userId, PDO::PARAM_INT);
                 $statement->execute();
 
                 $results = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
                 foreach ($results as $sensor) {
-                    array_push($sensors, Sensor::getSensor($sensor['id']));
+
+                    array_push($sensors, Sensor::getSensor($sensor['id'], $sensor['user_id']));
                 }
 
             }
@@ -57,13 +58,13 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT `id` FROM `sensors` GROUP BY `id`");
+                $statement = $connection->prepare("SELECT `id`, `user_id` FROM `sensors` GROUP BY `id`");
                 $statement->execute();
 
                 $results = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
                 foreach ($results as $sensor) {
-                    array_push($sensors, Sensor::getSensor($sensor['id']));
+                    array_push($sensors, Sensor::getSensor($sensor['id'], $sensor['user_id']));
                 }
 
             }

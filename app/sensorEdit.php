@@ -6,14 +6,14 @@
     require_once('configuration/Users.php');
 ?>
 
-<script type="module" src="./javascript/sensorAdd.js"></script>
+<script type="module" src="./javascript/sensorEdit.js"></script>
 
 <section class="container-fluid row">
     
     <div class="col-md-12">
         <!-- action="api.php?class=Sensors&method=addSensor" -->
         <form class="form-signin needs-validation" method="post" enctype="application/x-www-form-urlencoded" novalidate>
-            <h1 class="h3 mb-3 font-weight-normal">Add Sensor</h1>
+            <h1 class="h3 mb-3 font-weight-normal">Edit Sensor</h1>
 
             <div id="message" class="alert" role="alert"></div>
 
@@ -57,7 +57,8 @@
 -->
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <button type="button" id="addSensorButton" class="btn btn-lg btn-primary mt-2">Add Sensor</button>
+                    <button type="button" id="updateSensorButton" class="btn btn-lg btn-primary mt-2">Update Sensor</button>
+                    <button type="button" id="deleteSensorButton" class="btn btn-lg btn-danger mt-2">Delete Sensor</button>
                 </div>
             </div>
 

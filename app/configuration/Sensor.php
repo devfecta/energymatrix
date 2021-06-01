@@ -6,7 +6,6 @@
         private $sensorId = 0;
         private $userId = 0;
         private $sensorName = "";
-        private $sensorAttributes = [];
 
         function __construct() {}
 
@@ -17,7 +16,7 @@
          *
          * @return  Sensor  An instance of this Sensor object.
          */
-        public static function getSensor($sensorId) {
+        public static function getSensor($sensorId, $userId) {
 
             $sensor = new static();
 
@@ -25,8 +24,9 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT * FROM sensors WHERE id=:sensorId");
+                $statement = $connection->prepare("SELECT * FROM sensors WHERE `id`=:sensorId AND `user_id`=:userId");
                 $statement->bindParam(":sensorId", $sensorId);
+                $statement->bindParam(":userId", $userId);
                 $statement->execute();
 
                 $results = $statement->fetch(PDO::FETCH_ASSOC);
@@ -34,7 +34,6 @@
                 $sensor->setSensorId($results['id']);
                 $sensor->setUserId($results['user_id']);
                 $sensor->setSensorName($results['sensor_name']);
-                $sensor->setSensorAttributes($results['attributes']);
 
             }
             catch (PDOException $pdo) {
@@ -74,7 +73,7 @@
         public function setSensorName($name) {
             $this->sensorName = $name;
         }
-
+        /*
         public function getSensorAttributes() {
             return $this->sensorAttributes;
         }
@@ -82,6 +81,7 @@
         public function setSensorAttributes($attributes) {
             $this->sensorAttributes = $attributes;
         }
+        */
 
     }
 ?>

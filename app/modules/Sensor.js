@@ -22,6 +22,12 @@ class Sensor extends Services {
         // Need to add some sort of confirmation
     }
 
+    getSensor = async (sensorId, userId) => {
+        return await this.getApi("Sensor", "getSensor", "sensorId=" + sensorId + "&userId=" + userId)
+        .then(response => response)
+        .catch(e => console.log(e));
+    }
+
 }
 
 export default Sensor;
