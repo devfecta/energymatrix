@@ -250,7 +250,7 @@ class Sidebar extends Services {
                 editButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
                 editButton.setAttribute("type", "button");
                 editButton.setAttribute("title", "Edit Sensor");
-                editButton.onclick = () => { window.location.href = "editSensor.php?sensorId=" +sensor.id }
+                editButton.onclick = () => { window.location.href = "sensorEdit.php?sensorId=" +sensor.id }
                 editButton.innerHTML = `<span class="fas fa-pen-square"></span>`;
                 // Sensor Trends Button
                 const trendsButton = document.createElement("button");

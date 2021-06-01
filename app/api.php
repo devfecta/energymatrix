@@ -129,7 +129,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     $Sensors = new Sensors();
                     switch ($_POST['method']) {
                         case "addSensor":
-                            echo $Sensors->addSensor($_POST);
+                            $result =  $Sensors->addSensor($_POST);
+
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $result . "\n", 3, "/var/www/html/app/php-errors.log");
+                            echo $result;
+
                             break;
                         default:
                             echo json_encode(array("error" => 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.\n'), JSON_PRETTY_PRINT);

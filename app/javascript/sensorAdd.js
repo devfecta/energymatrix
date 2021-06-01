@@ -5,13 +5,24 @@ const sensor = new Sensor();
 const addSensorButton = document.querySelector("#addSensorButton");
 addSensorButton.addEventListener("click", (e) => {
     //document.cookie = "userId=" + e.target.value;
-    if (sensor.addSensor(document.forms[0])) {
-        document.querySelector("#message").classList.add("alert-success");
-        document.querySelector("#message").innerHTML = "Sensor Added";
-    }
-    else {
-        document.querySelector("#message").classList.add("alert-danger");
-        document.querySelector("#message").innerHTML = "Sensor Was Not Added";
-    }
+
+    sensor.addSensor(document.forms[0])
+    .then(response => {
+        if (response) {
+            document.querySelector("#message").classList.remove("alert-danger");
+            document.querySelector("#message").classList.add("alert-success");
+            document.querySelector("#message").innerHTML = "Sensor Added";
+            document.querySelectorAll('input[type="number"]').forEach(field => {field.value = ""});
+            document.querySelectorAll('input[type="text"]').forEach(field => {field.value = ""});
+
+        }
+        else {
+            document.querySelector("#message").classList.remove("alert-success");
+            document.querySelector("#message").classList.add("alert-danger");
+            document.querySelector("#message").innerHTML = "Sensor Was Not Added";
+        }
+    })
+    .catch(e => console.log(e));
+    
 }, false);
 

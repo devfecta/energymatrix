@@ -2,22 +2,21 @@ class Services {
 
     constructor() {}
 
-    postApi = (formData) => {
+    postApi = async (formData) => {
 
         //let params = new URLSearchParams(formData);
-        // console.log(formData);
+        //console.log(formData);
     
         const url = "./api.php";
     
-        return fetch(url, {
+        return await fetch(url, {
             method: 'POST',
             body: formData
         })
         .then(response => {
-            console.log(response.text());
             return response.json();
         })
-        .then(data => data)
+        //.then(data => data)
         .catch(error => console.log(error.toString()));
     
     }

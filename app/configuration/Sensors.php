@@ -83,11 +83,13 @@
 
         public function addSensor($formData) {
 
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $formData . "\n", 3, "/var/www/html/app/php-errors.log");
+
             $result = false;
 
             $data = json_decode(json_encode($formData), false);
 
-            error_log($data->sensorId . " = " . $data->company . " = " . $data->sensorName . " = " . $data->sensorAttributes);
+            //error_log($data->sensorId . " = " . $data->company . " = " . $data->sensorName . " = " . $data->sensorAttributes);
 
             try {
                 $connection = Configuration::openConnection();
@@ -107,21 +109,21 @@
 
                 $statement->bindParam(":sensor_id", $data->sensorId, PDO::PARAM_INT);
                 $statement->bindParam(":user_id", $data->company, PDO::PARAM_INT);
-               // $statement->bindParam(":sensor_name", $data->sensorName, PDO::PARAM_STR);
+                $statement->bindParam(":sensor_name", $data->sensorName, PDO::PARAM_STR);
                 $result = $statement->execute() ? true : false;
 
             }
             catch(PDOException $pdo) {
                 error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
-                $result = false;
             }
             catch (Exception $e) {
                 error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
-                $result = false;
             }
             finally {
                 Configuration::closeConnection();
             }
+
+            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $result . "\n", 3, "/var/www/html/app/php-errors.log");
 
             return $result;
         }
