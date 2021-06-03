@@ -132,6 +132,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             $result =  $Sensors->addSensor($_POST);
                             echo $result;
                             break;
+                        case "updateSensor":
+                            $result =  $Sensors->updateSensor($_POST);
+                            echo $result;
+                            break;
                         case "deleteSensor":
                             //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_POST, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                             $result =  $Sensors->deleteSensor($_POST['sensorId'], $_POST['userId']);

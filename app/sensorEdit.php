@@ -21,14 +21,16 @@
             <div class="row">
                 <div class="col-md-12 form-group">
                     <label for="company">Company: </label>
-                    <select class="form-control" id="company" name="company">
+                    <select class="form-control" id="company" name="company" readonly>
                         <?php
                             $Users = new Users();
                             $companies = $Users->getCompanies();
 
                             foreach ($companies as $company) {
-                                $selected = ($_GET['companyId'] == $company->getId()) ? ' selected' : '';
-                                echo '<option value="' . $company->getId() . '"' . $selected . '>' . $company->getCompany() . '</option>';
+                                $selected = ($_GET['userId'] == $company->getId()) ? ' selected' : '';
+                                if ($_GET['userId'] == $company->getId()) {
+                                    echo '<option value="' . $company->getId() . '"' . $selected . '>' . $company->getCompany() . '</option>';
+                                }
                             }
 
                         ?>
@@ -39,13 +41,18 @@
             <div class="row">
                 <div class="col-md-12 form-group">
                     <label for="sensorId">Sensor ID: </label>
-                    <input type="number" class="form-control" id="sensorId" name="sensorId" maxlength="6" required autofocus />
+                    <input type="number" class="form-control" id="sensorId" name="sensorId" maxlength="6" required readonly />
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12 form-group">
                     <label for="sensorName">Sensor Name: </label>
                     <input type="text" class="form-control" id="sensorName" name="sensorName" maxlength="32" required />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <p>NOTE: Any changes to the sensor name will need to be reflected on the sensor side too.</p>
                 </div>
             </div>
 <!--

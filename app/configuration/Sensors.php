@@ -115,7 +115,35 @@
             finally {
                 Configuration::closeConnection();
             }
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $result . "\n", 3, "/var/www/html/app/php-errors.log");
+            
+            return $result;
+        }
+
+        public function updateSensor($formData) {
+
+            $result = false;
+            $data = json_decode(json_encode($formData), false);
+
+            try {
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("UPDATE `sensors` SET `sensor_name`=:sensor_name WHERE `id`=:sensor_id AND `user_id`=:user_id");
+
+                $statement->bindParam(":sensor_id", $data->sensorId, PDO::PARAM_INT);
+                $statement->bindParam(":user_id", $data->userId, PDO::PARAM_INT);
+                $statement->bindParam(":sensor_name", $data->sensorName, PDO::PARAM_STR);
+                $result = $statement->execute() ? true : false;
+            }
+            catch(PDOException $pdo) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                Configuration::closeConnection();
+            }
+            
             return $result;
         }
 

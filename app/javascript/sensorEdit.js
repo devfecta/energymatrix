@@ -8,16 +8,42 @@ const sensorId = url.get("sensorId");
 
 sensor.getSensor(sensorId, userId)
 .then(response => {
-
+    /*
     const companys = document.querySelector("#company");
     companys.childNodes.forEach(company => {
         company.selected = (company.value == response.user_id) ? true : false;
     });
-
+    */
     const sensorId = document.querySelector("#sensorId");
     sensorId.value = response.id;
     const sensorName = document.querySelector("#sensorName");
     sensorName.value = response.sensor_name;
+
+    const updateSensorButton = document.querySelector("#updateSensorButton");
+    updateSensorButton.addEventListener("click", (event) => {
+        // Need to set so it can be passed into the promise.
+        let sensorId = document.forms[0].getElementsByTagName("input").namedItem("sensorId").value;
+        let sensorName = document.forms[0].getElementsByTagName("input").namedItem("sensorName").value;
+
+        sensor.updateSensor(document.forms[0])
+        .then(response => {
+            if (response) {
+                document.querySelector("#message").classList.remove("alert-danger");
+                document.querySelector("#message").classList.add("alert-success");
+                document.querySelector("#message").innerHTML = "Sensor Updated";
+
+                const menuItem = document.querySelector("#sensorsMenuItem" + sensorId);
+                menuItem.childNodes[0].innerHTML = sensorName;
+            }
+            else {
+                document.querySelector("#message").classList.remove("alert-success");
+                document.querySelector("#message").classList.add("alert-danger");
+                document.querySelector("#message").innerHTML = "Sensor Was Not Updated";
+            }
+        })
+        .catch(e => console.log(e));
+        
+    }, false);
 
     const deleteSensorButton = document.querySelector("#deleteSensorButton");
     deleteSensorButton.addEventListener("click", (event) => {
