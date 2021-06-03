@@ -104,12 +104,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             break;
                     }
                     break;
-                default;
+                default:
                     echo json_encode(array("error" => 'GET CLASS ERROR: The '.$_GET['class'].' class does not exist.\n'), JSON_PRETTY_PRINT);
                     break;
             }
         }
-        
+        // NEWER SECTION
         if (isset($_POST["class"])) {
             
             switch ($_POST['class']) {
@@ -121,7 +121,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo $DataPoints->getDataPoints((int)$_POST['userId'], $_POST['startDateTime'], $_POST['endDateTime']);
                             break;
                         default:
-                            echo json_encode(array("error" => 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.\n'), JSON_PRETTY_PRINT);
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
                     break;
@@ -132,13 +132,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             $result =  $Sensors->addSensor($_POST);
                             echo $result;
                             break;
+                        case "deleteSensor":
+                            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_POST, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            $result =  $Sensors->deleteSensor($_POST['sensorId'], $_POST['userId']);
+                            echo $result;
+                            break;
                         default:
-                            echo json_encode(array("error" => 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.\n'), JSON_PRETTY_PRINT);
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
                     break;
-                default;
-                    echo json_encode(array("error" => 'POST CLASS ERROR: The '.$_POST['class'].' class does not exist.\n'), JSON_PRETTY_PRINT);
+                default:
+                    error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET CLASS ERROR: The '.$_POST['class'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                     break;
             }
         }
@@ -164,7 +169,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                             break;
                         default:
-                            echo json_encode(array("error" => 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.\n'), JSON_PRETTY_PRINT);
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
                     break;
@@ -197,7 +202,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo json_encode($sensorsArray);
                             break;
                         default:
-                            echo json_encode(array("error" => 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.\n'), JSON_PRETTY_PRINT);
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
                     break;
@@ -206,7 +211,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     switch ($_GET['method']) {
                         case "getSensor":
 
-                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $_GET['sensorId'] .' = '. $_GET['userId'] . "\n", 3, "/var/www/html/app/php-errors.log");
                             $sensor = Sensor::getSensor($_GET['sensorId'], $_GET['userId']);
 
                             $sensorArray = array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "user_id" => $sensor->getUserId());
@@ -215,7 +219,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                             break;
                         default:
-                            echo json_encode(array("error" => 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.\n'), JSON_PRETTY_PRINT);
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
                     break;
@@ -257,40 +261,21 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo $dataPoints->getDataPoints((int)$_GET['userId'], $_GET['startDateTime'], 'null');
                             break;
                         default:
-                            echo json_encode(array("error" => 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.\n'), JSON_PRETTY_PRINT);
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
                     break;
-                default;
-                    echo json_encode(array("error" => 'GET CLASS ERROR: The '.$_GET['class'].' class does not exist.\n'), JSON_PRETTY_PRINT);
+                default:
+                    error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET CLASS ERROR: The '.$_GET['class'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                     break;
             }
         } else {
            // echo json_encode(array("error" => 'GET ERROR: Form type not set.\n'), JSON_PRETTY_PRINT);
         }
         break;
-        
-    case "PUT":
-        //echo "REQUEST_METHOD Put";
-        // Updates
-        if (isset($_REQUEST['formType'])) {
-            
-        } else {
-            echo json_encode(array("error" => 'PUT ERROR: Form type not set.\n'), JSON_PRETTY_PRINT);
-        }
-        break;
-        
-    case "DELETE":
-        //echo "REQUEST_METHOD Delete";
-        // Deletes
-        if (isset($_GET['formType'])) {
-            
-        } else {
-            echo json_encode(array("error" => 'DELETE ERROR: Form type not set.\n'), JSON_PRETTY_PRINT);
-        }
-        break;
     default:
         //echo "REQUEST_METHOD Default";
+        error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " REQUEST_METHOD NOT FOUND " . "\n", 3, "/var/www/html/app/php-errors.log");
         break;
 }
 

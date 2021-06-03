@@ -33,6 +33,22 @@ class Services {
         .catch(error => console.log(error));
     
     }
+
+    deleteApi = async (formData) => {
+    
+        //let formData = 'class=' + className + '&method=' + methodName + '&' + parameters;
+    
+        let url = "./api.php";
+    
+        return await fetch(url, {
+            method: 'DELETE',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(json => json)
+        .catch(error => console.log(error));
+    
+    }
 }
 
 export default Services;

@@ -3,7 +3,7 @@ import Sensor from "../modules/Sensor.js";
 const sensor = new Sensor();
 
 const addSensorButton = document.querySelector("#addSensorButton");
-addSensorButton.addEventListener("click", (e) => {
+addSensorButton.addEventListener("click", (event) => {
     //document.cookie = "userId=" + e.target.value;
 
     sensor.addSensor(document.forms[0])
@@ -14,6 +14,11 @@ addSensorButton.addEventListener("click", (e) => {
             document.querySelector("#message").innerHTML = "Sensor Added";
             document.querySelectorAll('input[type="number"]').forEach(field => {field.value = ""});
             document.querySelectorAll('input[type="text"]').forEach(field => {field.value = ""});
+
+            setInterval(() => {
+                window.location.href = './';
+            }, 1000);
+            
 
         }
         else {

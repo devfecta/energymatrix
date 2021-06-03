@@ -11,11 +11,12 @@
 <section class="container-fluid row">
     
     <div class="col-md-12">
+        <h1 class="h3 mb-3 font-weight-normal">Add Sensor</h1>
+
+        <div id="message" class="alert" role="alert"></div>
         <!-- action="api.php?class=Sensors&method=addSensor" -->
         <form class="form-signin needs-validation" method="post" enctype="application/x-www-form-urlencoded" novalidate>
-            <h1 class="h3 mb-3 font-weight-normal">Add Sensor</h1>
-
-            <div id="message" class="alert" role="alert"></div>
+            
 
             <div class="row">
                 <div class="col-md-12 form-group">

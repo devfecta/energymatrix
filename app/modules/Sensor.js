@@ -5,9 +5,13 @@ class Sensor extends Services {
         super();
     }
 
-    addSensor = async (sensorForm) => {
+    getSensor = async (sensorId, userId) => {
+        return await this.getApi("Sensor", "getSensor", "sensorId=" + sensorId + "&userId=" + userId)
+        .then(response => response)
+        .catch(e => console.log(e));
+    }
 
-        const result = false;
+    addSensor = async (sensorForm) => {
 
         let formData = new FormData();
         formData.append("class", "Sensors");
@@ -22,8 +26,15 @@ class Sensor extends Services {
         // Need to add some sort of confirmation
     }
 
-    getSensor = async (sensorId, userId) => {
-        return await this.getApi("Sensor", "getSensor", "sensorId=" + sensorId + "&userId=" + userId)
+    deleteSensor = async (sensorId, userId) => {
+
+        let formData = new FormData();
+        formData.append("class", "Sensors");
+        formData.append("method", "deleteSensor");
+        formData.append("userId", userId);
+        formData.append("sensorId", sensorId);
+
+        return await this.postApi(formData)
         .then(response => response)
         .catch(e => console.log(e));
     }

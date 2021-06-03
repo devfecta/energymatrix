@@ -84,13 +84,8 @@
 
         public function addSensor($formData) {
 
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $formData . "\n", 3, "/var/www/html/app/php-errors.log");
-
             $result = false;
-
             $data = json_decode(json_encode($formData), false);
-
-            //error_log($data->sensorId . " = " . $data->company . " = " . $data->sensorName . " = " . $data->sensorAttributes);
 
             try {
                 $connection = Configuration::openConnection();
@@ -105,14 +100,11 @@
                     :user_id,
                     :sensor_name
                 )");
-                // Convert sensor attributes to a string for the database.
-                $sensorAttributes = $data->sensorAttributes;
 
                 $statement->bindParam(":sensor_id", $data->sensorId, PDO::PARAM_INT);
                 $statement->bindParam(":user_id", $data->company, PDO::PARAM_INT);
                 $statement->bindParam(":sensor_name", $data->sensorName, PDO::PARAM_STR);
                 $result = $statement->execute() ? true : false;
-
             }
             catch(PDOException $pdo) {
                 error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
@@ -123,9 +115,33 @@
             finally {
                 Configuration::closeConnection();
             }
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $result . "\n", 3, "/var/www/html/app/php-errors.log");
+            return $result;
+        }
 
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $result . "\n", 3, "/var/www/html/app/php-errors.log");
+        public function deleteSensor($sensorId, $userId) {
 
+            $result = false;
+
+            try {
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("DELETE FROM `sensors` WHERE `id`=:sensor_id AND `user_id`=:user_id");
+
+                $statement->bindParam(":sensor_id", $sensorId, PDO::PARAM_INT);
+                $statement->bindParam(":user_id", $userId, PDO::PARAM_INT);
+                $result = $statement->execute() ? true : false;
+            }
+            catch(PDOException $pdo) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                Configuration::closeConnection();
+            }
+            
             return $result;
         }
 
