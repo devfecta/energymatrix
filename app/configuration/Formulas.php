@@ -11,8 +11,23 @@
          * Previous [a] to [b] range based on inputs under “Show in Dashboard”
          * c = minimum operational value (L)
         */
-        public function lastAverage() {
-            return $average;
+        public function lastAverage($rangeLow, $rangeHigh, $constraint) {
+            // Array of all the numbers within the range.
+            $range = range($rangeLow, $rangeHigh);
+            // Number of numbers within the range.
+            $count = count($range);
+            // Adds up the numbers in the range.
+            $sum = array_sum($range);
+            // Calculates the range average.
+            $average = $sum / $count;
+
+            if ($average > $constraint) {
+                $lastAverage = $average;
+            }
+            else {
+                $lastAverage = $constraint;
+            }
+            return $lastAverage;
         }
 
         /**
@@ -20,8 +35,8 @@
          * Current [a] to [b] range based on inputs under “Show in Dashboard”
          * c = minimum operational value (L)
         */
-        public function currentAverage() {
-            return $average;
+        public function currentAverage($rangeStart, $rangeEnd, $constraint) {
+            return $currentAverage;
         }
         
         /**
@@ -32,7 +47,8 @@
          * d = Process Max (input value)
          * e = Process Min (input value)
         */
-        public function maConversion() {
+        public function maConversion($sensorReading, $maMin, $maMax, $procesMin, $processMax) {
+            $processValue = ($sensorReading - $maMin) / ($maMax - $maMin) * ($processMax - $procesMin);
             return $processValue;
         }
         
@@ -41,7 +57,8 @@
          * a = Volumetric Flow (GPM) (trend value)
          * b = Density (LB/Gal) (input value)
         */
-        public function massFlow() {
+        public function massFlow($volumetricFlow, $density) {
+            $lbPerHour = $volumetricFlow * $density * 60;
             return $lbPerHour;
         }
         
@@ -50,7 +67,8 @@
          * a = Amp Hours (Ah) (trend value)
          * b = Averaging factor (input value)
         */
-        public function current() {
+        public function current($ampHours, $averagingFactor) {
+            $amps = $ampHours + $averagingFactor;
             return $amps;
         }
         
@@ -60,7 +78,8 @@
          * b = Voltage (VAC) (input value)
          * c = Power Factor (%) (input value)
         */
-        public function power() {
+        public function power($current, $voltage, $powerFactor) {
+            $kw = $current * $voltage * sqrt(3) * $powerFactor / 1000;
             return $kw;
         }
         
@@ -72,7 +91,8 @@
          * d = Chilled Media Supply Temperature (°F) (trend value)
          * e = Power (kW) (trend value)
          */
-        public function chillerEfficiency() {
+        public function chillerEfficiency($massFlow, $heatCapacity, $chilledMediaReturn, $chilledMediaSupply, $power) {
+            $kwPerTr = ($massFlow * $heatCapacity * ($chilledMediaReturn - $chilledMediaSupply) / 12000) / $power;
             return $kwPerTr;
         }
 

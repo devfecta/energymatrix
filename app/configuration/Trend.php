@@ -1,4 +1,7 @@
 <?php
+/**
+ * A Trend is created by kinergetics or kinergetics' customer.
+ */
     class Trend {
 
         /**
