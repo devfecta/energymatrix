@@ -23,6 +23,7 @@ class Configuration extends PDO {
      */
     public static function openConnection() {
         // Create a new instance of the Database class if connMySQL isn't set.
+        // REVIEW THIS PART THE IF MAY NOT BE NEEEDED
         if (!(self::$connection instanceof Database)) {
             self::$connection = new Configuration();
             self::$connection->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);

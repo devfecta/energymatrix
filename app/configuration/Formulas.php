@@ -1,8 +1,6 @@
 <?php
 
-    require_once('Trend.php');
-
-    class Formulas extends Trend {
+    class Formulas {
 
         function __construct() {}
 
@@ -11,7 +9,7 @@
          * Previous [a] to [b] range based on inputs under “Show in Dashboard”
          * c = minimum operational value (L)
         */
-        public function lastAverage($rangeLow, $rangeHigh, $constraint) {
+        public function lastAverageOLD($rangeLow, $rangeHigh, $constraint) {
             // Array of all the numbers within the range.
             $range = range($rangeLow, $rangeHigh);
             // Number of numbers within the range.
@@ -28,6 +26,13 @@
                 $lastAverage = $constraint;
             }
             return $lastAverage;
+        }
+
+        public function lastAverage($sensorData, $startTime, $range) {
+
+            return false;
+
+            // Get sensor data
         }
 
         /**

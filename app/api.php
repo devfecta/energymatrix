@@ -18,6 +18,8 @@ require("configuration/Users.php");
 require("configuration/Sensor.php");
 require("configuration/Sensors.php");
 
+require("configuration/Trends.php");
+
 //require("configuration/DataPoint.php");
 require("configuration/DataPoints.php");
 
@@ -269,6 +271,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             break;
                     }
                     break;
+                    case "Trends":
+                        $trends = new Trends();
+                        switch ($_GET['method']) {
+                            case "getTrends":
+
+                                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
+                                //echo json_encode(array("message" => $_GET['userId'].' = '.$_GET['dateTime']), JSON_PRETTY_PRINT);
+                                echo json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId']), JSON_PRETTY_PRINT);
+                                break;
+                            default:
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
+                            break;
+                        }
+                        break;
                 default:
                     error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET CLASS ERROR: The '.$_GET['class'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                     break;

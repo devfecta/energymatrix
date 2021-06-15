@@ -2,12 +2,18 @@
     // Needed to make the connection to the database.
     require_once('Configuration.php');
     // Contains sensor getters and setters.
-    require_once('Sensor.php');
+    require_once('Trend.php');
+    require_once('Formulas.php');
 
-    class Trends extends Sensor {
+    class Trends extends Trend {
 
-        // The code in __construct is called when a Trends object is instantiated.
-        function __construct() {}
+        public $formulas;
+        public $trend;
+
+        function __construct() {
+            // Brings the formulas into this class.
+            $this->formulas = new Formulas();
+        }
 
         /* 
             // Used to establish a database connection.
@@ -30,10 +36,145 @@
             $results = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
         */
 
-        // Function example
-        public function exampleFunction ($value1, $value2) {
-            $value = $value1 + $value2;
-            return $value;
+        /**
+         * Gets the information for a specific trend.
+         *
+         * @param   int $trendId  The ID of a trend.
+         *
+         * @return  array   An array of trend information.
+         */
+        public function getTrend($trendId) {
+
+            $trend = array();
+
+            try {
+
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("SELECT * FROM `trends` WHERE `id`=:trendId");
+
+                $statement->bindValue(":trendId", $trendId, PDO::PARAM_INT);
+
+                $statement->execute();
+
+                $trend = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+
+            }
+            catch(PDOException $pdo) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+            
+            return $trend;
+        }
+
+        public function getTrends($userId, $sensorId) {
+
+            $trends = array();
+
+            try {
+
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("SELECT * FROM `trends` WHERE `userId`=:userId AND  `sensorId`=:sensorId");
+                $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
+                $statement->bindValue(":sensorId", $sensorId, PDO::PARAM_INT);
+
+                $statement->execute();
+
+                $trends = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
+
+            }
+            catch(PDOException $pdo) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+            
+            return $trends;
+
+
+        }
+        /**
+         * Inserts a new trend into the database and returns an array of the new trend information.
+         *
+         * @param   json  $formData  JSON string
+         *
+         * @return  array            An array of new trend information.
+         */
+        public function insertTrend($formData) {
+
+            $result = array();
+
+            $data = json_decode($formData, false);
+
+            try {
+
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("INSERT INTO `trends` (
+                    `userId`,
+                    `sensorId`,
+                    `lowestLevel`,
+                    `highestLevel`,
+                    `operationalMinimum`,
+                    `operationalMaximum`,
+                    `operationalStartTime`,
+                    `operationalDuration`
+                ) 
+                VALUES (
+                    :userId,
+                    :sensorId,
+                    :lowestLevel,
+                    :highestLevel,
+                    :operationalMinimum,
+                    :operationalMaximum,
+                    :operationalStartTime,
+                    :operationalDuration
+                )");
+                $statement->bindParam(":userId", $data->userId, PDO::PARAM_INT);
+                $statement->bindValue(":sensorId", $data->sensorId, PDO::PARAM_INT);
+                $statement->bindParam(":lowestLevel", $data->lowestLevel, PDO::PARAM_INT);
+                $statement->bindParam(":highestLevel", $data->highestLevel, PDO::PARAM_INT);
+                $statement->bindParam(":operationalMinimum", $data->operationalMinimum, PDO::PARAM_INT);
+                $statement->bindValue(":operationalMaximum", $data->operationalMaximum, PDO::PARAM_INT);
+                $statement->bindParam(":operationalStartTime", $data->operationalStartTime, PDO::PARAM_STR);
+                $statement->bindParam(":operationalDuration", $data->operationalDuration, PDO::PARAM_INT);
+
+                $connection->beginTransaction();
+                $statement->execute();
+                $lastInsertId = $connection->lastInsertId();
+                $connection->commit();
+
+
+                $statement = $connection->prepare("SELECT * FROM `trends` WHERE `id`=:trendId");
+                $statement->bindValue(":trendId", $lastInsertId, PDO::PARAM_INT);
+                $statement->execute();
+
+                $result = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+                
+            }
+            catch(PDOException $pdo) {
+                $connection->rollback();
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+
+            return $result;
         }
     }
 ?>

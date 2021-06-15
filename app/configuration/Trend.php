@@ -9,37 +9,37 @@
          * 
          * @var int $lowestLevel
          */
-        public int $lowestLevel = 0;
+        public $lowestLevel = 0;
         /**
          * The highest possible level for a device/equipment.
          * 
          * @var int $highestLevel
          */
-        public int $highestLevel = 0;
+        public $highestLevel = 0;
         /**
          * Lowest desired operational level.
          * 
          * @var int $operationalMinimum
          */
-        public int $operationalMinimum = 0;
+        public $operationalMinimum = 0;
         /**
          * Highest desired operational level.
          * 
          * @var int $operationalMaximum
          */
-        public int $operationalMaximum = 0;
+        public $operationalMaximum = 0;
         /**
          * The start time for the trend.
          * 
          * @var int $operationalStartTime
          */
-        public int $operationalStartTime = 0;
+        public $operationalStartTime = 0;
         /**
          * The duration of the trend (i.e. an 8-hour duration could be 8am to 4pm).
          * 
          * @var int $operationalDuration
          */
-        public int $operationalDuration = 0;
+        public $operationalDuration = 0;
         
         function __construct() {}
         /**

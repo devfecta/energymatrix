@@ -6,7 +6,16 @@ const init = () => {
 
     const sidebarMenu = document.querySelector('#sidebarMenu');
 
-    const sidebar = new Sidebar(sidebarMenu, userType[1]);
+    if (userType) {
+        const sidebar = new Sidebar(sidebarMenu, userType[1]);
+    }
+    else {
+
+        window.alert("System Timed Out");
+        window.location.href = "/app/logout.php";
+    }
+
+//    const sidebar = new Sidebar(sidebarMenu, userType[1]);
     
     /*
     console.log(userType);
