@@ -9,7 +9,6 @@ const sensorId = url.get("sensorId");
 trends.getTrends(sensorId, userId)
 .then(response => {
 
-    console.log(response);
     const trendsListing = document.querySelector("#trends");
     // Table
     const trendsTable = document.createElement("table");
@@ -53,10 +52,6 @@ trends.getTrends(sensorId, userId)
     trendsTableHeaderRowColumnDuration.innerHTML = "Duration";
     trendsTableHeaderRow.append(trendsTableHeaderRowColumnDuration);
 
-    const trendsTableHeaderRowColumnButton = document.createElement("th");
-    trendsTableHeaderRowColumnButton.setAttribute("scope", "col");
-    trendsTableHeaderRow.append(trendsTableHeaderRowColumnButton);
-
     trendsTableHeader.append(trendsTableHeaderRow);
     trendsTable.append(trendsTableHeader);
     // Table Body
@@ -65,6 +60,7 @@ trends.getTrends(sensorId, userId)
     response.forEach(trend => {
 
         let trendsTableBodyRow = document.createElement("tr");
+        trendsTableBodyRow.addEventListener("click", event => console.log(trend.id));
 
         let trendsTableBodyColumnSensorId = document.createElement("td");
         trendsTableBodyColumnSensorId.innerHTML = trend.sensorId;
@@ -93,15 +89,6 @@ trends.getTrends(sensorId, userId)
         let trendsTableBodyColumnDuration = document.createElement("td");
         trendsTableBodyColumnDuration.innerHTML = trend.operationalDuration;
         trendsTableBodyRow.append(trendsTableBodyColumnDuration);
-
-        let trendsTableBodyColumnButton = document.createElement("td");
-        let trendsTableButton = document.createElement("button");
-        trendsTableButton.setAttribute("type", "button");
-        trendsTableButton.innerHTML = '<span class="fas fa-eye"></span>';
-        trendsTableButton.addEventListener("click", event => console.log(trend.id));
-
-        trendsTableBodyColumnButton.append(trendsTableButton);
-        trendsTableBodyRow.append(trendsTableBodyColumnButton);
 
         trendsTableBody.append(trendsTableBodyRow);
         

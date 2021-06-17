@@ -350,6 +350,7 @@ const getFormFields = () => {
  * Gets the minimum and maximum dates based on a specific sensor's data points.
  * Then assigns them to the appropriate HTML date elements.
  */
+/*
 const getMinMaxDates = () => {
 
     if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
@@ -386,13 +387,12 @@ const getMinMaxDates = () => {
     }
 
 }
-
+*/
 const getRandomColor = () => {
     return (Math.floor(Math.random() * 200) + 1) + ", " + (Math.floor(Math.random() * 200) + 1) + ", " + (Math.floor(Math.random() * 200) + 1);
 }
 
-
-
+/*
 const postApi = async (formData) => {
 
     //let params = new URLSearchParams(formData);
@@ -425,5 +425,5 @@ const getApi = async (className, methodName, parameters) => {
     .catch(error => console.log(error));
 
 }
-
+*/
 window.onload = init;

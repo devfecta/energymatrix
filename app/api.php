@@ -275,9 +275,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                         $trends = new Trends();
                         switch ($_GET['method']) {
                             case "getTrends":
-
-                                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
-                                //echo json_encode(array("message" => $_GET['userId'].' = '.$_GET['dateTime']), JSON_PRETTY_PRINT);
+                                // error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
                                 echo json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId']), JSON_PRETTY_PRINT);
                                 break;
                             default:

@@ -6,6 +6,8 @@
 	//require_once('configuration/Sensor.php');
 ?>
 
+<script type="module" src="./javascript/charting.js"></script>
+
 <style>
 
     canvas {
@@ -17,7 +19,7 @@
 </style>
 
 <!-- User Section -->
-<section id="userSectionSearch" class="row" style="background-color: #ddd">
+<section id="userSectionSearch" class="row">
 
     <form id="searchForm" class="form-inline d-flex justify-content-center w-100 p-2" method="post">
         
@@ -62,8 +64,8 @@
 </section>
 
 <script>
-    getSensorChart(null, null);
-    getMinMaxDates();
+    //getSensorChart(null, null);
+    //getMinMaxDates();
 </script>
 
 
