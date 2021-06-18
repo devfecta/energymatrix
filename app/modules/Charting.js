@@ -47,8 +47,6 @@ class Charting extends Services {
                 return this.getApi("DataPoints", "getSensorDataPoints", "userId=" + userId + "&sensorId=" + urlParams.get("sensorId") + "&startDateTime=" + startDateTime + "&endDateTime=" + endDateTime)
                 .then(dataPoints => {
 
-                    //console.log(dataPoints);
-
                     sensor.dataTypes.forEach(dataType => {
                         
                         let chart = null;
@@ -242,7 +240,7 @@ class Charting extends Services {
         json.startDateTime = searchForm.querySelector("#startDate").value + " "+ searchForm.querySelector("#startTime").value;
         json.endDateTime = searchForm.querySelector("#endDate").value + " "+ searchForm.querySelector("#startTime").value;
 
-        getSensorChart(json.startDateTime, json.endDateTime);
+        this.getSensorChart(json.startDateTime, json.endDateTime);
 
     }
     /**
@@ -256,8 +254,8 @@ class Charting extends Services {
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
             const urlParams = new URLSearchParams(window.location.search);
 
-            let searchButton = document.querySelector("#getData");
-            searchButton.addEventListener("click", getData);
+            let searchButton = document.querySelector("#getDataButton");
+            searchButton.addEventListener("click", this.getData);
 
             this.getApi("DataPoints", "getMinMaxDates", "userId=" + userId + "&sensorId=" + urlParams.get('sensorId'))
             .then(data => {

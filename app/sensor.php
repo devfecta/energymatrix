@@ -52,7 +52,7 @@
         
         <div class="col-md-2 mx-2 align-items-center">
             <input type="hidden" name="user" id="user" value="<?php echo $_SESSION['userId']; ?>" />
-            <button type="button" class="btn btn-primary w-100" id="getData">Get Data</button>
+            <button type="button" class="btn btn-primary w-100" id="getDataButton">Get Data</button>
         </div>
 
     </form>
@@ -63,7 +63,10 @@
     <div id="charts" class="d-flex justify-content-around row"></div>
 </section>
 
+
+
 <script>
+    
     //getSensorChart(null, null);
     //getMinMaxDates();
 </script>

@@ -81,7 +81,7 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT * FROM `trends` WHERE `userId`=:userId AND  `sensorId`=:sensorId");
+                $statement = $connection->prepare("SELECT * FROM `trends` WHERE `userId`=:userId AND  `sensorId`=:sensorId ORDER BY `operationalStartTIME` DESC");
                 $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
                 $statement->bindValue(":sensorId", $sensorId, PDO::PARAM_INT);
 

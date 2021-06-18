@@ -57,12 +57,12 @@ class DataPoints extends DataPoint {
                     
                 }
                 else {
-                    error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Sensor ID: " . $sensor['sensorID'] . " - User does NOT exist.\n", 3, "/var/www/html/app/php-errors.log");
+                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Sensor ID: " . $sensor['sensorID'] . " - User does NOT exist.\n", 3, "/var/www/html/app/php-errors.log");
                 }
 
             }
             else {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Sensor ID: " . $sensor['sensorID'] . " - Sensor Name NOT Formatted Properly\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Sensor ID: " . $sensor['sensorID'] . " - Sensor Name NOT Formatted Properly\n", 3, "/var/www/html/app/php-errors.log");
                 //return false;
             }
 
@@ -92,13 +92,13 @@ class DataPoints extends DataPoint {
 
         }
         catch (PDOException $pdo) {
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         catch (Exception $e) {
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         finally {
-            Configuration::closeConnection();
+            $connection = Configuration::closeConnection();
         }
 
         return $result;
@@ -163,12 +163,19 @@ class DataPoints extends DataPoint {
                 :data_value
             )");
 
+            $statement->bindValue(":user_id", $userId, PDO::PARAM_INT); 
+            $statement->bindValue(":sensor_id", $sensor['sensorID'], PDO::PARAM_INT);
+            $statement->bindParam(":date_time", $sensor['messageDate'], PDO::PARAM_STR); 
+
 
             if (strpos($plotLabels, '|')) {
                 
                 $plotLabelArray = explode('|', $plotLabels);
                 $plotValueArray = explode('|', $plotValues);
 
+                $statement->bindParam(":data_type", $plotLabelArray[0]);
+                $statement->bindValue(":data_value", $plotValueArray[0]);
+                /* TOOK OUT BECAUSE WE JUST NEED THE FIRST VALUES
                 for ($i = 0; $i < count($plotLabelArray); $i++) {
 
                     $statement->bindValue(":user_id", $userId, PDO::PARAM_INT);
@@ -179,27 +186,24 @@ class DataPoints extends DataPoint {
                     $result = $statement->execute() ? true : false;
                     
                 }
+                */
             }
             else {
-
-                $statement->bindValue(":user_id", $userId, PDO::PARAM_INT); 
-                $statement->bindValue(":sensor_id", $sensor['sensorID'], PDO::PARAM_INT);
-                $statement->bindParam(":date_time", $sensor['messageDate'], PDO::PARAM_STR); 
                 $statement->bindParam(":data_type", $plotLabels);
                 $statement->bindValue(":data_value", $plotValues); 
-                $result = $statement->execute() ? true : false;
-                
             }
+
+            $result = $statement->execute() ? true : false;
 
         }
         catch(PDOException $pdo) {
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         catch (Exception $e) {
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         finally {
-            Configuration::closeConnection();
+            $connection = Configuration::closeConnection();
         }
 
         return $result;
@@ -253,7 +257,7 @@ class DataPoints extends DataPoint {
                     Need to use the sensor ID because the attributes can differ from sensor to sensor.
                     Once calculated set the data value.
                 */
-
+                /* TOOK OUT BECAUSE THIS IS NOT NEEDED ANYMORE
                 if ($result['data_type'] == "mA") {
                     $sensor = Sensor::getSensor($result['sensor_id']);
                     $attributes = json_decode($sensor->getSensorAttributes(), false);
@@ -266,6 +270,9 @@ class DataPoints extends DataPoint {
                     
                     $dataPoint->setDataValue($result['data_value']);
                 }
+                */
+
+                $dataPoint->setDataValue($result['data_value']);
 
                 $dataPoint->setCustomValue($result['custom_value']);
 
@@ -275,13 +282,13 @@ class DataPoints extends DataPoint {
             //error_log(var_dump($dataPoints), 0);
         }
         catch(PDOException $pdo) {
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         catch (Exception $e) {
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         finally {
-            Configuration::closeConnection();
+            $connection = Configuration::closeConnection();
         }
 
         return $dataPoints;
@@ -315,13 +322,13 @@ class DataPoints extends DataPoint {
             //error_log(var_dump($dataPoints), 0);
         }
         catch(PDOException $pdo) {
-            error_log(date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         catch (Exception $e) {
-            error_log(date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         finally {
-            Configuration::closeConnection();
+            $connection = Configuration::closeConnection();
         }
 
         return $dataTypes;
@@ -368,10 +375,10 @@ class DataPoints extends DataPoint {
         }
         catch(PDOException $pdo) {
             $result['error'] =  $pdo->getMessage();
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         finally {
-            Configuration::closeConnection();
+            $connection = Configuration::closeConnection();
         }
 
         return json_encode($result, JSON_PRETTY_PRINT);
@@ -401,13 +408,13 @@ class DataPoints extends DataPoint {
             return json_encode($dates, JSON_PRETTY_PRINT);
         }
         catch(PDOException $pdo) {
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         catch (Exception $e) {
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
         }
         finally {
-            Configuration::closeConnection();
+            $connection = Configuration::closeConnection();
         }
     }
 
