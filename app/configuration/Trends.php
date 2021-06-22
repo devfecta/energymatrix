@@ -115,7 +115,7 @@
 
             $result = array();
 
-            $data = json_decode($formData, false);
+            $data = json_decode(json_encode($formData), false);
 
             try {
 

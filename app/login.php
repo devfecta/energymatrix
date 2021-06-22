@@ -35,7 +35,7 @@
         <img class="mb-4" src="images/Kinergetics-Logo.png" alt="Kinergetic, LLC" class="w-100" />
         <h1 class="h3 mb-3 font-weight-normal">Sign In</h1>
         <label for="username" class="sr-only">Username</label>
-        <input type="text" id="username" name="username" class="mb-2 form-control" placeholder="Username" value="test" required autofocus>
+        <input type="text" id="username" name="username" class="mb-2 form-control" placeholder="Username" value="kinergetics" required autofocus>
         <div class="invalid-feedback">Please Enter A Username</div>
         <label for="password" class="sr-only">Password</label>
         <input type="password" id="password" name="password" class="mb-2 form-control" placeholder="Password" value="123abc" required>

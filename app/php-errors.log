@@ -1,0 +1,41 @@
+Line: 116 - 2021-06-22 11:48:01 {
+    "class": "Trends",
+    "method": "insertTrend",
+    "userId": "2",
+    "sensorId": "111111",
+    "lowestLevel": "2",
+    "highestLevel": "3",
+    "operationalMinimum": "4",
+    "operationalMaximum": "5",
+    "operationalStartTime": "2021-06-21 12:47",
+    "operationalDuration": "2"
+}
+Line: 122 - 2021-06-22 11:48:01 
+Line: 173 - 2021-06-22 11:48:01 SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'userId' cannot be null
+Line: 116 - 2021-06-22 11:48:37 {
+    "class": "Trends",
+    "method": "insertTrend",
+    "userId": "2",
+    "sensorId": "111111",
+    "lowestLevel": "2",
+    "highestLevel": "3",
+    "operationalMinimum": "4",
+    "operationalMaximum": "5",
+    "operationalStartTime": "2021-06-21 12:47",
+    "operationalDuration": "2"
+}
+Line: 122 - 2021-06-22 11:48:37 
+Line: 173 - 2021-06-22 11:48:37 SQLSTATE[23000]: Integrity constraint violation: 1048 Column 'userId' cannot be null
+Line: 116 - 2021-06-22 11:49:25 {
+    "class": "Trends",
+    "method": "insertTrend",
+    "userId": "2",
+    "sensorId": "111111",
+    "lowestLevel": "2",
+    "highestLevel": "3",
+    "operationalMinimum": "4",
+    "operationalMaximum": "5",
+    "operationalStartTime": "2021-06-21 12:47",
+    "operationalDuration": "2"
+}
+Line: 122 - 2021-06-22 11:49:25 2

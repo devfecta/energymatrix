@@ -144,12 +144,24 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo $result;
                             break;
                         default:
-                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
                     break;
+                case "Trends":
+                    $trends = new Trends();
+                    switch ($_POST['method']) {
+                        case "insertTrend":
+                            // error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            echo json_encode($trends->insertTrend($_POST));
+                            break;
+                        default:
+                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
+                        break;
+                    }
+                    break;
                 default:
-                    error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET CLASS ERROR: The '.$_POST['class'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
+                    error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'POST CLASS ERROR: The '.$_POST['class'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                     break;
             }
         }
