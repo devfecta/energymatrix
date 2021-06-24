@@ -90,6 +90,29 @@ class Sidebar extends Services {
         return menuButton;
     }
     /**
+     * Creates the Add Trend button.
+     *
+     * @return  {HTMLElement}
+     */
+     getAddTrendButton = (companyId) => {
+        const menuButton = document.createElement("div");
+        menuButton.setAttribute("class", "accordion-item");
+        menuButton.setAttribute("id","addTrendButton");
+
+        const addButton = document.createElement("button");
+        addButton.setAttribute("type", "button");
+        addButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        addButton.setAttribute("value", companyId);
+        addButton.addEventListener("click", (event) => {
+            window.location.href = "trendAdd.php?userId=" + event.target.value
+        }, false);
+        addButton.innerHTML = '<span class="fas fa-plus-square"></span> Add Trend';
+
+        menuButton.append(addButton);
+
+        return menuButton;
+    }
+    /**
      * Appends the admin sidebar to the sidebar in the sidebar.php file.
      *
      * @param   {HTMLElement}  sidebarMenu
@@ -179,8 +202,6 @@ class Sidebar extends Services {
         if (document.cookie.includes('; ') && document.cookie.includes('userType')) {
             userType = document.cookie.split('; ').find(c => c.startsWith('userType')).split('=')[1];
         }
-
-        
         // Creates the sub-menu area for the add sensor button and list of sensors.
         const menu = document.createElement("div");
         menu.setAttribute("id","sensorsMenuItems" + companyId);
@@ -188,7 +209,10 @@ class Sidebar extends Services {
             menu.setAttribute("class", "accordion-collapse border-0 collapse");
             menu.setAttribute("aria-labelledby", "companyMenu" + companyId);
             menu.setAttribute("data-bs-parent", "#companyMenu" + companyId);
+            // Appends Add Sensor Button
             menu.append(this.getAddSensorButton(companyId));
+            // Appends Add Trend Button
+            menu.append(this.getAddTrendButton(companyId));
         }
         else { }
 
@@ -213,6 +237,51 @@ class Sidebar extends Services {
         return menu;
     }
     /**
+     * Creates the trends menu items for specific company menu items.
+     *
+     * @param   {int}  companyId
+     *
+     * @return  {HTMLElement}
+     */
+     getTrendsMenu = (companyId) => {
+        let userType = 0;
+        if (document.cookie.includes('; ') && document.cookie.includes('userType')) {
+            userType = document.cookie.split('; ').find(c => c.startsWith('userType')).split('=')[1];
+        }
+
+        
+        // Creates the sub-menu area for the add trend button and list of trends.
+        const menu = document.createElement("div");
+        menu.setAttribute("id","trendsMenuItems" + companyId);
+        if (userType > 0) {
+            menu.setAttribute("class", "accordion-collapse border-0 collapse");
+            menu.setAttribute("aria-labelledby", "companyMenu" + companyId);
+            menu.setAttribute("data-bs-parent", "#companyMenu" + companyId);
+            menu.append(this.getAddTrendButton(companyId));
+        }
+        else { }
+
+        const menuButton = document.createElement("div");
+        menuButton.setAttribute("class", "accordion-item");
+        menuButton.setAttribute("id","trendsButton" + companyId);
+
+        const trendsButton = document.createElement("button");
+        trendsButton.setAttribute("type", "button");
+        trendsButton.setAttribute("class", "accordion-button border-0 collapsed");
+        trendsButton.setAttribute("data-bs-toggle", "collapse");
+        trendsButton.setAttribute("data-bs-target", "#trends" + companyId);
+        trendsButton.setAttribute("aria-expanded", "false");
+        trendsButton.setAttribute("aria-controls", "trends" + companyId);
+        trendsButton.innerHTML = '<span class="fas fa-chart-line pe-1"></span> Trends';
+
+        menuButton.append(trendsButton);
+        menuButton.append(this.getTrendMenuList(companyId, userType));
+
+        menu.append(menuButton);
+
+        return menu;
+    }
+    /**
      * Creates a list of sensors for a specific company's menu item.
      *
      * @param   {int}  companyId
@@ -231,9 +300,10 @@ class Sidebar extends Services {
         .then(sensors => {
             
             sensors.forEach(sensor => {
+                //console.log(sensor);
                 // Sensor Menu Item
                 const sensorsMenuItem = document.createElement('div');
-                sensorsMenuItem.setAttribute("id", "sensorsMenuItem" + sensor.id);
+                sensorsMenuItem.setAttribute("id", "sensorsMenuItem" + sensor.sensorId);
                 sensorsMenuItem.setAttribute("class", "accordion-item d-flex justify-content-end");
                 // View Sensor Button
                 const menuLink = document.createElement('button');
@@ -242,7 +312,7 @@ class Sidebar extends Services {
                 menuLink.setAttribute("value", companyId)
                 menuLink.addEventListener("click", (e) => {
                     document.cookie = "userId=" + e.target.value;
-                    window.location.href = "sensor.php?sensorId="+sensor.id
+                    window.location.href = "sensor.php?sensorId=" + sensor.sensorId
                 }, false);
                 menuLink.innerHTML = sensor.sensor_name;
                 // Edit Sensor Button
@@ -250,14 +320,14 @@ class Sidebar extends Services {
                 editButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
                 editButton.setAttribute("type", "button");
                 editButton.setAttribute("title", "Edit Sensor");
-                editButton.onclick = () => { window.location.href = "sensorEdit.php?sensorId=" + sensor.id + "&userId=" + companyId }
+                editButton.onclick = () => { window.location.href = "sensorEdit.php?sensorId=" + sensor.sensorId + "&userId=" + companyId }
                 editButton.innerHTML = `<span class="fas fa-pen-square"></span>`;
                 // Sensor Trends Button
                 const trendsButton = document.createElement("button");
                 trendsButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
                 trendsButton.setAttribute("type", "button");
                 trendsButton.setAttribute("title", "View Sensor Trends");
-                trendsButton.onclick = () => { window.location.href = "sensorTrends.php?sensorId=" + sensor.id + "&userId=" + companyId }
+                trendsButton.onclick = () => { window.location.href = "sensorTrends.php?sensorId=" + sensor.sensorId + "&userId=" + companyId }
                 trendsButton.innerHTML = `<span class="fas fa-chart-line"></span>`;
                 // Add Sensor Buttons to Menu Item
                 sensorsMenuItem.append(menuLink);
@@ -276,7 +346,72 @@ class Sidebar extends Services {
 
         return menu;
     }
+    /**
+     * Creates a list of trends for a specific company's menu item.
+     *
+     * @param   {int}  companyId
+     *
+     * @return  {HTMLElement}
+     */
+     getTrendMenuList = (companyId, userType) => {
 
+        const menu = document.createElement("div");
+        menu.setAttribute("id","trends" + companyId);
+        menu.setAttribute("class", "accordion-collapse border-0 collapse");
+        menu.setAttribute("aria-labelledby", "trendsButton" + companyId);
+        menu.setAttribute("data-bs-parent", "#trendsButton" + companyId);
+
+        this.getApi("trends", "getUserTrends", "userId=" + companyId)
+        .then(sensors => {
+            
+            sensors.forEach(sensor => {
+                // Sensor Menu Item
+                const sensorsMenuItem = document.createElement('div');
+                sensorsMenuItem.setAttribute("id", "trendsMenuItem" + sensor.sensorId);
+                sensorsMenuItem.setAttribute("class", "accordion-item d-flex justify-content-end");
+                // View Sensor Button
+                const menuLink = document.createElement('button');
+                menuLink.setAttribute("class", "btn btn-light text-nowrap");
+                menuLink.setAttribute("style", "text-align: left");
+                menuLink.setAttribute("value", companyId)
+                menuLink.addEventListener("click", (e) => {
+                    document.cookie = "userId=" + e.target.value;
+                    window.location.href = "trends.php?trendId=" + sensor.sensorId
+                }, false);
+                menuLink.innerHTML = sensor.sensor_name;
+                // Edit Sensor Button
+                const editButton = document.createElement("button");
+                editButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
+                editButton.setAttribute("type", "button");
+                editButton.setAttribute("title", "Edit Trend");
+                editButton.onclick = () => { window.location.href = "trendEdit.php?trendId=" + sensor.sensorId + "&userId=" + companyId }
+                editButton.innerHTML = `<span class="fas fa-pen-square"></span>`;
+                /*
+                // Sensor Trends Button
+                const trendsButton = document.createElement("button");
+                trendsButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
+                trendsButton.setAttribute("type", "button");
+                trendsButton.setAttribute("title", "View Sensor Trends");
+                trendsButton.onclick = () => { window.location.href = "sensorTrends.php?sensorId=" + sensor.sensorId + "&userId=" + companyId }
+                trendsButton.innerHTML = `<span class="fas fa-chart-line"></span>`;
+                */
+                // Add Sensor Buttons to Menu Item
+                sensorsMenuItem.append(menuLink);
+                //sensorsMenuItem.append(trendsButton);
+                if (userType > 0) {
+                    sensorsMenuItem.append(editButton);
+                }
+                else {}
+                
+                // Add Menu Item to Sensor Group
+                menu.append(sensorsMenuItem);
+            });
+
+        })
+        .catch(error => console.log(error));
+
+        return menu;
+    }
     /**
      * Adds menu items to the user's sidebar by creating HTML button elements for specific menu categories.
      */

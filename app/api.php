@@ -195,14 +195,16 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     $Sensors = new Sensors();
                     switch ($_GET['method']) {
                         case "getUserSensors":
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $_GET['userId'] . "\n", 3, "/var/www/html/app/php-errors.log");
                             
+
                             $userSensors = $Sensors->getUserSensors($_GET['userId']);
 
                             $sensorArray = array();
 
                             foreach($userSensors as $sensor) {
                                 
-                                array_push($sensorArray, array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "user_id" => $sensor->getUserId()));    
+                                array_push($sensorArray, array("sensorId" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "userId" => $sensor->getUserId()));    
                             }
 
                             echo json_encode($sensorArray);
@@ -214,7 +216,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             $sensorsArray = array();
 
                             foreach($sensors as $sensor) {
-                                array_push($sensorsArray, array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "user_id" => $sensor->getUserId()));    
+                                array_push($sensorsArray, array("sensorId" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "userId" => $sensor->getUserId()));    
                             }
 
                             echo json_encode($sensorsArray);

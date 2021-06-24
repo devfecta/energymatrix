@@ -11,6 +11,12 @@ class Sensor extends Services {
         .catch(e => console.log(e));
     }
 
+    getUserSensors = async (userId) => {
+        return await this.getApi("Sensors", "getUserSensors", "&userId=" + userId)
+        .then(response => response)
+        .catch(e => console.log(e));
+    }
+
     addSensor = async (sensorForm) => {
 
         let formData = new FormData();

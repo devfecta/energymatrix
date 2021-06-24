@@ -120,8 +120,8 @@ class DataPoints extends DataPoint {
             
             $connection = Configuration::openConnection();
 
-            $statement = $connection->prepare("SELECT * FROM `sensors` WHERE `id`=:sensor_id");
-            $statement->bindParam(":sensor_id", $sensor['sensorID'], PDO::PARAM_INT);
+            $statement = $connection->prepare("SELECT * FROM `sensors` WHERE `sensorId`=:sensorId");
+            $statement->bindParam(":sensorId", $sensor['sensorID'], PDO::PARAM_INT);
             $statement->execute();
 
             if ($statement->rowCount() < 1) {
@@ -129,17 +129,17 @@ class DataPoints extends DataPoint {
                 $sensorName =  explode(' | ', $sensor['sensorName'])[1];
 
                 $statement = $connection->prepare("INSERT INTO `sensors` (
-                    `id`,
-                    `user_id`,
+                    `sensorId`,
+                    `userId`,
                     `sensor_name`
                 ) 
                 VALUES (
-                    :sensor_id,
-                    :user_id,
+                    :sensorId,
+                    :userId,
                     :sensor_name
                 )");
-                $statement->bindParam(":sensor_id", $sensor['sensorID'], PDO::PARAM_INT);
-                $statement->bindValue(":user_id", $userId, PDO::PARAM_INT);
+                $statement->bindParam(":sensorId", $sensor['sensorID'], PDO::PARAM_INT);
+                $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
                 $statement->bindParam(":sensor_name", $sensorName, PDO::PARAM_STR);
                 $statement->execute();
 

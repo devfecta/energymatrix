@@ -24,15 +24,15 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT * FROM sensors WHERE `id`=:sensorId AND `user_id`=:userId");
+                $statement = $connection->prepare("SELECT * FROM `sensors` WHERE `sensorId`=:sensorId AND `userId`=:userId");
                 $statement->bindParam(":sensorId", $sensorId);
                 $statement->bindParam(":userId", $userId);
                 $statement->execute();
 
                 $results = $statement->fetch(PDO::FETCH_ASSOC);
 
-                $sensor->setSensorId($results['id']);
-                $sensor->setUserId($results['user_id']);
+                $sensor->setSensorId($results['sensorId']);
+                $sensor->setUserId($results['userId']);
                 $sensor->setSensorName($results['sensor_name']);
 
             }
@@ -43,7 +43,7 @@
                 error_log(date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
             }
             finally {
-                Configuration::closeConnection();
+                $connection = Configuration::closeConnection();
             }
 
             return $sensor;

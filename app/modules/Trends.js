@@ -25,7 +25,7 @@ class Trends extends Services {
      * @param   {int}  sensorId
      * @param   {int}  userId
      */
-    listTrends = (sensorId, userId) => {
+    MOVEtoUSERSIDElistTrends = (sensorId, userId) => {
 
         this.getTrends(sensorId, userId)
         .then(response => {
@@ -235,6 +235,10 @@ class Trends extends Services {
         .catch(e => console.log(e));
     }
     */
+
+    getFormulas = () => {
+        console.log("getFormulas");
+    }
 }
 
 export default Trends;
