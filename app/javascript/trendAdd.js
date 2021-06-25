@@ -19,17 +19,14 @@ companySensor.addEventListener("change", (event) => {
 const trendFormulas = document.querySelector("#trendFormulas");
 trendFormulas.addEventListener("change", (event) => {
 
-    const formulaInputs = document.querySelector("#formulaInputs");
+    let formulaInputs = document.querySelector("#formulaInputs");
 
     let selectedValue = event.target.options[event.target.options.selectedIndex].value;
 
-    
+    formulaInputs.innerHTML = "";
 
     trends.getFormulaInputs(userId, selectedValue)
     .then(inputs => {
-        
-        formulaInputs.childNodes.forEach(node => {node.remove()});
-
         inputs.forEach(input => {
             formulaInputs.append(input);
         });

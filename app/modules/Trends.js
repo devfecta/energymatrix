@@ -242,35 +242,102 @@ class Trends extends Services {
         .then(response => response)
         .catch(e => console.log(e));
     }
-
+    /**
+     * Gets the form inputs required for each formula.
+     *
+     * @param   {int}  userId	Company ID
+     * @param   {string}  selectedValue	The formula name
+     *
+     * @return  {array}	Returns an array of HTML elements.
+     */
     getFormulaInputs = async (userId, selectedValue) => {
+
+        let formulaSelected = true;
 
         let formulaInputs = new Array();
         
         let inputGroup = HTMLElement;
-
-        /*
-<div class="col-md-12 form-group">
-                    <label for="trendFormulas">Sensor: </label>
-                    <select class="form-control" id="trendFormulas" name="trendFormulas"></select>
-                </div>
-        */
+		let inputLabel = HTMLElement;
 
         switch (selectedValue) {
             case "chillerEfficiency":
-                
+                // Heat Capacity
+				inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "heatCapacity");
+                inputLabel.innerHTML = "Heat Capacity: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "heatCapacity", "heatCapacity", 4, true));
+
+                formulaInputs.push(inputGroup);
                 break;
             case "current":
-            
+				// Averaging Factor
+				inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "averagingFactor");
+                inputLabel.innerHTML = "Averaging Factor: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "averagingFactor", "averagingFactor", 4, true));
+
+                formulaInputs.push(inputGroup);
                 break;
             case "maConversion":
-            
+				// mA Minimum
+				inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "mAMin");
+                inputLabel.innerHTML = "mA Minimum: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "mAMin", "mAMin", 4, true));
+
+                formulaInputs.push(inputGroup);
+				// mA Maximum
+				inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "mAMax");
+                inputLabel.innerHTML = "mA Maximum: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "mAMax", "mAMax", 4, true));
+
+                formulaInputs.push(inputGroup);
+				// Process Minimum
+				inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "processMin");
+                inputLabel.innerHTML = "Process Minimum: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "processMin", "processMin", 4, true));
+
+                formulaInputs.push(inputGroup);
+				// Process Maximum
+				inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "processMax");
+                inputLabel.innerHTML = "Process Maximum: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "processMax", "processMax", 4, true));
+
+                formulaInputs.push(inputGroup);
                 break;
             case "massFlow":
+				// Density
                 inputGroup = document.createElement("div");
                 inputGroup.setAttribute("class", "col-md-12 form-group");
 
-                let inputLabel = document.createElement("label");
+                inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "density");
                 inputLabel.innerHTML = "Density: ";
                 inputGroup.append(inputLabel);
@@ -290,54 +357,76 @@ class Trends extends Services {
                 */
                 break;
             case "power":
-        
+				// Voltage
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "voltage");
+                inputLabel.innerHTML = "Voltage: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "voltage", "voltage", 4, true));
+
+                formulaInputs.push(inputGroup);
+				// Power Factor
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "powerFactor");
+                inputLabel.innerHTML = "Power Factor: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "powerFactor", "powerFactor", 4, true));
+
+                formulaInputs.push(inputGroup);
                 break;
             default:
+                formulaSelected = false;
                 break;
         }
         
-        const sensor = new Sensor();
-        console.log(inputGroup);
+        if (formulaSelected) {
+            const sensor = new Sensor();
 
-        await sensor.getUserSensors(userId)
-        .then(response => {
+            await sensor.getUserSensors(userId)
+            .then(response => {
 
-            inputGroup = document.createElement("div");
-            inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
 
-            let inputLabel = document.createElement("label");
-            inputLabel.setAttribute("for", "companySensors");
-            inputLabel.innerHTML = "Sensor/Trend: ";
-            inputGroup.append(inputLabel);
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "companySensors");
+                inputLabel.innerHTML = "Sensor/Trend: ";
+                inputGroup.append(inputLabel);
 
-            const formElement = document.createElement("select");
-            formElement.setAttribute("id", "companySensors");
-            formElement.setAttribute("name", "companySensors");
-            formElement.setAttribute("class", "form-control");
-            formElement.required = true;
+                const formElement = document.createElement("select");
+                formElement.setAttribute("id", "companySensors");
+                formElement.setAttribute("name", "companySensors");
+                formElement.setAttribute("class", "form-control");
+                formElement.required = true;
 
-            let optionElement = document.createElement("option");
-            optionElement.setAttribute("value", "");
-            optionElement.innerHTML = `Select A Sensor`;
-            formElement.append(optionElement);
-
-            response.forEach(option => {
                 let optionElement = document.createElement("option");
-                optionElement.setAttribute("value", option.sensorId);
-                optionElement.innerHTML = `${option.sensor_name} <em class="mx-1" style="font-size: 0.75em">(ID: ${option.sensorId})</em>`;
+                optionElement.setAttribute("value", "");
+                optionElement.innerHTML = `Select A Sensor`;
                 formElement.append(optionElement);
-            });
 
-            inputGroup.append(formElement);
-            //formulaInputs.append(inputGroup);
+                response.forEach(option => {
+                    let optionElement = document.createElement("option");
+                    optionElement.setAttribute("value", option.sensorId);
+                    optionElement.innerHTML = `${option.sensor_name} <em class="mx-1" style="font-size: 0.75em">(ID: ${option.sensorId})</em>`;
+                    formElement.append(optionElement);
+                });
 
-            console.log(inputGroup);
+                inputGroup.append(formElement);
+                //formulaInputs.append(inputGroup);
 
-            formulaInputs.push(inputGroup);
+                console.log(inputGroup);
 
-        })
-        .catch(e => console.log(e));
+                formulaInputs.push(inputGroup);
 
+            })
+            .catch(e => console.log(e));
+        }
         
 
         return formulaInputs;
