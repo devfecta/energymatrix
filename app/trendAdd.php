@@ -26,14 +26,16 @@
 
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <label for="companySensor">Sensor: </label>
-                    <select class="form-control" id="companySensor" name="companySensor"></select>
+                    <label for="trendFormulas">Trend Formula: </label>
+                    <select class="form-control" id="trendFormulas" name="trendFormulas"></select>
                 </div>
             </div>
 
+            <div id="formulaInputs" class="row"></div>
+
             <div class="row">
                 <div class="col-md-12 form-group">
-                    <button type="button" id="addSensorButton" class="btn btn-lg btn-primary mt-2">Add Trend</button>
+                    <button type="button" id="addTrendButton" class="btn btn-lg btn-primary mt-2">Add Trend</button>
                 </div>
             </div>
 

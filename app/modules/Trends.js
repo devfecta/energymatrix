@@ -1,4 +1,5 @@
 import Services from "./Services.js";
+import Sensor from "./Sensor.js";
 
 class Trends extends Services {
     constructor() {
@@ -236,8 +237,110 @@ class Trends extends Services {
     }
     */
 
-    getFormulas = () => {
-        console.log("getFormulas");
+    getFormulas = async () => {
+        return await this.getApi("Trends", "getFormulas")
+        .then(response => response)
+        .catch(e => console.log(e));
+    }
+
+    getFormulaInputs = async (userId, selectedValue) => {
+
+        let formulaInputs = new Array();
+        
+        let inputGroup = HTMLElement;
+
+        /*
+<div class="col-md-12 form-group">
+                    <label for="trendFormulas">Sensor: </label>
+                    <select class="form-control" id="trendFormulas" name="trendFormulas"></select>
+                </div>
+        */
+
+        switch (selectedValue) {
+            case "chillerEfficiency":
+                
+                break;
+            case "current":
+            
+                break;
+            case "maConversion":
+            
+                break;
+            case "massFlow":
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                let inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "density");
+                inputLabel.innerHTML = "Density: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "density", "density", 4, true));
+
+                formulaInputs.push(inputGroup);
+                
+                /*
+                let optionsDuration = new Array();
+                optionsDuration[24] = "24 Hours";
+                optionsDuration[12] = "12 Hours";
+                optionsDuration[8] = "8 Hours";
+                optionsDuration[4] = "4 Hours";
+                optionsDuration[2] = "2 Hours";
+                optionsDuration[1] = "1 Hour";
+                trendsTableHeaderRowColumnDuration.append(this.createDropDown("duration", "duration", true, optionsDuration));
+                */
+                break;
+            case "power":
+        
+                break;
+            default:
+                break;
+        }
+        
+        const sensor = new Sensor();
+        console.log(inputGroup);
+
+        await sensor.getUserSensors(userId)
+        .then(response => {
+
+            inputGroup = document.createElement("div");
+            inputGroup.setAttribute("class", "col-md-12 form-group");
+
+            let inputLabel = document.createElement("label");
+            inputLabel.setAttribute("for", "companySensors");
+            inputLabel.innerHTML = "Sensor/Trend: ";
+            inputGroup.append(inputLabel);
+
+            const formElement = document.createElement("select");
+            formElement.setAttribute("id", "companySensors");
+            formElement.setAttribute("name", "companySensors");
+            formElement.setAttribute("class", "form-control");
+            formElement.required = true;
+
+            let optionElement = document.createElement("option");
+            optionElement.setAttribute("value", "");
+            optionElement.innerHTML = `Select A Sensor`;
+            formElement.append(optionElement);
+
+            response.forEach(option => {
+                let optionElement = document.createElement("option");
+                optionElement.setAttribute("value", option.sensorId);
+                optionElement.innerHTML = `${option.sensor_name} <em class="mx-1" style="font-size: 0.75em">(ID: ${option.sensorId})</em>`;
+                formElement.append(optionElement);
+            });
+
+            inputGroup.append(formElement);
+            //formulaInputs.append(inputGroup);
+
+            console.log(inputGroup);
+
+            formulaInputs.push(inputGroup);
+
+        })
+        .catch(e => console.log(e));
+
+        
+
+        return formulaInputs;
     }
 }
 

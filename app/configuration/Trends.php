@@ -176,5 +176,33 @@
 
             return $result;
         }
+
+        public function getFormulas() {
+
+            $formulas = array();
+
+            try {
+
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("SELECT * FROM `formulas` ORDER BY `displayName` ASC");
+
+                $statement->execute();
+
+                $formulas = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
+
+            }
+            catch(PDOException $pdo) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+            
+            return $formulas;
+        }
     }
 ?>

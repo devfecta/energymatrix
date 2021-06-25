@@ -195,7 +195,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     $Sensors = new Sensors();
                     switch ($_GET['method']) {
                         case "getUserSensors":
-                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $_GET['userId'] . "\n", 3, "/var/www/html/app/php-errors.log");
+                            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $_GET['userId'] . "\n", 3, "/var/www/html/app/php-errors.log");
                             
 
                             $userSensors = $Sensors->getUserSensors($_GET['userId']);
@@ -285,18 +285,20 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             break;
                     }
                     break;
-                    case "Trends":
-                        $trends = new Trends();
-                        switch ($_GET['method']) {
-                            case "getTrends":
-                                // error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
-                                echo json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId']), JSON_PRETTY_PRINT);
-                                break;
-                            default:
-                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
+                case "Trends":
+                    $trends = new Trends();
+                    switch ($_GET['method']) {
+                        case "getTrends":
+                            // error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            echo json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId']), JSON_PRETTY_PRINT);
                             break;
-                        }
+                        case "getFormulas":
+                            echo json_encode($trends->getFormulas(), JSON_PRETTY_PRINT);
+                        default:
+                            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                         break;
+                    }
+                    break;
                 default:
                     error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET CLASS ERROR: The '.$_GET['class'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                     break;

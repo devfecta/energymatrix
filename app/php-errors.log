@@ -1,75 +1,111 @@
-Line: 242 - 2021-06-24 10:38:03 GET METHOD ERROR: The getUserSensors method does not exist.
-Line: 198 - 2021-06-24 10:38:03 2
-Line: 198 - 2021-06-24 10:38:03 3
-Line: 198 - 2021-06-24 10:38:03 5
-Line: 242 - 2021-06-24 10:38:59 GET METHOD ERROR: The getUserSensors method does not exist.
-Line: 198 - 2021-06-24 10:39:00 2
-Line: 198 - 2021-06-24 10:39:00 3
-Line: 198 - 2021-06-24 10:39:00 5
-Line: 198 - 2021-06-24 10:39:18 null
-Line: 198 - 2021-06-24 10:39:18 2
-Line: 198 - 2021-06-24 10:39:18 3
-Line: 198 - 2021-06-24 10:39:18 5
-Line: 198 - 2021-06-24 10:40:45 2
-Line: 198 - 2021-06-24 10:40:45 2
-Line: 198 - 2021-06-24 10:40:45 3
-Line: 198 - 2021-06-24 10:40:45 5
-Line: 198 - 2021-06-24 10:40:53 3
-Line: 198 - 2021-06-24 10:40:53 2
-Line: 198 - 2021-06-24 10:40:53 3
-Line: 198 - 2021-06-24 10:40:53 5
-Line: 198 - 2021-06-24 11:12:36 2
-Line: 198 - 2021-06-24 11:12:36 3
-Line: 198 - 2021-06-24 11:12:36 5
-Line: 198 - 2021-06-24 11:12:41 2
-Line: 198 - 2021-06-24 11:12:41 2
-Line: 198 - 2021-06-24 11:12:41 3
-Line: 198 - 2021-06-24 11:12:41 5
-Line: 198 - 2021-06-24 11:12:53 2
-Line: 198 - 2021-06-24 11:12:53 2
-Line: 198 - 2021-06-24 11:12:53 3
-Line: 198 - 2021-06-24 11:12:53 5
-Line: 198 - 2021-06-24 11:13:07 2
-Line: 198 - 2021-06-24 11:13:07 2
-Line: 198 - 2021-06-24 11:13:07 3
-Line: 198 - 2021-06-24 11:13:07 5
-Line: 198 - 2021-06-24 11:14:08 2
-Line: 198 - 2021-06-24 11:14:08 2
-Line: 198 - 2021-06-24 11:14:08 3
-Line: 198 - 2021-06-24 11:14:08 5
-Line: 198 - 2021-06-24 11:14:10 2
-Line: 198 - 2021-06-24 11:14:10 2
-Line: 198 - 2021-06-24 11:14:10 3
-Line: 198 - 2021-06-24 11:14:10 5
-Line: 198 - 2021-06-24 11:14:20 2
-Line: 198 - 2021-06-24 11:14:20 2
-Line: 198 - 2021-06-24 11:14:20 3
-Line: 198 - 2021-06-24 11:14:20 5
-Line: 198 - 2021-06-24 11:14:54 2
-Line: 198 - 2021-06-24 11:14:54 2
-Line: 198 - 2021-06-24 11:14:54 3
-Line: 198 - 2021-06-24 11:14:54 5
-Line: 198 - 2021-06-24 11:15:58 2
-Line: 198 - 2021-06-24 11:15:58 2
-Line: 198 - 2021-06-24 11:15:58 3
-Line: 198 - 2021-06-24 11:15:58 5
-Line: 198 - 2021-06-24 11:17:14 2
-Line: 198 - 2021-06-24 11:17:14 2
-Line: 198 - 2021-06-24 11:17:14 3
-Line: 198 - 2021-06-24 11:17:14 5
-Line: 198 - 2021-06-24 11:17:30 2
-Line: 198 - 2021-06-24 11:17:30 2
-Line: 198 - 2021-06-24 11:17:30 3
-Line: 198 - 2021-06-24 11:17:30 5
-Line: 198 - 2021-06-24 11:25:43 2
-Line: 198 - 2021-06-24 11:25:43 2
-Line: 198 - 2021-06-24 11:25:43 3
-Line: 198 - 2021-06-24 11:25:43 5
-Line: 198 - 2021-06-24 11:25:53 2
-Line: 198 - 2021-06-24 11:25:53 2
-Line: 198 - 2021-06-24 11:25:53 3
-Line: 198 - 2021-06-24 11:25:53 5
-Line: 198 - 2021-06-24 11:27:29 2
-Line: 198 - 2021-06-24 11:27:29 2
-Line: 198 - 2021-06-24 11:27:29 3
-Line: 198 - 2021-06-24 11:27:29 5
+Line: 298 - 2021-06-24 19:16:03 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 198 - 2021-06-24 19:16:03 2
+Line: 198 - 2021-06-24 19:16:03 2
+Line: 198 - 2021-06-24 19:16:03 3
+Line: 198 - 2021-06-24 19:16:03 5
+Line: 298 - 2021-06-24 19:17:26 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 198 - 2021-06-24 19:17:26 2
+Line: 198 - 2021-06-24 19:17:26 2
+Line: 198 - 2021-06-24 19:17:26 3
+Line: 198 - 2021-06-24 19:17:26 5
+Line: 298 - 2021-06-24 19:42:24 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:42:26 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:43:22 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:45:07 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:45:45 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:47:01 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:47:45 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:47:54 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:48:37 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:49:20 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:49:31 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:51:40 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:58:52 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 19:59:01 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:00:36 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:01:22 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:02:32 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:02:48 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:03:05 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:03:54 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:38:21 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:38:30 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 20:38:46 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:09:29 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:10:21 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:10:43 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:10:58 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:11:38 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:11:42 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:12:37 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:13:07 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:13:49 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:33:17 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:33:54 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:34:01 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:34:44 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:34:45 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:35:42 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:35:45 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:36:54 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:37:25 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:37:30 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:38:23 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:39:01 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:39:07 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:39:29 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:40:09 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:41:09 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:41:52 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:43:21 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:44:52 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:45:13 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:45:35 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:46:19 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:46:48 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:51:43 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:51:59 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:52:24 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:53:28 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:53:35 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:54:04 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:54:09 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:55:37 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:55:39 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:56:07 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:57:14 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:57:16 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:58:09 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:59:00 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:59:10 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 21:59:35 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:00:33 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:00:38 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:00:56 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:00:57 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:01:32 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:02:30 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:03:43 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:03:54 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:04:15 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:05:30 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:06:27 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:07:07 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:07:22 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:07:42 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:07:53 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:08:09 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:09:41 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:10:46 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:11:22 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:12:13 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:13:12 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:14:36 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:15:34 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:16:06 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:19:21 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:20:34 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:21:43 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:22:23 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:23:56 GET METHOD ERROR: The getFormulas method does not exist.
+Line: 298 - 2021-06-24 22:25:49 GET METHOD ERROR: The getFormulas method does not exist.
