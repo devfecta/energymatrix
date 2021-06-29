@@ -204,5 +204,34 @@
             
             return $formulas;
         }
+
+        public function getFormulaTrends($userId, $sensorId) {
+
+            $trends = array();
+            
+            try {
+
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("SELECT * FROM `trendsCalculated` WHERE `userId`=:userId AND `sensorId`=:sensorId ORDER BY `trendName` ASC");
+                $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
+                $statement->bindValue(":sensorId", $sensorId, PDO::PARAM_INT);
+                $statement->execute();
+
+                $trends = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
+
+            }
+            catch(PDOException $pdo) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+            
+            return $trends;
+        }
     }
 ?>

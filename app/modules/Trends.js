@@ -238,7 +238,7 @@ class Trends extends Services {
     */
 
     getFormulas = async () => {
-        return await this.getApi("Trends", "getFormulas")
+        return await this.getApi("Trends", "getFormulas", null)
         .then(response => response)
         .catch(e => console.log(e));
     }
@@ -396,13 +396,36 @@ class Trends extends Services {
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "companySensors");
-                inputLabel.innerHTML = "Sensor/Trend: ";
+                inputLabel.innerHTML = "Sensor: ";
                 inputGroup.append(inputLabel);
 
                 const formElement = document.createElement("select");
                 formElement.setAttribute("id", "companySensors");
                 formElement.setAttribute("name", "companySensors");
                 formElement.setAttribute("class", "form-control");
+
+
+                formElement.addEventListener("change", (event) => {
+
+                    // Create trend dropdown and append to formulaInputs
+
+                    let formulaInputs = document.querySelector("#formulaInputs");
+                
+                    let sensorId = event.target.options[event.target.options.selectedIndex].value;
+
+                    formElement.setAttribute("disabled", true);
+                    
+                    this.getFormulaTrends(userId, sensorId)
+                    .then(dropdown => {
+
+                        console.log("test");
+                        formulaInputs.append(dropdown);
+                    })
+                    .catch(e => console.log(e));
+                    
+                });
+
+
                 formElement.required = true;
 
                 let optionElement = document.createElement("option");
@@ -418,7 +441,6 @@ class Trends extends Services {
                 });
 
                 inputGroup.append(formElement);
-                //formulaInputs.append(inputGroup);
 
                 console.log(inputGroup);
 
@@ -427,9 +449,62 @@ class Trends extends Services {
             })
             .catch(e => console.log(e));
         }
-        
 
         return formulaInputs;
+    }
+
+    getFormulaTrends = async (userId, sensorId) => {
+
+        let inputGroup = HTMLElement;
+		let inputLabel = HTMLElement;
+
+        await this.getApi("Trends", "getFormulaTrends", "userId=" + userId + "&sensorId=" + sensorId)
+        .then(trends => {
+            
+            inputGroup = document.createElement("div");
+            inputGroup.setAttribute("class", "col-md-12 form-group");
+
+            inputLabel = document.createElement("label");
+            inputLabel.setAttribute("for", "formulaTrends[]");
+            inputLabel.innerHTML = "Sensor Trend: ";
+            inputGroup.append(inputLabel);
+
+            const formElement = document.createElement("select");
+            formElement.setAttribute("id", "formulaTrends[]");
+            formElement.setAttribute("name", "formulaTrends");
+            formElement.setAttribute("class", "form-control");
+
+            formElement.addEventListener("change", (event) => {
+
+                let formulaInputs = document.querySelector("#formulaInputs");
+            
+                //sensorId = event.target.options[event.target.options.selectedIndex].value;
+                
+                this.getFormulaTrends(userId, sensorId)
+                .then(dropdown => {
+                    formulaInputs.append(dropdown);
+                })
+                .catch(e => console.log(e));
+                
+            });
+
+            let optionElement = document.createElement("option");
+            optionElement.setAttribute("value", "");
+            optionElement.innerHTML = `Select A Sensor`;
+            formElement.append(optionElement);
+
+            trends.forEach(option => {
+                let optionElement = document.createElement("option");
+                optionElement.setAttribute("value", option.id);
+                optionElement.innerHTML = `${option.trendName} <em class="mx-1" style="font-size: 0.75em">(Sensor ID: ${option.sensorId})</em>`;
+                formElement.append(optionElement);
+            });
+
+            inputGroup.append(formElement);
+        })
+        .catch(e => console.log(e));
+
+        return inputGroup;
     }
 }
 

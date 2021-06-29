@@ -294,9 +294,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             break;
                         case "getFormulas":
                             echo json_encode($trends->getFormulas(), JSON_PRETTY_PRINT);
+                            break;
+                        case "getFormulaTrends":
+                            echo json_encode($trends->getFormulaTrends((int)$_GET['userId'], (int)$_GET['sensorId']), JSON_PRETTY_PRINT);
+                            break;
                         default:
                             error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'GET METHOD ERROR: The '.$_GET['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
-                        break;
+                            break;
                     }
                     break;
                 default:

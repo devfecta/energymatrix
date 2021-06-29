@@ -59,5 +59,8 @@ trends.getFormulas()
 })
 .catch(e => console.log(e));
 
-
+const addTrendButton = document.querySelector("#addTrendButton");
+addTrendButton.addEventListener("click", (event) => {
+    console.log(document.querySelector("form").elements);
+});
 
