@@ -61,6 +61,97 @@ trends.getFormulas()
 
 const addTrendButton = document.querySelector("#addTrendButton");
 addTrendButton.addEventListener("click", (event) => {
-    console.log(document.querySelector("form").elements);
+
+    const trendFormElements = document.querySelector("form").elements;
+
+    let formData = new FormData();
+    formData.append("class", "Trends");
+    formData.append("method", "insertCalculatedTrend");
+
+    
+
+    //console.log(document.querySelector("form").elements);
+    formData.append("userId", userId);
+
+    formData.append("trendName", trendFormElements.trendName.value);
+    formData.append("trendFormula", trendFormElements.trendFormulas.value);
+
+    const inputs = {
+        "heatCapacity" : null
+        , "averagingFactor" : null
+        , "mAMin" : null
+        , "mAMax" : null
+        , "processMin" : null
+        , "processMax" : null
+        , "density" : null
+        , "voltage" : null
+        , "powerFactor" : null
+    };
+
+    switch (trendFormElements.trendFormulas.value) {
+        case "chillerEfficiency":
+            inputs.heatCapacity = trendFormElements.heatCapacity.value;
+            //formData.append("heatCapacity", trendFormElements.heatCapacity.value);
+            break;
+        case "current":
+            inputs.averagingFactor = trendFormElements.averagingFactor.value;
+            //formData.append("averagingFactor", trendFormElements.averagingFactor.value);
+            break;
+        case "maConversion":
+            inputs.mAMin = trendFormElements.mAMin.value;
+            inputs.mAMax = trendFormElements.mAMax.value;
+            inputs.processMin = trendFormElements.processMin.value;
+            inputs.processMax = trendFormElements.processMax.value;
+            //formData.append("mAMin", trendFormElements.mAMin.value);
+            //formData.append("mAMax", trendFormElements.mAMax.value);
+            //formData.append("processMin", trendFormElements.processMin.value);
+            //formData.append("processMax", trendFormElements.processMax.value);
+            break;
+        case "massFlow":
+            inputs.density = trendFormElements.density.value;
+            //formData.append("density", trendFormElements.density.value);
+            break;
+        case "power":
+            inputs.voltage = trendFormElements.voltage.value;
+            inputs.powerFactor = trendFormElements.powerFactor.value;
+            //formData.append("voltage", trendFormElements.voltage.value);
+            //formData.append("powerFactor", trendFormElements.powerFactor.value);
+            break;
+        default:
+            break;
+    }
+
+    formData.append("inputs", JSON.stringify(inputs));
+
+    formData.append("sensorId", trendFormElements.companySensors.value);
+
+
+    // Check to see if any trends are selected.
+    let selectedTrends = [];
+
+    if (trendFormElements.formulaTrends[0].value) {
+
+        let formulaTrends = trendFormElements.formulaTrends;
+        
+        formulaTrends.forEach(element => {
+            if (element.value !== "") {
+                selectedTrends.push(element.value)
+                
+            }
+        });
+        
+    }
+
+    formData.append("associatedTrends", JSON.stringify(selectedTrends));
+
+    trends.insertCalculatedTrend(formData);
+
+    
+    /*
+    
+    formData.append("company", sensorForm.company.value);
+    formData.append("sensorId", sensorForm.sensorId.value);
+    formData.append("sensorName", sensorForm.sensorName.value);
+    */
 });
 

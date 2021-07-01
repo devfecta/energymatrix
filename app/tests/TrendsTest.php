@@ -32,6 +32,23 @@ final class TrendsTest extends TestCase
 
     }
 
+    public function testInsertCalculatedTrend(): void
+    {
+        $trend = '{
+            "class": "Trends",
+            "method": "insertCalculatedTrend",
+            "userId": "2",
+            "trendName": "test",
+            "trendFormula": "maConversion",
+            "inputs": "{\"heatCapacity\":null,\"averagingFactor\":null,\"mAMin\":\"1\",\"mAMax\":\"2\",\"processMin\":\"3\",\"processMax\":\"4\",\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+            "sensorId": "111111",
+            "associatedTrends": "[\"1\",\"2\"]"
+        }';
+
+        $trends = new Trends();
+        $this->assertIsArray($trends->insertCalculatedTrend($trend));
+    }
+
     public function testGetTrends(): void
     {
         $trends = new Trends();

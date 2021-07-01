@@ -177,6 +177,66 @@
             return $result;
         }
 
+        public function insertCalculatedTrend($formData) {
+            $result = array();
+
+            $data = json_decode(json_encode($formData), false);
+
+            try {
+
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("INSERT INTO `trendsCalculated` (
+                    `userId`,
+                    `sensorId`,
+                    `trendName`,
+                    `trendFormula`,
+                    `inputs`,
+                    `associatedTrends`
+                ) 
+                VALUES (
+                    :userId,
+                    :sensorId,
+                    :trendName,
+                    :trendFormula,
+                    :inputs,
+                    :associatedTrends
+                )");
+                
+                $statement->bindParam(":userId", $data->userId, PDO::PARAM_INT);
+                $statement->bindValue(":sensorId", $data->sensorId, PDO::PARAM_INT);
+                $statement->bindParam(":trendName", $data->trendName, PDO::PARAM_STR);
+                $statement->bindParam(":trendFormula", $data->trendFormula, PDO::PARAM_STR);
+                $statement->bindParam(":inputs", $data->inputs, PDO::PARAM_STR);
+                $statement->bindValue(":associatedTrends", $data->associatedTrends, PDO::PARAM_STR);
+
+                $connection->beginTransaction();
+                $statement->execute();
+                $lastInsertId = $connection->lastInsertId();
+                $connection->commit();
+
+
+                $statement = $connection->prepare("SELECT * FROM `trendsCalculated` WHERE `id`=:trendId");
+                $statement->bindValue(":trendId", $lastInsertId, PDO::PARAM_INT);
+                $statement->execute();
+
+                $result = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+                
+            }
+            catch(PDOException $pdo) {
+                $connection->rollback();
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+
+            return $result;
+        }
+
         public function getFormulas() {
 
             $formulas = array();

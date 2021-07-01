@@ -155,9 +155,13 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             // error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
                             echo json_encode($trends->insertTrend($_POST));
                             break;
+                        case "insertCalculatedTrend":
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_POST, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            echo json_encode($trends->insertCalculatedTrend($_POST));
+                            break;
                         default:
-                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
-                        break;
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
+                            break;
                     }
                     break;
                 default:

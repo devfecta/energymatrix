@@ -163,6 +163,20 @@ class Trends extends Services {
     
     }
     /**
+     * Inserts a new trend into the database.
+     *
+     * @param   {FormData}  trendForm  Form data of the new trend.
+     *
+     * @return  {json}  JSON of the new trend data.
+     */
+     insertCalculatedTrend = async (trendForm) => {
+
+        return await this.postApi(trendForm)
+        .then(response => response)
+        .catch(e => console.log(e));
+    
+    }
+    /**
      * Creates a trend row in the list of trends.
      *
      * @param   {json}  trend  JSON of trend data
