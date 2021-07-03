@@ -126,6 +126,96 @@ class Sidebar extends Services {
      * @return  {HTMLElement}
      */
     getCompaniesMenu = () => {
+
+        let menuItem = {
+            "id" : "copmaniesButton"
+            , "subMenuId" : "companies"
+            , "buttonValue" : '<span class="fas fa-building pe-1"></span> Companies'
+        };
+
+        let companiesMenuItem = this.getMenuItem(menuItem);
+
+        let companyMenuItem = {
+            "id" : menuItem.subMenuId
+            , "parentId" : menuItem.id
+        };
+
+        let subMenu = this.getSubMenuItem(companyMenuItem);
+        subMenu.append(this.getAddCompanyButton());
+
+        /*
+            menuItems.id
+            menuItems.parentId
+            menuItems.value
+        */
+
+        this.getApi("Users", "getCompanies")
+        .then(companies => {
+
+            companies.forEach(company => {
+
+                let subMenuItem = {
+                    "id" : "company" + company.id
+                    , "subMenuId" : "sensors" + company.id
+                    , "buttonValue" : company.company + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${company.id})</em>`
+                };
+
+                let item = this.getMenuItem(subMenuItem);
+
+                let addSensorMenuItem = {
+                    "id" : "sensors" + company.id
+                    , "parentId" : "company" + company.id
+                };
+
+                let itemSub = this.getSubMenuItem(addSensorMenuItem);
+
+                itemSub.append(this.getAddSensorButton());
+
+                item.append(itemSub);
+
+                //item.querySelector("button");
+                //item.addEventListener();
+        
+                subMenu.append(item);
+
+                
+                /*
+                // Company menu item.
+                const companyMenu = document.createElement('div');
+                companyMenu.setAttribute("class", "accordion-item");
+                companyMenu.setAttribute("id","companyMenu" + company.id);
+                // Company button with the company name.
+                const companyButton = document.createElement('button');
+                companyButton.setAttribute("class", "accordion-button border-0 collapsed");
+                companyButton.setAttribute("type", "button");
+                companyButton.setAttribute("data-bs-toggle", "collapse");
+                companyButton.setAttribute("data-bs-target", "#sensorsMenuItems" + company.id);
+                companyButton.setAttribute("aria-expanded", "false");
+                companyButton.setAttribute("aria-controls", "sensorsMenuItems" + company.id);
+                companyButton.innerHTML = company.company + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${company.id})</em>`;
+                // Appends the company button with the company name.                
+                companyMenu.append(companyButton);
+                
+                companyMenu.append(this.getSensorsMenu(company.id));
+
+                companyMenu.append(this.getTrendsMenu(company.id));
+
+                console.log(companyMenu);
+
+                menu.append(companyMenu);
+                */
+            });
+
+            companiesMenuItem.append(subMenu);
+
+            console.log(companiesMenuItem);
+            
+            //menu.append(companiesMenuItem);
+        })
+        .catch(error => console.log(error));
+
+        return companiesMenuItem;
+
         const menuButton = document.createElement("div");
         menuButton.setAttribute("class", "accordion-item");
         menuButton.setAttribute("id","companiesButton");
@@ -181,6 +271,10 @@ class Sidebar extends Services {
                 companyMenu.append(companyButton);
                 
                 companyMenu.append(this.getSensorsMenu(company.id));
+
+                companyMenu.append(this.getTrendsMenu(company.id));
+
+                console.log(companyMenu);
 
                 menu.append(companyMenu);
             });
@@ -249,7 +343,6 @@ class Sidebar extends Services {
             userType = document.cookie.split('; ').find(c => c.startsWith('userType')).split('=')[1];
         }
 
-        
         // Creates the sub-menu area for the add trend button and list of trends.
         const menu = document.createElement("div");
         menu.setAttribute("id","trendsMenuItems" + companyId);
@@ -275,7 +368,7 @@ class Sidebar extends Services {
         trendsButton.innerHTML = '<span class="fas fa-chart-line pe-1"></span> Trends';
 
         menuButton.append(trendsButton);
-        menuButton.append(this.getTrendMenuList(companyId, userType));
+        //menuButton.append(this.getTrendMenuList(companyId, userType));
 
         menu.append(menuButton);
 
@@ -429,6 +522,67 @@ class Sidebar extends Services {
             location.href = './logout.php';
         }
         
+    }
+
+
+
+
+    getMenuItem = (menuItems) => {
+
+        /*
+            menuItems.id
+            menuItems.subMenuId
+            menuItems.buttonValue
+        */
+
+        let menu = document.createElement("div")
+        menu.setAttribute("id", menuItems.id);
+        menu.setAttribute("class", "accordian-item");
+
+        let menuButton = document.createElement("button");
+        menuButton.setAttribute("class", "accordian-button btn btn-light m-2 text-nowrap border-0 collapsed");
+        menuButton.setAttribute("data-bs-toggle", "collapse");
+        menuButton.setAttribute("data-bs-target", "#" + menuItems.subMenuId);
+        menuButton.setAttribute("aria-controls", menuItems.subMenuId);
+        menuButton.setAttribute("aria-expanded", "false");
+        menuButton.innerHTML = menuItems.buttonValue;
+
+        menu.append(menuButton);
+
+        return menu;
+
+    }
+
+    // Append
+    getSubMenuItem = (menuItem) => {
+
+        /*
+            menuItems.id
+            menuItems.parentId
+            menuItems.value
+        */
+
+        let subMenu = HTMLElement;
+
+        subMenu = document.createElement("div");
+        subMenu.setAttribute("id", menuItem.id);
+        subMenu.setAttribute("class", "accordian-collapse collapse");
+        subMenu.setAttribute("aria-labelledby", menuItem.parentId);
+        subMenu.setAttribute("data-bs-parent", "#" + menuItem.parentId);
+        /*
+        if (menuItem.value) {
+            subMenu.innerHTML = menuItem.value;
+        }
+        else {
+            // Append submenu later
+        }
+        */
+        /*
+        menuItems.forEach(item => {
+            
+        });
+        */
+        return subMenu;
     }
 }
 

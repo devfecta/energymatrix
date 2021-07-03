@@ -432,7 +432,7 @@ class Trends extends Services {
                     this.getFormulaTrends(userId, sensorId)
                     .then(dropdown => {
 
-                        console.log("test");
+                        //console.log("test");
                         formulaInputs.append(dropdown);
                     })
                     .catch(e => console.log(e));

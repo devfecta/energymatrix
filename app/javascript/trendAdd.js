@@ -40,8 +40,6 @@ trendFormulas.addEventListener("change", (event) => {
 trends.getFormulas()
 .then(response => {
 
-    console.log(response);
-
     let optionElement = document.createElement("option");
     optionElement.setAttribute("value", "");
     optionElement.innerHTML = `Select a Formula`;
@@ -67,8 +65,6 @@ addTrendButton.addEventListener("click", (event) => {
     let formData = new FormData();
     formData.append("class", "Trends");
     formData.append("method", "insertCalculatedTrend");
-
-    
 
     //console.log(document.querySelector("form").elements);
     formData.append("userId", userId);
@@ -144,7 +140,11 @@ addTrendButton.addEventListener("click", (event) => {
 
     formData.append("associatedTrends", JSON.stringify(selectedTrends));
 
-    trends.insertCalculatedTrend(formData);
+    trends.insertCalculatedTrend(formData)
+    .then(trend => {
+        console.log(trend);
+    })
+    .catch(e => console.log(e));
 
     
     /*

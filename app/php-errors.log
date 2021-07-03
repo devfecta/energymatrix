@@ -94,3 +94,39 @@
     "sensorId": "528876",
     "associatedTrends": "[]"
 }
+/var/www/html/app/api.php Line: 159 - 2021-07-01 10:13:25 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "test",
+    "trendFormula": "chillerEfficiency",
+    "inputs": "{\"heatCapacity\":\"1\",\"averagingFactor\":null,\"mAMin\":null,\"mAMax\":null,\"processMin\":null,\"processMax\":null,\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "111111",
+    "associatedTrends": "[\"1\",\"2\"]"
+}
+/var/www/html/app/api.php Line: 159 - 2021-07-01 10:14:50 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "test",
+    "trendFormula": "chillerEfficiency",
+    "inputs": "{\"heatCapacity\":\"1\",\"averagingFactor\":null,\"mAMin\":null,\"mAMax\":null,\"processMin\":null,\"processMax\":null,\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "111111",
+    "associatedTrends": "[\"1\",\"10\"]"
+}
+/var/www/html/app/api.php Line: 159 - 2021-07-01 10:16:23 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "",
+    "trendFormula": "chillerEfficiency",
+    "inputs": "{\"heatCapacity\":\"1\",\"averagingFactor\":null,\"mAMin\":null,\"mAMax\":null,\"processMin\":null,\"processMax\":null,\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "111111",
+    "associatedTrends": "[\"1\",\"10\"]"
+}
+Line: 311 - 2021-07-01 10:43:14 GET CLASS ERROR: The trends method does not exist.
+Line: 311 - 2021-07-01 10:43:14 GET CLASS ERROR: The trends method does not exist.
+Line: 311 - 2021-07-01 10:43:14 GET CLASS ERROR: The trends method does not exist.
+Line: 311 - 2021-07-01 10:43:44 GET CLASS ERROR: The trends method does not exist.
+Line: 311 - 2021-07-01 10:43:44 GET CLASS ERROR: The trends method does not exist.
+Line: 311 - 2021-07-01 10:43:44 GET CLASS ERROR: The trends method does not exist.

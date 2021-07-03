@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
+</head>
+<body>
+
+    <div class="accordian" id="sideBar">
+
+
+        <div id="menuParent1" class="accordian-item">
+
+            <button class="accordian-button collapsed" data-bs-toggle="collapse" data-bs-target="#menuChild1" aria-controls="menuChild1"  aria-expanded="false">Menu Parent</button>
+        
+            <div id="menuChild1" class="accordian-collapse collapse" aria-labelledby="menuParent1" data-bs-parent="#menuParent1">
+                Menu Child 1
+
+                <div id="menuParent2" class="accordian-item">
+
+                    <button class="accordian-button collapsed" data-bs-toggle="collapse" data-bs-target="#subMenuChild1" aria-controls="subMenuChild1"  aria-expanded="false">Sub Menu Parent</button>
+                
+                    <div id="subMenuChild1" class="accordian-collapse collapse" aria-labelledby="menuParent2" data-bs-parent="#menuParent2">
+                        Sub Menu Child 1
+                    </div>
+        
+                </div>
+
+            </div>
+
+        </div>
+
+        
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
