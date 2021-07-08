@@ -136,6 +136,7 @@ class Sidebar extends Services {
             "parentId" : "copmaniesButton"
             , "subMenuId" : "companies"
             , "buttonTitle" : ""
+            , "buttonClasses" : []
             , "buttonText" : '<span class="fas fa-building pe-1"></span> Companies'
             , "buttonValue" : ""
             , "buttonClick" : function (event) {}
@@ -155,6 +156,7 @@ class Sidebar extends Services {
                     "parentId" : "company" + company.id
                     , "subMenuId" : "companyOptions" + company.id
                     , "buttonTitle" : ""
+                    , "buttonClasses" : []
                     , "buttonText" : company.company + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${company.id})</em>`
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {}
@@ -175,28 +177,6 @@ class Sidebar extends Services {
                 // Appends to Companies Sub Menu
                 companiesSubMenu.append(companyMenu);
                 
-                /*
-                let itemSub = this.getSubMenuItem(addSensorMenuItem);
-                // Add Sensor Button
-                itemSub.append(this.getAddSensorButton(company.id));
-                // Add Trend Button
-                itemSub.append(this.getAddTrendButton(company.id));
-
-                //item.getSensorsMenu(company.id)
-
-                //item.querySelector("button");
-                //item.addEventListener();
-                
-                let sensorsMenuItem = this.getSensorMenuList(company.id, userType);
-
-                itemSub.append(sensorsMenuItem);
-                
-
-                item.append(itemSub);
-        
-                subMenu.append(item);
-                */
-                
             });
 
             companiesMenu.append(companiesSubMenu);
@@ -210,7 +190,7 @@ class Sidebar extends Services {
      * 
      * @return  {HTMLElement}
      */
-    getCompanyMenuList = () => {
+    getCompanyMenuListOLD = () => {
 
         // Creates the sub-menu area for the add companies button and list of companies.
         const menu = document.createElement("div");
@@ -308,7 +288,7 @@ class Sidebar extends Services {
      *
      * @return  {HTMLElement}
      */
-     getTrendsMenu = (companyId) => {
+     getTrendsMenuOLD = (companyId) => {
         let userType = 0;
         if (document.cookie.includes('; ') && document.cookie.includes('userType')) {
             userType = document.cookie.split('; ').find(c => c.startsWith('userType')).split('=')[1];
@@ -353,42 +333,43 @@ class Sidebar extends Services {
      * @return  {HTMLElement}
      */
     getSensorMenu = (companyId, userType) => {
-
+        // Creates the Sensors button
         let menuItem = {
             "parentId" : "sensorsButton" + companyId
             , "subMenuId" : "sensors" + companyId
             , "buttonTitle" : ""
             , "buttonText" : '<span class="fas fa-satellite-dish pe-1"></span> Sensors'
+            , "buttonClasses" : []
             , "buttonValue" : ""
             , "buttonClick" : function (event) {}
         };
-        // Creates the Sensors button
         let sensorsMenu = this.getMenuItem(menuItem);
-
+        // Creates the sub menu area under the Sensors button.
         let sensorsSubMenu = this.getSubMenuItem(menuItem);
 
         this.getApi("Sensors", "getUserSensors", "userId=" + companyId)
         .then(sensors => {
             sensors.forEach(sensor => {
-
+                // Creates the button for a specific sensor.
                 menuItem = {
                     "parentId" : "sensor" + sensor.sensorId
                     , "subMenuId" : "sensorOptions" + sensor.sensorId
                     , "buttonTitle" : ""
                     , "buttonText" : sensor.sensor_name + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${sensor.sensorId})</em>`
+                    , "buttonClasses" : []
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {}
                 };
-
                 let sensorMenu = this.getMenuItem(menuItem);
-
+                // Creates the sub menu area for a specific sensor under the button.
                 let sensorSubMenu = this.getSubMenuItem(menuItem);
-
+                // Creates the View Sensor button and adds it to the specific sensor sub menu.
                 let subMenuItem = {
                     "parentId" : "sensor" + sensor.sensorId
                     , "subMenuId" : "sensorView" + sensor.sensorId
                     , "buttonTitle" : "View Sensor"
                     , "buttonText" : `View <em class="mx-1" style="font-size: 0.75em"> (ID: ${sensor.sensorId})</em>`
+                    , "buttonClasses" : ["d-flex", "justify-content-end"]
                     , "buttonValue" : companyId
                     , "buttonClick" : function (event) {
                         document.cookie = "userId=" + event.target.value;
@@ -396,36 +377,39 @@ class Sidebar extends Services {
                     }
                 };
                 sensorSubMenu.append(this.getMenuItem(subMenuItem));
-
+                // Creates the Edit Sensor button and adds it to the specific sensor sub menu.
                 subMenuItem = {
                     "parentId" : "sensor" + sensor.sensorId
                     , "subMenuId" : "sensorEdit" + sensor.sensorId
                     , "buttonTitle" : "Edit Sensor"
                     , "buttonText" : `Edit <span class="fas fa-pen-square"></span>`
+                    , "buttonClasses" : ["d-flex", "justify-content-end"]
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {
                         window.location.href = "sensorEdit.php?sensorId=" + sensor.sensorId + "&userId=" + companyId
                     }
                 };
                 sensorSubMenu.append(this.getMenuItem(subMenuItem));
-
+                // Creates the View Sensor Trends button and adds it to the specific sensor sub menu.
                 subMenuItem = {
                     "parentId" : "sensor" + sensor.sensorId
                     , "subMenuId" : "sensorEdit" + sensor.sensorId
                     , "buttonTitle" : "View Sensor Trends"
                     , "buttonText" : `Sensor Trends <span class="fas fa-chart-line"></span>`
+                    , "buttonClasses" : ["d-flex", "justify-content-end"]
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {
                         window.location.href = "sensorTrends.php?sensorId=" + sensor.sensorId + "&userId=" + companyId
                     }
                 };
                 sensorSubMenu.append(this.getMenuItem(subMenuItem));
-
+                // Appends the sub menu under the specific sensor button.
                 sensorMenu.append(sensorSubMenu);
                 /* Only needed for a sub menu for a sensor
                 let sensorSubMenu = this.getSubMenuItem(menuItem);
                 sensorsSubMenu.append();
                 */
+                // Appends the specific sensor menu to the sub menu of the Sensors button.
                 sensorsSubMenu.append(sensorMenu);
 
             });
@@ -436,62 +420,6 @@ class Sidebar extends Services {
 
         return sensorsMenu;
 
-
-        const menu = document.createElement("div");
-        menu.setAttribute("id","sensors" + companyId);
-        menu.setAttribute("class", "accordion-collapse border-0 collapse");
-        menu.setAttribute("aria-labelledby", "sensorsButton" + companyId);
-        menu.setAttribute("data-bs-parent", "#sensorsButton" + companyId);
-
-        this.getApi("Sensors", "getUserSensors", "userId=" + companyId)
-        .then(sensors => {
-            
-            sensors.forEach(sensor => {
-                //console.log(sensor);
-                // Sensor Menu Item
-                const sensorsMenuItem = document.createElement('div');
-                sensorsMenuItem.setAttribute("id", "sensorsMenuItem" + sensor.sensorId);
-                sensorsMenuItem.setAttribute("class", "accordion-item d-flex justify-content-end");
-                // View Sensor Button
-                const menuLink = document.createElement('button');
-                menuLink.setAttribute("class", "btn btn-light text-nowrap");
-                menuLink.setAttribute("style", "text-align: left");
-                menuLink.setAttribute("value", companyId)
-                menuLink.addEventListener("click", (e) => {
-                    document.cookie = "userId=" + e.target.value;
-                    window.location.href = "sensor.php?sensorId=" + sensor.sensorId;
-                }, false);
-                menuLink.innerHTML = sensor.sensor_name;
-                // Edit Sensor Button
-                const editButton = document.createElement("button");
-                editButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
-                editButton.setAttribute("type", "button");
-                editButton.setAttribute("title", "Edit Sensor");
-                editButton.onclick = () => { window.location.href = "sensorEdit.php?sensorId=" + sensor.sensorId + "&userId=" + companyId }
-                editButton.innerHTML = `<span class="fas fa-pen-square"></span>`;
-                // Sensor Trends Button
-                const trendsButton = document.createElement("button");
-                trendsButton.setAttribute("class", "btn btn-light text-nowrap align-item-end");
-                trendsButton.setAttribute("type", "button");
-                trendsButton.setAttribute("title", "View Sensor Trends");
-                trendsButton.onclick = () => { window.location.href = "sensorTrends.php?sensorId=" + sensor.sensorId + "&userId=" + companyId }
-                trendsButton.innerHTML = `<span class="fas fa-chart-line"></span>`;
-                // Add Sensor Buttons to Menu Item
-                sensorsMenuItem.append(menuLink);
-                sensorsMenuItem.append(trendsButton);
-                if (userType > 0) {
-                    sensorsMenuItem.append(editButton);
-                }
-                else {}
-                
-                // Add Menu Item to Sensor Group
-                menu.append(sensorsMenuItem);
-            });
-
-        })
-        .catch(error => console.log(error));
-
-        return menu;
     }
     /**
      * Creates a list of trends for a specific company's menu item.
@@ -500,7 +428,7 @@ class Sidebar extends Services {
      *
      * @return  {HTMLElement}
      */
-     getTrendMenuList = (companyId, userType) => {
+     getTrendMenuListOLD = (companyId, userType) => {
 
         const menu = document.createElement("div");
         menu.setAttribute("id","trends" + companyId);
@@ -578,21 +506,28 @@ class Sidebar extends Services {
         
     }
 
-
-
-
+    /**
+     * Creates the menu item with a button.
+     *
+     * @param   {json}  menuItems
+     *
+     * @return  {HTMLElement}
+     */
     getMenuItem = (menuItems) => {
         /*
             menuItems.parentId
             menuItems.subMenuId
             menuItems.buttonValue
         */
-        let menu = document.createElement("div")
+        let menu = HTMLElement;
+        menu = document.createElement("div")
         menu.setAttribute("id", menuItems.parentId);
         menu.setAttribute("class", "accordian-item");
+        menuItems.buttonClasses.forEach(className => {menu.classList.add(className)});
 
         let menuButton = document.createElement("button");
         menuButton.setAttribute("class", "accordian-button btn btn-light m-2 text-nowrap border-0 collapsed");
+        
         menuButton.setAttribute("data-bs-toggle", "collapse");
         menuButton.setAttribute("data-bs-target", "#" + menuItems.subMenuId);
         menuButton.setAttribute("aria-controls", menuItems.subMenuId);
@@ -607,14 +542,18 @@ class Sidebar extends Services {
 
     }
 
-    // Append
+    /**
+     * Creates the sub menu area under the menu button.
+     *
+     * @param   {json}  menuItem
+     *
+     * @return  {HTMLElement}
+     */
     getSubMenuItem = (menuItem) => {
-
         /*
             menuItems.subMenuId
             menuItems.parentId
         */
-
         let subMenu = HTMLElement;
 
         subMenu = document.createElement("div");
@@ -622,19 +561,7 @@ class Sidebar extends Services {
         subMenu.setAttribute("class", "accordian-collapse collapse");
         subMenu.setAttribute("aria-labelledby", menuItem.parentId);
         subMenu.setAttribute("data-bs-parent", "#" + menuItem.parentId);
-        /*
-        if (menuItem.value) {
-            subMenu.innerHTML = menuItem.value;
-        }
-        else {
-            // Append submenu later
-        }
-        */
-        /*
-        menuItems.forEach(item => {
-            
-        });
-        */
+        
         return subMenu;
     }
 }
