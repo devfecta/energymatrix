@@ -368,10 +368,11 @@ class Sidebar extends Services {
                     "parentId" : "sensor" + sensor.sensorId
                     , "subMenuId" : "sensorView" + sensor.sensorId
                     , "buttonTitle" : "View Sensor"
-                    , "buttonText" : `View <em class="mx-1" style="font-size: 0.75em"> (ID: ${sensor.sensorId})</em>`
+                    , "buttonText" : `View (ID: ${sensor.sensorId})`
                     , "buttonClasses" : ["d-flex", "justify-content-end"]
                     , "buttonValue" : companyId
                     , "buttonClick" : function (event) {
+                        console.log(event.target);
                         document.cookie = "userId=" + event.target.value;
                         window.location.href = "sensor.php?sensorId=" + sensor.sensorId;
                     }

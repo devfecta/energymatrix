@@ -28,7 +28,7 @@
             return $lastAverage;
         }
 
-        public function lastAverage($sensorData, $startTime, $range) {
+        public function lastAverageNEW($sensorData, $startTime, $range) {
 
             return false;
 
@@ -40,8 +40,33 @@
          * Current [a] to [b] range based on inputs under “Show in Dashboard”
          * c = minimum operational value (L)
         */
-        public function currentAverage($rangeStart, $rangeEnd, $constraint) {
-            return $currentAverage;
+        public function currentAverage($dataPoints, $constraint) {
+
+            $data = array(0);
+            // Creates an array data points that are greater than the constraint.
+            foreach ($dataPoints as $dataPoint) {
+                if ($dataPoint->getDataValue() > $constraint) {
+                    array_push($data, $dataPoint->getDataValue());
+                }
+            }
+
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . count($data) . "\n", 3, "/var/www/html/app/php-errors.log");
+        
+
+            // Number of numbers within the range.
+            $count = count($data);
+            // Adds up the numbers in the range.
+            $sum = array_sum($data);
+            // Calculates the range average.
+            $average = $sum / $count;
+
+            if ($average > $constraint) {
+                $currentAverage = $average;
+            }
+            else {
+                $currentAverage = $constraint;
+            }
+            return round($currentAverage, 3);
         }
         
         /**
@@ -52,8 +77,8 @@
          * d = Process Max (input value)
          * e = Process Min (input value)
         */
-        public function maConversion($sensorReading, $maMin, $maMax, $procesMin, $processMax) {
-            $processValue = ($sensorReading - $maMin) / ($maMax - $maMin) * ($processMax - $procesMin);
+        public function maConversion($sensorReading, $maMin, $maMax, $processMin, $processMax) {
+            $processValue = ($sensorReading - $maMin) / ($maMax - $maMin) * ($processMax - $processMin);
             return $processValue;
         }
         
