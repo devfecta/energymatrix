@@ -1,6 +1,7 @@
 <?php
 
 require_once('Configuration.php');
+require_once('Sensor.php');
 require_once('DataPoint.php');
 
 class DataPoints extends DataPoint {
@@ -224,7 +225,9 @@ class DataPoints extends DataPoint {
 
         try {
             
-            $connection = Configuration::openConnection();  
+            $connection = Configuration::openConnection();
+
+            $sensorId = Sensor::getSensor($sensorId)->getSensorId();
 
             if ($endDateTime != "null") {
                 $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`sensor_id`=:sensor_id AND `dataPoints`.`user_id`=:user_id AND `dataPoints`.`date_time`>=:startDateTime AND `dataPoints`.`date_time`<=:endDateTime ORDER BY `date_time` ASC");
@@ -295,12 +298,6 @@ class DataPoints extends DataPoint {
 
     }
 
-    public function calculateMaProcess($attributes, $storedValue) {
-        
-        $attributes = json_decode($attributes, false);
-        return (($storedValue - $attributes->mAMin) / ($attributes->mAMax - $attributes->mAMin)) * ($attributes->processMax - $attributes->processMin);
-    }
-
     public function getSensorDataTypes($sensorId) {
 
         $dataTypes = array();
@@ -308,6 +305,8 @@ class DataPoints extends DataPoint {
         try {
             
             $connection = Configuration::openConnection();
+
+            $sensorId = Sensor::getSensor($sensorId)->getSensorId();
 
             $statement = $connection->prepare("SELECT `dataPoints`.`data_type` FROM `dataPoints` WHERE `dataPoints`.`sensor_id`=:sensor_id GROUP BY `dataPoints`.`data_type`");
             $statement->bindParam(":sensor_id", $sensorId, PDO::PARAM_INT);
@@ -395,6 +394,8 @@ class DataPoints extends DataPoint {
         try {
 
             $connection = Configuration::openConnection();
+
+            $sensorId = Sensor::getSensor($sensorId)->getSensorId();
 
             $statement = $connection->prepare("SELECT MIN(date_time) AS minDate, MAX(date_time) AS maxDate FROM dataPoints WHERE user_id=:userId AND sensor_id=:sensorId");
             $statement->bindParam(":userId", $userId, PDO::PARAM_STR);

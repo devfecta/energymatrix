@@ -12,7 +12,7 @@ class Sidebar extends Services {
 
         const dashboardButton = document.createElement("button");
         dashboardButton.setAttribute("type", "button");
-        dashboardButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        dashboardButton.setAttribute("class", "btn btn-light text-nowrap m-2");
         dashboardButton.addEventListener("click", (event) => {
             window.location.href = "index.php"
         }, false);
@@ -35,7 +35,7 @@ class Sidebar extends Services {
 
         const logoutButton = document.createElement("button");
         logoutButton.setAttribute("type", "button");
-        logoutButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        logoutButton.setAttribute("class", "btn btn-light text-nowrap m-2");
         logoutButton.addEventListener("click", (event) => {
             window.location.href = "logout.php"
         }, false);
@@ -56,7 +56,7 @@ class Sidebar extends Services {
 
         const addCompanyButton = document.createElement("button");
         addCompanyButton.setAttribute("type", "button");
-        addCompanyButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        addCompanyButton.setAttribute("class", "btn btn-light text-nowrap m-2");
         addCompanyButton.addEventListener("click", (event) => {
             window.location.href = "register.php"
         }, false);
@@ -78,7 +78,7 @@ class Sidebar extends Services {
 
         const addButton = document.createElement("button");
         addButton.setAttribute("type", "button");
-        addButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        addButton.setAttribute("class", "btn btn-light text-nowrap m-2");
         addButton.setAttribute("value", companyId);
         addButton.addEventListener("click", (event) => {
             window.location.href = "sensorAdd.php?companyId=" + event.target.value
@@ -101,7 +101,7 @@ class Sidebar extends Services {
 
         const addButton = document.createElement("button");
         addButton.setAttribute("type", "button");
-        addButton.setAttribute("class", "btn btn-light m-2 text-nowrap");
+        addButton.setAttribute("class", "btn btn-light text-nowrap m-2");
         addButton.setAttribute("value", companyId);
         addButton.addEventListener("click", (event) => {
             window.location.href = "trendAdd.php?userId=" + event.target.value
@@ -137,7 +137,7 @@ class Sidebar extends Services {
             , "subMenuId" : "companies"
             , "buttonTitle" : ""
             , "buttonClasses" : []
-            , "buttonText" : '<span class="fas fa-building pe-1"></span> Companies'
+            , "buttonText" : '<span class="fas fa-building"></span><span class="fas fa-building pe-1"></span> Companies'
             , "buttonValue" : ""
             , "buttonClick" : function (event) {}
         };
@@ -157,7 +157,7 @@ class Sidebar extends Services {
                     , "subMenuId" : "companyOptions" + company.id
                     , "buttonTitle" : ""
                     , "buttonClasses" : []
-                    , "buttonText" : company.company + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${company.id})</em>`
+                    , "buttonText" : '<span class="fas fa-building pe-1"></span> ' + company.company + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${company.id})</em>`
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {}
                 };
@@ -181,7 +181,7 @@ class Sidebar extends Services {
 
             companiesMenu.append(companiesSubMenu);
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
 
         return companiesMenu;
     }
@@ -224,13 +224,13 @@ class Sidebar extends Services {
 
                 companyMenu.append(this.getTrendsMenu(company.id));
 
-                console.log(companyMenu);
+                //console.log(companyMenu);
 
                 menu.append(companyMenu);
             });
             
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
 
         return menu;
     }
@@ -338,7 +338,7 @@ class Sidebar extends Services {
             "parentId" : "sensorsButton" + companyId
             , "subMenuId" : "sensors" + companyId
             , "buttonTitle" : ""
-            , "buttonText" : '<span class="fas fa-satellite-dish pe-1"></span> Sensors'
+            , "buttonText" : '<span class="fas fa-satellite-dish"></span><span class="fas fa-satellite-dish pe-1"></span> Sensors'
             , "buttonClasses" : []
             , "buttonValue" : ""
             , "buttonClick" : function (event) {}
@@ -349,13 +349,19 @@ class Sidebar extends Services {
 
         this.getApi("Sensors", "getUserSensors", "userId=" + companyId)
         .then(sensors => {
+
+            // console.log(sensors);
+
             sensors.forEach(sensor => {
                 // Creates the button for a specific sensor.
+
+                //console.log(sensor);
+
                 menuItem = {
-                    "parentId" : "sensor" + sensor.sensorId
-                    , "subMenuId" : "sensorOptions" + sensor.sensorId
+                    "parentId" : "sensor" + sensor.id
+                    , "subMenuId" : "sensorOptions" + sensor.id
                     , "buttonTitle" : ""
-                    , "buttonText" : sensor.sensor_name + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${sensor.sensorId})</em>`
+                    , "buttonText" : '<span class="fas fa-satellite-dish pe-1"></span>' + sensor.sensor_name + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${sensor.sensorId})</em>`
                     , "buttonClasses" : []
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {}
@@ -365,42 +371,42 @@ class Sidebar extends Services {
                 let sensorSubMenu = this.getSubMenuItem(menuItem);
                 // Creates the View Sensor button and adds it to the specific sensor sub menu.
                 let subMenuItem = {
-                    "parentId" : "sensor" + sensor.sensorId
-                    , "subMenuId" : "sensorView" + sensor.sensorId
-                    , "buttonTitle" : "View Sensor"
-                    , "buttonText" : `View (ID: ${sensor.sensorId})`
-                    , "buttonClasses" : ["d-flex", "justify-content-end"]
+                    "parentId" : "sensor" + sensor.id
+                    , "subMenuId" : "sensorView" + sensor.id
+                    , "buttonTitle" : "View Sensor Data Points"
+                    , "buttonText" : '<span class="fas fa-chart-line pe-1"></span> View Data Points'
+                    , "buttonClasses" : ["d-flex"]
                     , "buttonValue" : companyId
                     , "buttonClick" : function (event) {
-                        console.log(event.target);
+                        //console.log(event.target);
                         document.cookie = "userId=" + event.target.value;
-                        window.location.href = "sensor.php?sensorId=" + sensor.sensorId;
+                        window.location.href = "sensor.php?sensorId=" + sensor.id + "&userId=" + companyId;
                     }
                 };
                 sensorSubMenu.append(this.getMenuItem(subMenuItem));
                 // Creates the Edit Sensor button and adds it to the specific sensor sub menu.
                 subMenuItem = {
-                    "parentId" : "sensor" + sensor.sensorId
-                    , "subMenuId" : "sensorEdit" + sensor.sensorId
+                    "parentId" : "sensor" + sensor.id
+                    , "subMenuId" : "sensorEdit" + sensor.id
                     , "buttonTitle" : "Edit Sensor"
-                    , "buttonText" : `Edit <span class="fas fa-pen-square"></span>`
-                    , "buttonClasses" : ["d-flex", "justify-content-end"]
+                    , "buttonText" : '<span class="fas fa-pen-square pe-1"></span> Edit Sensor'
+                    , "buttonClasses" : ["d-flex"]
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {
-                        window.location.href = "sensorEdit.php?sensorId=" + sensor.sensorId + "&userId=" + companyId
+                        window.location.href = "sensorEdit.php?sensorId=" + sensor.id + "&userId=" + companyId
                     }
                 };
                 sensorSubMenu.append(this.getMenuItem(subMenuItem));
                 // Creates the View Sensor Trends button and adds it to the specific sensor sub menu.
                 subMenuItem = {
-                    "parentId" : "sensor" + sensor.sensorId
-                    , "subMenuId" : "sensorEdit" + sensor.sensorId
+                    "parentId" : "sensor" + sensor.id
+                    , "subMenuId" : "sensorEdit" + sensor.id
                     , "buttonTitle" : "View Sensor Trends"
-                    , "buttonText" : `Sensor Trends <span class="fas fa-chart-line"></span>`
-                    , "buttonClasses" : ["d-flex", "justify-content-end"]
+                    , "buttonText" : '<span class="fas fa-bars pe-1"></span> View Trends'
+                    , "buttonClasses" : ["d-flex"]
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {
-                        window.location.href = "sensorTrends.php?sensorId=" + sensor.sensorId + "&userId=" + companyId
+                        window.location.href = "sensorTrends.php?sensorId=" + sensor.id + "&userId=" + companyId
                     }
                 };
                 sensorSubMenu.append(this.getMenuItem(subMenuItem));
@@ -415,7 +421,7 @@ class Sidebar extends Services {
 
             });
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
         
         sensorsMenu.append(sensorsSubMenu);
 
@@ -484,7 +490,7 @@ class Sidebar extends Services {
             });
 
         })
-        .catch(error => console.log(error));
+        .catch(error => console.error(error));
 
         return menu;
     }
@@ -523,11 +529,14 @@ class Sidebar extends Services {
         let menu = HTMLElement;
         menu = document.createElement("div")
         menu.setAttribute("id", menuItems.parentId);
-        menu.setAttribute("class", "accordian-item");
+        menu.setAttribute("class", "accordian-item m-2");
+
+        //menu.setAttribute("style", "margin-left: 1em");
+
         menuItems.buttonClasses.forEach(className => {menu.classList.add(className)});
 
         let menuButton = document.createElement("button");
-        menuButton.setAttribute("class", "accordian-button btn btn-light m-2 text-nowrap border-0 collapsed");
+        menuButton.setAttribute("class", "accordian-button btn btn-light mx-2 text-nowrap border-0 collapsed");
         
         menuButton.setAttribute("data-bs-toggle", "collapse");
         menuButton.setAttribute("data-bs-target", "#" + menuItems.subMenuId);
@@ -536,6 +545,7 @@ class Sidebar extends Services {
         menuButton.setAttribute("value", menuItems.buttonValue);
         menuButton.innerHTML = menuItems.buttonText;
         menuButton.addEventListener("click", menuItems.buttonClick, false);
+        
 
         menu.append(menuButton);
 

@@ -31,7 +31,7 @@ trendFormulas.addEventListener("change", (event) => {
             formulaInputs.append(input);
         });
     })
-    .catch(e => console.log(e));
+    .catch(e => console.error(e));
 
 });
 /**
@@ -55,7 +55,7 @@ trends.getFormulas()
     });
 
 })
-.catch(e => console.log(e));
+.catch(e => console.error(e));
 
 const addTrendButton = document.querySelector("#addTrendButton");
 addTrendButton.addEventListener("click", (event) => {
@@ -143,8 +143,25 @@ addTrendButton.addEventListener("click", (event) => {
     trends.insertCalculatedTrend(formData)
     .then(trend => {
         console.log(trend);
+        
+        if (trend) {
+            document.querySelector("#message").classList.remove("alert-danger");
+            document.querySelector("#message").classList.add("alert-success");
+            document.querySelector("#message").innerHTML = "Trend Added";
+            document.querySelectorAll('input[type="number"]').forEach(field => {field.value = ""});
+            document.querySelectorAll('input[type="text"]').forEach(field => {field.value = ""});
+
+            setInterval(() => {
+                window.location.href = `./sensorTrends.php?sensorId=${trend.sensorId}&userId=${trend.userId}`;
+            }, 1000);
+        }
+        else {
+            document.querySelector("#message").classList.remove("alert-success");
+            document.querySelector("#message").classList.add("alert-danger");
+            document.querySelector("#message").innerHTML = "Trend Was Not Added";
+        }
     })
-    .catch(e => console.log(e));
+    .catch(e => console.error(e));
 
     
     /*

@@ -3,6 +3,7 @@
 
     class Sensor {
 
+        private $id = 0;
         private $sensorId = 0;
         private $userId = 0;
         private $sensorName = "";
@@ -16,7 +17,7 @@
          *
          * @return  Sensor  An instance of this Sensor object.
          */
-        public static function getSensor($sensorId, $userId) {
+        public static function getSensor($id) {
 
             $sensor = new static();
 
@@ -24,17 +25,16 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT * FROM `sensors` WHERE `sensorId`=:sensorId AND `userId`=:userId");
-                $statement->bindParam(":sensorId", $sensorId);
-                $statement->bindParam(":userId", $userId);
+                $statement = $connection->prepare("SELECT * FROM `sensors` WHERE `id`=:id");
+                $statement->bindParam(":id", $id, PDO::PARAM_INT);
                 $statement->execute();
 
                 $results = $statement->fetch(PDO::FETCH_ASSOC);
 
+                $sensor->setId($results['id']);
                 $sensor->setSensorId($results['sensorId']);
                 $sensor->setUserId($results['userId']);
                 $sensor->setSensorName($results['sensor_name']);
-
             }
             catch (PDOException $pdo) {
                 error_log(date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
@@ -48,6 +48,14 @@
 
             return $sensor;
 
+        }
+
+        public function getId() {
+            return $this->id;
+        }
+
+        public function setId($id) {
+            $this->id = $id;
         }
 
         public function getSensorId() {

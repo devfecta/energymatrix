@@ -157,7 +157,6 @@ class Charting extends Services {
         * borderWidth: Width of the line for the data points.
         * fill: Show the background color for the line of the data points.
         */
-
         chart.datasets = [...chart.datasets, {
             label: dataPoints[0].data_type
             , data: pointData
@@ -238,7 +237,7 @@ class Charting extends Services {
         });
 
         json.startDateTime = searchForm.querySelector("#startDate").value + " "+ searchForm.querySelector("#startTime").value;
-        json.endDateTime = searchForm.querySelector("#endDate").value + " "+ searchForm.querySelector("#startTime").value;
+        json.endDateTime = searchForm.querySelector("#endDate").value + " "+ searchForm.querySelector("#endTime").value;
 
         this.getSensorChart(json.startDateTime, json.endDateTime);
 
@@ -268,15 +267,18 @@ class Charting extends Services {
                 
                 let minimumDate = new Date(data.minimum);
                 startDate.value = minimumDate.toLocaleDateString("fr-CA");
+
                 minimumDate.setFullYear(minimumDate.getFullYear() - 5);
                 startDate.min = minimumDate.toLocaleDateString("fr-CA");
                 startTime.value = ("0" + minimumDate.getHours()).slice(-2) + ":" + ("0" + minimumDate.getMinutes()).slice(-2);
 
                 let maximumDate = new Date(data.maximum);
                 endDate.value = maximumDate.toLocaleDateString("fr-CA");
+
                 maximumDate.setFullYear(maximumDate.getFullYear() - 5);
                 endDate.min = maximumDate.toLocaleDateString("fr-CA");
                 endTime.value = ("0" + maximumDate.getHours()).slice(-2) + ":" + ("0" + maximumDate.getMinutes()).slice(-2);
+            
             })
             .catch(error => console.log(error));
 

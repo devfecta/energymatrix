@@ -20,16 +20,14 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT `sensorId`, `userId` FROM `sensors` WHERE `userId`=:userId");
+                $statement = $connection->prepare("SELECT `id` FROM `sensors` WHERE `userId`=:userId");
                 $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
                 $statement->execute();
 
                 $results = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
                 foreach ($results as $sensor) {
-
-                    array_push($sensors, Sensor::getSensor($sensor['sensorId'], $sensor['userId']));
-
+                    array_push($sensors, Sensor::getSensor($sensor['id']));
                 }
 
             }
@@ -42,8 +40,6 @@
             finally {
                 $connection = Configuration::closeConnection();
             }
-
-            //error_log(date('Y-m-d H:i:s') . " " . $sensors[0]->getSensorId() . "\n", 3, "/var/www/html/app/php-errors.log");
 
             return $sensors;
 
@@ -130,9 +126,9 @@
             try {
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("UPDATE `sensors` SET `sensor_name`=:sensor_name WHERE `sensorId`=:sensorId AND `userId`=:userId");
+                $statement = $connection->prepare("UPDATE `sensors` SET `sensor_name`=:sensor_name WHERE `id`=:id AND `userId`=:userId");
 
-                $statement->bindParam(":sensorId", $data->sensorId, PDO::PARAM_INT);
+                $statement->bindParam(":id", $data->id, PDO::PARAM_INT);
                 $statement->bindParam(":userId", $data->userId, PDO::PARAM_INT);
                 $statement->bindParam(":sensor_name", $data->sensorName, PDO::PARAM_STR);
                 $result = $statement->execute() ? true : false;
@@ -154,12 +150,15 @@
 
             $result = false;
 
+            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorId . "\n", 3, "/var/www/html/app/php-errors.log");
+           
+
             try {
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("DELETE FROM `sensors` WHERE `sensorId`=:sensorId AND `userId`=:userId");
+                $statement = $connection->prepare("DELETE FROM `sensors` WHERE `id`=:id AND `userId`=:userId");
 
-                $statement->bindParam(":sensorId", $sensorId, PDO::PARAM_INT);
+                $statement->bindParam(":id", $sensorId, PDO::PARAM_INT);
                 $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
                 $result = $statement->execute() ? true : false;
             }

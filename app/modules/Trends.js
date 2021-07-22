@@ -17,7 +17,30 @@ class Trends extends Services {
 
         return await this.getApi("Trends", "getTrends", "sensorId=" + sensorId + "&userId=" + userId)
         .then(response => response)
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
+    }
+    /**
+     * Gets the calculated trend data for a specific sensor.
+     *
+     * @param   {int}  sensorId
+     * @param   {int}  userId
+     *
+     * @return  {array} Array of trend data.
+     */
+     getConfiguredTrends = async (sensorId, userId) => {
+        console.log(sensorId, userId);
+        return await this.getApi("Trends", "getConfiguredTrends", "sensorId=" + sensorId + "&userId=" + userId)
+        .then(response => response)
+        .catch(e => console.error(e));
+    }
+
+    listConfiguredTrends = (sensorId, userId) => {
+        
+        this.getConfiguredTrends(sensorId, userId)
+        .then(response => {
+            console.log(response);
+        })
+        .catch(e => console.error(e));
     }
 
     /**
@@ -121,7 +144,7 @@ class Trends extends Services {
                 .then(response => {
                     document.querySelector("#trendsList").prepend(this.createTrendRow(response));
                 })
-                .catch(e => console.log(e));;
+                .catch(e => console.error(e));;
 
 
             }, false);
@@ -145,7 +168,7 @@ class Trends extends Services {
             trendsTable.append(trendsTableBody);
             trendsListing.append(trendsTable);
         })
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
 
     }
     /**
@@ -159,7 +182,7 @@ class Trends extends Services {
 
         return await this.postApi(trendForm)
         .then(response => response)
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
     
     }
     /**
@@ -173,7 +196,7 @@ class Trends extends Services {
 
         return await this.postApi(trendForm)
         .then(response => response)
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
     
     }
     /**
@@ -254,7 +277,7 @@ class Trends extends Services {
     getFormulas = async () => {
         return await this.getApi("Trends", "getFormulas", null)
         .then(response => response)
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
     }
     /**
      * Gets the form inputs required for each formula.
@@ -431,11 +454,9 @@ class Trends extends Services {
                     
                     this.getFormulaTrends(userId, sensorId)
                     .then(dropdown => {
-
-                        //console.log("test");
                         formulaInputs.append(dropdown);
                     })
-                    .catch(e => console.log(e));
+                    .catch(e => console.error(e));
                     
                 });
 
@@ -448,20 +469,22 @@ class Trends extends Services {
                 formElement.append(optionElement);
 
                 response.forEach(option => {
+
+                    //console.log(option);
                     let optionElement = document.createElement("option");
-                    optionElement.setAttribute("value", option.sensorId);
+                    optionElement.setAttribute("value", option.id);
                     optionElement.innerHTML = `${option.sensor_name} <em class="mx-1" style="font-size: 0.75em">(ID: ${option.sensorId})</em>`;
                     formElement.append(optionElement);
                 });
 
                 inputGroup.append(formElement);
 
-                console.log(inputGroup);
+                //console.log(inputGroup);
 
                 formulaInputs.push(inputGroup);
 
             })
-            .catch(e => console.log(e));
+            .catch(e => console.error(e));
         }
 
         return formulaInputs;
@@ -498,7 +521,7 @@ class Trends extends Services {
                 .then(dropdown => {
                     formulaInputs.append(dropdown);
                 })
-                .catch(e => console.log(e));
+                .catch(e => console.error(e));
                 
             });
 
@@ -516,7 +539,7 @@ class Trends extends Services {
 
             inputGroup.append(formElement);
         })
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
 
         return inputGroup;
     }

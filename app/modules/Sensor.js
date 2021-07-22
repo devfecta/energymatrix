@@ -5,20 +5,25 @@ class Sensor extends Services {
         super();
     }
 
-    getSensor = async (sensorId, userId) => {
-        return await this.getApi("Sensor", "getSensor", "sensorId=" + sensorId + "&userId=" + userId)
-        .then(response => response)
+    getSensor = async (sensorId) => {
+        return await this.getApi("Sensor", "getSensor", "sensorId=" + sensorId)
+        .then(response => {
+            console.log(response);
+            return response;
+        })
         .catch(e => console.log(e));
     }
 
     getUserSensors = async (userId) => {
         return await this.getApi("Sensors", "getUserSensors", "&userId=" + userId)
-        .then(response => response)
+        .then(response => {
+            console.log(response);
+            return response;
+        })
         .catch(e => console.log(e));
     }
 
     addSensor = async (sensorForm) => {
-
         let formData = new FormData();
         formData.append("class", "Sensors");
         formData.append("method", "addSensor");
@@ -33,13 +38,13 @@ class Sensor extends Services {
 
     updateSensor = async (sensorForm) => {
 
-        console.log(sensorForm);
         let formData = new FormData();
         formData.append("class", "Sensors");
         formData.append("method", "updateSensor");
         formData.append("userId", sensorForm.company.value);
         formData.append("sensorId", sensorForm.sensorId.value);
         formData.append("sensorName", sensorForm.sensorName.value);
+        formData.append("id", sensorForm.updateSensorButton.value);
 
         return await this.postApi(formData)
         .then(response => response)

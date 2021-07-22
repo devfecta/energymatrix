@@ -20,14 +20,11 @@ final class FormulasTest extends TestCase
         // Array of all the numbers within the range.
         
 
-        $dataPoints = $DataPoints->getSensorDataPoints(2, 528911, "null", "null");
-
-        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($dataPoints) . "\n", 3, "/var/www/html/app/php-errors.log");
-        
+        $dataPoints = $DataPoints->getSensorDataPoints(2, 1, "null", "null");
 
           
 
-        $this->assertEquals(2, $Formulas->currentAverage($dataPoints, 76.3));
+        $this->assertEquals(2, $Formulas->currentAverage($dataPoints, 70.3));
     }
     /*
     public function testGetSensors(): void

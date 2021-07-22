@@ -8,6 +8,9 @@ addSensorButton.addEventListener("click", (event) => {
 
     sensor.addSensor(document.forms[0])
     .then(response => {
+
+        console.log(response);
+        
         if (response) {
             document.querySelector("#message").classList.remove("alert-danger");
             document.querySelector("#message").classList.add("alert-success");

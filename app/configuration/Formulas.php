@@ -40,32 +40,30 @@
          * Current [a] to [b] range based on inputs under “Show in Dashboard”
          * c = minimum operational value (L)
         */
+        /**
+         * Takes an array of data points and creates an average of all data points that are greater than the constraint.
+         *
+         * @param   array   $dataPoints Array of sensor data points.
+         * @param   float   $constraint Minimum operational value.
+         *
+         * @return  float
+         */
         public function currentAverage($dataPoints, $constraint) {
 
-            $data = array(0);
+            $data = array();
             // Creates an array data points that are greater than the constraint.
             foreach ($dataPoints as $dataPoint) {
                 if ($dataPoint->getDataValue() > $constraint) {
                     array_push($data, $dataPoint->getDataValue());
                 }
             }
-
-            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . count($data) . "\n", 3, "/var/www/html/app/php-errors.log");
-        
-
             // Number of numbers within the range.
             $count = count($data);
             // Adds up the numbers in the range.
             $sum = array_sum($data);
             // Calculates the range average.
-            $average = $sum / $count;
+            $currentAverage = $sum / $count;
 
-            if ($average > $constraint) {
-                $currentAverage = $average;
-            }
-            else {
-                $currentAverage = $constraint;
-            }
             return round($currentAverage, 3);
         }
         

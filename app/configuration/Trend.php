@@ -121,7 +121,7 @@
         /**
          * Get $operationalStartTime
          *
-         * @return  int
+         * @return  string
          */ 
         public function getOperationalStartTime()
         {
@@ -130,11 +130,30 @@
         /**
          * Set $operationalStartTime
          *
-         * @param  int  $operationalStartTime
+         * @param  string  $operationalStartTime
          */ 
-        public function setOperationalStartTime(int $operationalStartTime)
+        public function setOperationalStartTime(string $operationalStartTime)
         {
                 $this->operationalStartTime = $operationalStartTime;
+        }
+
+        /**
+         * Get $operationalDuration
+         *
+         * @return  int
+         */ 
+        public function getOperationalDuration()
+        {
+                return $this->operationalDuration;
+        }
+        /**
+         * Set $operationalDuration
+         *
+         * @param  int  $operationalDuration
+         */ 
+        public function setOperationalDuration(int $operationalDuration)
+        {
+                $this->operationalDuration = $operationalDuration;
         }
 
     }

@@ -5,14 +5,14 @@
     require_once('Trend.php');
     require_once('Formulas.php');
 
-    class Trends extends Trend {
+    class Trends {
 
-        public $formulas;
-        public $trend;
+        public $Formulas;
+        //public $trend;
 
         function __construct() {
             // Brings the formulas into this class.
-            $this->formulas = new Formulas();
+            $this->Formulas = new Formulas();
         }
 
         /* 
@@ -177,6 +177,36 @@
             return $result;
         }
 
+        public function getConfiguredTrends($sensor) {
+
+            $trends = array();
+
+            try {
+
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `userId`=:userId AND  `sensorId`=:sensorId ORDER BY `id` DESC");
+                $statement->bindValue(":userId", $sensor['userId'], PDO::PARAM_INT);
+                $statement->bindValue(":sensorId", $sensor['sensorId'], PDO::PARAM_INT);
+
+                $statement->execute();
+
+                $trends = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
+
+            }
+            catch(PDOException $pdo) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+            
+            return $trends;
+        }
+
         public function insertCalculatedTrend($formData) {
             $result = array();
 
@@ -186,7 +216,7 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("INSERT INTO `trendsCalculated` (
+                $statement = $connection->prepare("INSERT INTO `trendsConfigurations` (
                     `userId`,
                     `sensorId`,
                     `trendName`,
@@ -216,7 +246,7 @@
                 $connection->commit();
 
 
-                $statement = $connection->prepare("SELECT * FROM `trendsCalculated` WHERE `id`=:trendId");
+                $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:trendId");
                 $statement->bindValue(":trendId", $lastInsertId, PDO::PARAM_INT);
                 $statement->execute();
 
@@ -273,7 +303,7 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT * FROM `trendsCalculated` WHERE `userId`=:userId AND `sensorId`=:sensorId ORDER BY `trendName` ASC");
+                $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `userId`=:userId AND `sensorId`=:sensorId ORDER BY `trendName` ASC");
                 $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
                 $statement->bindValue(":sensorId", $sensorId, PDO::PARAM_INT);
                 $statement->execute();
@@ -292,6 +322,14 @@
             }
             
             return $trends;
+        }
+
+        public function calculateMaConversion($trendId, $startDate, $endDate) {
+        
+            //$this->Formulas
+            return false;
+            //$attributes = json_decode($attributes, false);
+            //return (($storedValue - $attributes->mAMin) / ($attributes->mAMax - $attributes->mAMin)) * ($attributes->processMax - $attributes->processMin);
         }
     }
 ?>

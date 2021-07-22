@@ -139,7 +139,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo $result;
                             break;
                         case "deleteSensor":
-                            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_POST, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                             $result =  $Sensors->deleteSensor($_POST['sensorId'], $_POST['userId']);
                             echo $result;
                             break;
@@ -208,7 +207,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
                             foreach($userSensors as $sensor) {
                                 
-                                array_push($sensorArray, array("sensorId" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "userId" => $sensor->getUserId()));    
+                                array_push($sensorArray, array("id" => $sensor->getId(), "sensorId" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "userId" => $sensor->getUserId()));    
                             }
 
                             echo json_encode($sensorArray);
@@ -220,7 +219,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             $sensorsArray = array();
 
                             foreach($sensors as $sensor) {
-                                array_push($sensorsArray, array("sensorId" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "userId" => $sensor->getUserId()));    
+                                array_push($sensorsArray, array("id" => $sensor->getId(), "sensorId" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "userId" => $sensor->getUserId()));    
                             }
 
                             echo json_encode($sensorsArray);
@@ -235,9 +234,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     switch ($_GET['method']) {
                         case "getSensor":
 
-                            $sensor = Sensor::getSensor($_GET['sensorId'], $_GET['userId']);
+                            $sensor = Sensor::getSensor($_GET['sensorId']);
 
-                            $sensorArray = array("id" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "user_id" => $sensor->getUserId());
+                            $sensorArray = array("id" => $sensor->getId(), "sensorId" => $sensor->getSensorId(), "sensor_name" => $sensor->getSensorName(), "user_id" => $sensor->getUserId());
 
                             echo json_encode($sensorArray);
 
@@ -294,7 +293,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     switch ($_GET['method']) {
                         case "getTrends":
                             // error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
-                            echo json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId']), JSON_PRETTY_PRINT);
+                            echo json_encode($trends->getTrends($_GET['userId'], (int)$_GET['sensorId']), JSON_PRETTY_PRINT);
+                            break;
+                        case "getConfiguredTrends":
+                            echo json_encode($trends->getConfiguredTrends($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getFormulas":
                             echo json_encode($trends->getFormulas(), JSON_PRETTY_PRINT);
