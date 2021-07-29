@@ -55,6 +55,11 @@ final class TrendsTest extends TestCase
         $this->assertIsArray($trends->getTrends(2, 111111));
     }
     
-    
+    public function testGetConfiguredTrends(): void
+    {
+        $trends = new Trends();
+        //var_dump($trends->getConfiguredTrends(array("sensorId" => 4, "userId" => 2)));
+        $this->assertIsArray($trends->getConfiguredTrends(array("sensorId" => 4, "userId" => 2)));
+    }
 }
 ?>

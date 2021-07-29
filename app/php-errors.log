@@ -1,0 +1,10 @@
+/var/www/html/app/api.php Line: 158 - 2021-07-29 13:41:19 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "test2",
+    "trendFormula": "maConversion",
+    "inputs": "{\"heatCapacity\":null,\"averagingFactor\":null,\"mAMin\":\"1\",\"mAMax\":\"2\",\"processMin\":\"3\",\"processMax\":\"4\",\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "4",
+    "associatedTrends": "[]"
+}

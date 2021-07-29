@@ -28,7 +28,7 @@ class Trends extends Services {
      * @return  {array} Array of trend data.
      */
      getConfiguredTrends = async (sensorId, userId) => {
-        console.log(sensorId, userId);
+        //console.log(sensorId, userId);
         return await this.getApi("Trends", "getConfiguredTrends", "sensorId=" + sensorId + "&userId=" + userId)
         .then(response => response)
         .catch(e => console.error(e));
@@ -38,9 +38,81 @@ class Trends extends Services {
         
         this.getConfiguredTrends(sensorId, userId)
         .then(response => {
-            console.log(response);
+            const trendsList = document.querySelector("#trends");
+
+            const trendsListGroup = document.createElement("div");
+            trendsListGroup.setAttribute("class", "list-group");
+
+            response.forEach(trend => {
+                const trendButton = document.createElement("button");
+                trendButton.setAttribute("type", "button");
+                trendButton.setAttribute("class", "d-flex flex-wrap list-group-item list-group-item-action");
+                trendButton.setAttribute("value", trend.id);
+                trendButton.addEventListener("click", (event) => {this.viewTrend(trendButton.value)});
+                
+                let trendColumn = document.createElement("div");
+                trendColumn.setAttribute("class", "col-md-4 h5");
+                trendColumn.innerHTML = trend.trendName;
+
+                trendButton.append(trendColumn);
+
+                trendColumn = document.createElement("div");
+                trendColumn.setAttribute("class", "col-md-4 h5");
+                trendColumn.innerHTML = trend.trendFormula;
+
+                trendButton.append(trendColumn);
+
+                // Inputs Row
+                trendColumn = document.createElement("div");
+                trendColumn.setAttribute("class", "col-md-12 d-flex");
+
+                let inputs = JSON.parse(trend.inputs);
+
+                let trendDetailRow = document.createElement("div");
+                trendDetailRow.setAttribute("class", "col-md-1");
+                trendDetailRow.innerHTML = `<strong>Inputs: </strong>`;
+                trendColumn.append(trendDetailRow);
+
+                Object.entries(inputs).forEach(input => {
+                    if (input[1]) {
+                        trendDetailRow = document.createElement("div");
+                        trendDetailRow.setAttribute("class", "col-md-2");
+                        trendDetailRow.innerHTML += input[0] + " : " + input[1];
+                        trendColumn.append(trendDetailRow);
+                    }
+                });
+
+                trendButton.append(trendColumn);
+
+                // Associated Trends Row
+                trendColumn = document.createElement("div");
+                trendColumn.setAttribute("class", "col-md-12 d-flex");
+
+                trendDetailRow = document.createElement("div");
+                trendDetailRow.setAttribute("class", "col-md-2");
+                trendDetailRow.innerHTML = `<strong>Associated Trend(s): </strong>`;
+                trendColumn.append(trendDetailRow);
+
+                trend.associatedTrends.forEach(trend => {
+                    trendDetailRow = document.createElement("div");
+                    trendDetailRow.setAttribute("class", "col-md-2");
+                    trendDetailRow.innerHTML += trend.trendName;
+                    trendColumn.append(trendDetailRow);
+                });
+
+                trendButton.append(trendColumn);
+
+                trendsListGroup.append(trendButton);
+            });
+
+            trendsList.append(trendsListGroup);
+            //console.log(response);
         })
         .catch(e => console.error(e));
+    }
+
+    viewTrend = (trendId) => {        
+        console.log(trendId);
     }
 
     /**

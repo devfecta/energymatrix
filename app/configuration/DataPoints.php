@@ -121,8 +121,9 @@ class DataPoints extends DataPoint {
             
             $connection = Configuration::openConnection();
 
-            $statement = $connection->prepare("SELECT * FROM `sensors` WHERE `sensorId`=:sensorId");
+            $statement = $connection->prepare("SELECT * FROM `sensors` WHERE `sensorId`=:sensorId AND `userId`=:userId");
             $statement->bindParam(":sensorId", $sensor['sensorID'], PDO::PARAM_INT);
+            $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
             $statement->execute();
 
             if ($statement->rowCount() < 1) {

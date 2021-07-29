@@ -193,6 +193,26 @@
 
                 $trends = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
+                foreach ($trends as $trendIndex => $trend) {
+                    $associatedTrends = json_decode($trend['associatedTrends'], true);
+
+                    $associatedTrendsArray = array();
+
+                    foreach ($associatedTrends as $associatedTrend) {
+
+                        $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:id");
+                        $statement->bindValue(":id", $associatedTrend, PDO::PARAM_INT);
+                        $statement->execute();
+
+                        $trendArray = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+
+                        $associatedTrendsArray[] = $trendArray;
+                    }
+
+                    $trends[$trendIndex]["associatedTrends"] = $associatedTrendsArray;
+
+                }
+
             }
             catch(PDOException $pdo) {
                 error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
