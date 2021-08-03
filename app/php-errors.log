@@ -1,10 +1,36 @@
-/var/www/html/app/api.php Line: 158 - 2021-07-29 13:41:19 {
-    "class": "Trends",
-    "method": "insertCalculatedTrend",
-    "userId": "2",
-    "trendName": "test2",
-    "trendFormula": "maConversion",
-    "inputs": "{\"heatCapacity\":null,\"averagingFactor\":null,\"mAMin\":\"1\",\"mAMax\":\"2\",\"processMin\":\"3\",\"processMax\":\"4\",\"density\":null,\"voltage\":null,\"powerFactor\":null}",
-    "sensorId": "4",
-    "associatedTrends": "[]"
-}
+/var/www/html/app/configuration/Trends.php Line: 301 - 2021-08-03 12:56:27
+11.430 =  =  =  = 
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:56:27
+NAN
+/var/www/html/app/configuration/Trends.php Line: 301 - 2021-08-03 12:56:27
+11.420 =  =  =  = 
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:56:27
+NAN
+/var/www/html/app/configuration/Trends.php Line: 301 - 2021-08-03 12:56:27
+11.100 =  =  =  = 
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:56:27
+NAN
+/var/www/html/app/configuration/Trends.php Line: 301 - 2021-08-03 12:57:18
+11.430 = 3 = 4 = 5 = 6
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:57:18
+NAN
+/var/www/html/app/configuration/Trends.php Line: 301 - 2021-08-03 12:57:18
+11.420 = 3 = 4 = 5 = 6
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:57:18
+NAN
+/var/www/html/app/configuration/Trends.php Line: 301 - 2021-08-03 12:57:18
+11.100 = 3 = 4 = 5 = 6
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:57:18
+NAN
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:57:59
+8.43
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:57:59
+8.42
+/var/www/html/app/configuration/Trends.php Line: 322 - 2021-08-03 12:57:59
+8.1
+/var/www/html/app/configuration/Trends.php Line: 310 - 2021-08-03 12:59:17
+3.575
+/var/www/html/app/configuration/Trends.php Line: 310 - 2021-08-03 12:59:17
+3.55
+/var/www/html/app/configuration/Trends.php Line: 310 - 2021-08-03 12:59:17
+2.75

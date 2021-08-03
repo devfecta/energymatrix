@@ -18,10 +18,13 @@ final class DataPointsTest extends TestCase
     public function testProcessWebhook(): void
     {
         $dataPoints = new DataPoints();
-
+        /*
         $sensorMessages = json_decode('[
                             {
                                 "sensorID":"528876","sensorName":"528876 | Thermocouple | 2 | Test Company","applicationID":"86","networkID":"3","dataMessageGUID":"9b65ec35-d972-4827-8c3d-fb3a1e04ce3f","state":"0","messageDate": "'. date("Y-m-d H:i:s") .'","rawData":"23.6","dataType":"TemperatureData","dataValue":"23.6","plotValues":"74.48","plotLabels":"Fahrenheit","batteryLevel":"97","signalStrength":"100","pendingChange":"True","voltage":"2.49"
+                            }
+                            ,{
+                                "sensorID":"528880" , "sensorName":"528880 | 0-20mA Current | 2 | Test Company", "applicationID":"22", "networkID":"3", "dataMessageGUID":"72feb5dc-08a9-4b65-8beb-278311e0499b", "state": "2", "messageDate": "'. date("Y-m-d H:i:s") .'", "rawData":"0", "dataType": "mA", "dataValue": "11.0", "plotValues": "11.1", "plotLabels": "mA", "batteryLevel": "0", "signalStrength": "0", "pendingChange": "False", "voltage": "2.15"
                             }
                             ,{
                                 "sensorID":"528879" , "sensorName":"528879 | 0-20mA Current | 2 | Test Company", "applicationID":"22", "networkID":"3", "dataMessageGUID":"72feb5dc-08a9-4b65-8beb-278311e0499b", "state": "2", "messageDate": "'. date("Y-m-d H:i:s") .'", "rawData":"0", "dataType": "MilliAmps", "dataValue": "0", "plotValues": "0", "plotLabels": "mA", "batteryLevel": "0", "signalStrength": "0", "pendingChange": "False", "voltage": "2.15"
@@ -34,6 +37,18 @@ final class DataPointsTest extends TestCase
                             }
                             ,{
                                 "sensorID":"528888","sensorName":"528888 | Current Meter 20 Amp | 13 | Test Company","applicationID":"93","networkID":"3","dataMessageGUID":"8b7fc2d6-2364-48d1-97c4-d7ab801c3baf","state": "1","messageDate": "'. date("Y-m-d H:i:s") .'","rawData":"0%2c0%2c0%2c0","dataType": "AmpHours|Amps|Amps|Amps","dataValue": "0|0|0|0","plotValues": "0.3|0.4|0.2|0.1","plotLabels": "Amp Hours|AvgCurrent|MaxCurrent|MinCurrent","batteryLevel": "100","signalStrength": "96","pendingChange": "True","voltage": "3.03"
+                            }
+                        ]', true);
+        */
+        $sensorMessages = json_decode('[
+                            {
+                                "sensorID":"528880" , "sensorName":"528880 | 0-20mA Current | Test Company | 2", "applicationID":"22", "networkID":"3", "dataMessageGUID":"72feb5dc-08a9-4b65-8beb-278311e0499b", "state": "2", "messageDate": "'. date("Y-m-d H:i:s") .'", "rawData":"0", "dataType": "mA", "dataValue": "11.0", "plotValues": "11.13", "plotLabels": "mA", "batteryLevel": "0", "signalStrength": "0", "pendingChange": "False", "voltage": "2.15"
+                            }
+                            , {
+                                "sensorID":"528880" , "sensorName":"528880 | 0-20mA Current | Test Company | 2", "applicationID":"22", "networkID":"3", "dataMessageGUID":"72feb5dc-08a9-4b65-8beb-278311e0499b", "state": "2", "messageDate": "'. date("Y-m-d H:i:s") .'", "rawData":"0", "dataType": "mA", "dataValue": "11.0", "plotValues": "11.05", "plotLabels": "mA", "batteryLevel": "0", "signalStrength": "0", "pendingChange": "False", "voltage": "2.15"
+                            }
+                            , {
+                                "sensorID":"528880" , "sensorName":"528880 | 0-20mA Current | Test Company | 2", "applicationID":"22", "networkID":"3", "dataMessageGUID":"72feb5dc-08a9-4b65-8beb-278311e0499b", "state": "2", "messageDate": "'. date("Y-m-d H:i:s") .'", "rawData":"0", "dataType": "mA", "dataValue": "11.0", "plotValues": "11.25", "plotLabels": "mA", "batteryLevel": "0", "signalStrength": "0", "pendingChange": "False", "voltage": "2.15"
                             }
                         ]', true);
 

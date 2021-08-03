@@ -3,6 +3,7 @@
 require_once('Configuration.php');
 require_once('Sensor.php');
 require_once('DataPoint.php');
+require_once('Formulas.php');
 
 class DataPoints extends DataPoint {
 
@@ -194,8 +195,44 @@ class DataPoints extends DataPoint {
                 $statement->bindParam(":data_type", $plotLabels);
                 $statement->bindValue(":data_value", $plotValues); 
             }
-
+            // Insert Raw Data Point
+            $connection->beginTransaction();
             $result = $statement->execute() ? true : false;
+            $lastInsertId = $connection->lastInsertId();
+            $connection->commit();
+
+            //$statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:trendId");
+            //$statement->bindValue(":trendId", $lastInsertId, PDO::PARAM_INT);
+            //$statement->execute();
+
+            //$result = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+
+            if ($result) {
+                // Data Point Object
+                $rawDataPoint = DataPoint::getDataPoint($lastInsertId);
+                // Sensor Object
+                $sensor = Sensor::getSensor($sensor['sensorID'], $userId);
+
+                $Formulas = new Formulas();
+
+                switch ($rawDataPoint->getDataType()) {
+                    case 'mA':
+                        $Formulas->maConversion($sensorReading, $maMin, $maMax, $processMin, $processMax);
+                        break;
+                    
+                    default:
+                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Invalid Data Type" . "\n", 3, "/var/www/html/app/php-errors.log");
+                        break;
+                }
+
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $rawDataPoint->getDataType() . "\n", 3, "/var/www/html/app/php-errors.log");
+                //$sensor = Sensor::getSensor($sensor['sensorID'], $userId);
+                
+            }
+            else {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " NO INSERT" . "\n", 3, "/var/www/html/app/php-errors.log");
+                
+            }
 
         }
         catch(PDOException $pdo) {

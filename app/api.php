@@ -289,7 +289,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     }
                     break;
                 case "Trends":
-                    $trends = new Trends();
+                    $trends = new Trends();       
                     switch ($_GET['method']) {
                         case "getTrends":
                             // error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
@@ -297,6 +297,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             break;
                         case "getConfiguredTrends":
                             echo json_encode($trends->getConfiguredTrends($_GET), JSON_PRETTY_PRINT);
+                            break;
+                        case "getConfiguredTrend":
+                            echo json_encode($trends->getConfiguredTrend($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getFormulas":
                             echo json_encode($trends->getFormulas(), JSON_PRETTY_PRINT);

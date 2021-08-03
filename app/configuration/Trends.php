@@ -1,7 +1,9 @@
 <?php
     // Needed to make the connection to the database.
     require_once('Configuration.php');
+    
     // Contains sensor getters and setters.
+    require_once('Sensor.php');
     require_once('Trend.php');
     require_once('Formulas.php');
 
@@ -194,6 +196,7 @@
                 $trends = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
                 foreach ($trends as $trendIndex => $trend) {
+                    // Associated Trends
                     $associatedTrends = json_decode($trend['associatedTrends'], true);
 
                     $associatedTrendsArray = array();
@@ -211,6 +214,19 @@
 
                     $trends[$trendIndex]["associatedTrends"] = $associatedTrendsArray;
 
+                    // Inputs
+                    $inputs = json_decode($trend['inputs'], true);
+
+                    $inputsArray = array();
+
+                    foreach ($inputs as $inputName => $inputValue) {
+                        if (isset($inputValue)) {
+                            $inputsArray[$inputName] = $inputValue;
+                        }
+                    }
+
+                    $trends[$trendIndex]["inputs"] = $inputsArray;
+
                 }
 
             }
@@ -225,6 +241,91 @@
             }
             
             return $trends;
+        }
+
+        public function getConfiguredTrend($trendId) {
+
+            $trend = array();
+
+            try {
+
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:trendId");
+                $statement->bindValue(":trendId", $trendId['trendId'], PDO::PARAM_INT);
+
+                $statement->execute();
+
+                $trend = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+
+                // Associated Trends
+                $associatedTrends = json_decode($trend['associatedTrends'], true);
+
+                $associatedTrendsArray = array();
+
+                foreach ($associatedTrends as $associatedTrend) {
+
+                    $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:id");
+                    $statement->bindValue(":id", $associatedTrend, PDO::PARAM_INT);
+                    $statement->execute();
+
+                    $trendArray = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
+
+                    $associatedTrendsArray[] = $trendArray;
+                }
+
+                $trend["associatedTrends"] = $associatedTrendsArray;
+
+                // Inputs
+                $inputs = json_decode($trend['inputs'], true);
+
+                $inputsArray = array();
+
+                foreach ($inputs as $inputName => $inputValue) {
+                    if (isset($inputValue)) {
+                        $inputsArray[$inputName] = $inputValue;
+                    }
+                }
+
+                $trend["inputs"] = $inputsArray;
+
+                $DataPoints = new DataPoints();
+                // Array of Data Points
+                $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], "null", "null");
+
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $rawDataPoints[0]->getDataPointId() . "\n", 3, "/var/www/html/app/php-errors.log");
+                $trendDataPoints = array();
+
+                foreach ($rawDataPoints as $rawDataPoint) {
+                    switch ($rawDataPoint->getDataType()) {
+                        case 'mA':
+                            $dataPoint = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
+                            break;
+                        
+                        default:
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Invalid Data Type" . "\n", 3, "/var/www/html/app/php-errors.log");
+                            break;
+                    }
+
+                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $dataPoint . "\n", 3, "/var/www/html/app/php-errors.log");
+                    
+                    array_push($trendDataPoints, $dataPoint);
+                }
+                
+                $trend = $trendDataPoints;
+                
+            }
+            catch(PDOException $pdo) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+            
+            return $trend;
         }
 
         public function insertCalculatedTrend($formData) {
