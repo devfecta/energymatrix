@@ -1,5 +1,6 @@
 import Services from "./Services.js";
 import Sensor from "./Sensor.js";
+import Charting from "./Charting.js";
 
 class Trends extends Services {
     constructor() {
@@ -123,8 +124,43 @@ class Trends extends Services {
     viewTrend = (trendId) => {        
         console.log(trendId);
         this.getConfiguredTrend(trendId)
-        .then(response => {
-            console.log(response);
+        .then(dataPoints => {
+            console.log(dataPoints);
+
+            const charting = new Charting();
+
+            //const charts = document.createElement('div');
+            //charts.setAttribute("id", "charts");
+            //charts.setAttribute("class", "d-flex justify-content-around row");
+
+            let chart = null;
+            /*
+            let points = dataPoints.filter(function(dataPoint) {
+
+                if (dataType.data_type == "mA") {
+                    // Need to change the labeling on the chart
+                }
+                else {
+                    
+                }
+                return dataPoint.data_type == dataType.data_type;
+                
+                
+            });
+            */
+            // Create charts here
+            //console.log(points);
+            let chartId = dataPoints.sensorId + "-" + dataPoints.points[0].data_type.replace(" ", "_");
+            chart = charting.createChart(chartId);
+            // Title the Chart and Label the Chart's Axes
+            
+            chart = charting.chartData(chart, dataPoints.sensor_name + " Data", dataPoints.points[0].data_type);
+            
+            charting.plotDataPoints(chart, dataPoints.points);
+            
+            charting.buildChart(chart);
+
+            
             /*
             const trendsList = document.querySelector("#trends");
 

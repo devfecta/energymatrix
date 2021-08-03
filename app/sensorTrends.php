@@ -6,7 +6,11 @@
 
 <script type="module" src="./javascript/sensorTrends.js"></script>
 
-<div id="trends" class="row"></div>
+<section id="userSectionResults" class="container-fluid row">
+    <div id="charts" class="d-flex justify-content-around row"></div>
+</section>
+
+<section id="trends" class="container-fluid row"></section>
 
 <?php
     include("template/footer.php");

@@ -289,17 +289,28 @@
 
                 $trend["inputs"] = $inputsArray;
 
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend) . "\n", 3, "/var/www/html/app/php-errors.log");
+                
+
+                $sensor = Sensor::getSensor($trend["sensorId"]);
+
                 $DataPoints = new DataPoints();
                 // Array of Data Points
                 $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], "null", "null");
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $rawDataPoints[0]->getDataPointId() . "\n", 3, "/var/www/html/app/php-errors.log");
-                $trendDataPoints = array();
+                $trendDataPoints = array(
+                    "id" => $sensor->getId()
+                    , "sensorId" => $sensor->getSensorId()
+                    , "sensor_name" => $sensor->getSensorName()
+                    , "user_id" => $sensor->getUserId()
+                    , "points" => array()
+                );
 
                 foreach ($rawDataPoints as $rawDataPoint) {
                     switch ($rawDataPoint->getDataType()) {
-                        case 'mA':
-                            $dataPoint = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
+                        case "mA":
+                            $dataPointValue = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
+                            $dataPointType = "mA Conversion";
                             break;
                         
                         default:
@@ -307,9 +318,20 @@
                             break;
                     }
 
-                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $dataPoint . "\n", 3, "/var/www/html/app/php-errors.log");
-                    
-                    array_push($trendDataPoints, $dataPoint);
+                    array_push($trendDataPoints["points"], 
+                                    array(
+                                        "id" => $rawDataPoint->getDataPointId()
+                                        , "user_id" => $rawDataPoint->getUserId()
+                                        , "sensor_id" => $rawDataPoint->getSensorId()
+                                        , "date_time" => $rawDataPoint->getDate()
+                                        , "data_type" => $dataPointType
+                                        , "data_value" => $dataPointValue
+                                        , "custom_value" => $rawDataPoint->getCustomValue()
+                                    )
+                                );
+
+                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $dataPoint . "\n", 3, "/var/www/html/app/php-errors.log");
+                    //array_push($trendDataPoints, $dataPoint);
                 }
                 
                 $trend = $trendDataPoints;

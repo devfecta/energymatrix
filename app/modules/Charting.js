@@ -43,9 +43,13 @@ class Charting extends Services {
                 //console.log(sensor);
                 startDateTime = (startDateTime === null) ? "null" : startDateTime + ":00";
                 endDateTime = (endDateTime === null) ? "null" : endDateTime + ":59";
+
+                console.log(sensor);
                 
                 return this.getApi("DataPoints", "getSensorDataPoints", "userId=" + userId + "&sensorId=" + urlParams.get("sensorId") + "&startDateTime=" + startDateTime + "&endDateTime=" + endDateTime)
                 .then(dataPoints => {
+
+                    console.log(dataPoints);
 
                     sensor.dataTypes.forEach(dataType => {
                         

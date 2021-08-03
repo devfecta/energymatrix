@@ -374,7 +374,7 @@ class Sidebar extends Services {
                     "parentId" : "sensor" + sensor.id
                     , "subMenuId" : "sensorView" + sensor.id
                     , "buttonTitle" : "View Sensor Data Points"
-                    , "buttonText" : '<span class="fas fa-chart-line pe-1"></span> View Data Points'
+                    , "buttonText" : '<span class="fas fa-chart-line pe-1"></span> View Raw Data Points'
                     , "buttonClasses" : ["d-flex"]
                     , "buttonValue" : companyId
                     , "buttonClick" : function (event) {
