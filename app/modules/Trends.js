@@ -149,7 +149,7 @@ class Trends extends Services {
             });
             */
             // Create charts here
-            //console.log(points);
+            console.log(dataPoints.points[0]);
             let chartId = dataPoints.sensorId + "-" + dataPoints.points[0].data_type.replace(" ", "_");
             chart = charting.createChart(chartId);
             // Title the Chart and Label the Chart's Axes
@@ -310,7 +310,7 @@ class Trends extends Services {
             optionsDuration[4] = "4 Hours";
             optionsDuration[2] = "2 Hours";
             optionsDuration[1] = "1 Hour";
-            trendsTableHeaderRowColumnDuration.append(this.createDropDown("duration", "duration", true, optionsDuration));
+            trendsTableHeaderRowColumnDuration.append(this.createDropDown("duration", "duration", optionsDuration, true));
             trendsTableHeaderRow.append(trendsTableHeaderRowColumnDuration);
             const trendsTableHeaderRowColumnButtons = document.createElement("th");
             trendsTableHeaderRowColumnButtons.setAttribute("scope", "col");
@@ -502,6 +502,30 @@ class Trends extends Services {
                 inputGroup.append(this.createTextBox("number", "heatCapacity", "heatCapacity", 4, true));
 
                 formulaInputs.push(inputGroup);
+
+                // Associated Sensors
+				inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "associatedSensors");
+                inputLabel.innerHTML = "Associated Sensors: ";
+                inputGroup.append(inputLabel);
+
+                
+                let optionsAssociatedSensors = new Array();
+                let associatedSensors = await this.getApi("Sensors", "getUserSensors", "&userId=" + userId)
+                .then(response => {
+                    //console.log(response);
+                    response.forEach(sensor => optionsAssociatedSensors[parseInt(sensor.id)] = sensor.sensor_name);
+                    return optionsAssociatedSensors;
+                })
+                .catch(e => console.log(e));
+                
+                inputGroup.append(this.createDropDown("associatedSensors", "associatedSensors", associatedSensors, true));
+
+                formulaInputs.push(inputGroup);
+
                 break;
             case "current":
 				// Averaging Factor

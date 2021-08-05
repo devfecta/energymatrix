@@ -295,7 +295,7 @@
                 $sensor = Sensor::getSensor($trend["sensorId"]);
 
                 $DataPoints = new DataPoints();
-                // Array of Data Points
+                // Array of Raw Data Points
                 $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], "null", "null");
 
                 $trendDataPoints = array(
@@ -312,7 +312,10 @@
                             $dataPointValue = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
                             $dataPointType = "mA Conversion";
                             break;
-                        
+                        case "Amp Hours":
+                            $dataPointValue = $this->Formulas->current($rawDataPoint->getDataValue(), $trend["inputs"]["averagingFactor"]);
+                            $dataPointType = "Current";
+                            break;
                         default:
                             error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Invalid Data Type" . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;

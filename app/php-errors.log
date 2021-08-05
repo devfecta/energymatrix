@@ -1,2 +1,226 @@
 /var/www/html/app/configuration/Trends.php Line: 292 - 2021-08-03 17:10:56
 {"id":"17","userId":"2","sensorId":"4","trendName":"test2","trendFormula":"maConversion","inputs":{"mAMin":"1","mAMax":"2","processMin":"3","processMax":"4"},"associatedTrends":[]}
+/var/www/html/app/api.php Line: 158 - 2021-08-05 09:42:41 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "Test Current",
+    "trendFormula": "current",
+    "inputs": "{\"heatCapacity\":null,\"averagingFactor\":\"0.016666667\",\"mAMin\":null,\"mAMax\":null,\"processMin\":null,\"processMax\":null,\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "5",
+    "associatedTrends": "[]"
+}
+/var/www/html/app/configuration/Trends.php Line: 292 - 2021-08-05 09:42:57
+{"id":"18","userId":"2","sensorId":"5","trendName":"Test Current","trendFormula":"current","inputs":{"averagingFactor":"0.016666667"},"associatedTrends":[]}
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:42:57 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 292 - 2021-08-05 09:43:42
+{"id":"17","userId":"2","sensorId":"4","trendName":"test2","trendFormula":"maConversion","inputs":{"mAMin":"1","mAMax":"2","processMin":"3","processMax":"4"},"associatedTrends":[]}
+/var/www/html/app/configuration/Trends.php Line: 292 - 2021-08-05 09:43:53
+{"id":"18","userId":"2","sensorId":"5","trendName":"Test Current","trendFormula":"current","inputs":{"averagingFactor":"0.016666667"},"associatedTrends":[]}
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:43:54 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 292 - 2021-08-05 09:44:30
+{"id":"18","userId":"2","sensorId":"5","trendName":"Test Current","trendFormula":"current","inputs":{"averagingFactor":"0.016666667"},"associatedTrends":[]}
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:30 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 292 - 2021-08-05 09:44:34
+{"id":"18","userId":"2","sensorId":"5","trendName":"Test Current","trendFormula":"current","inputs":{"averagingFactor":"0.016666667"},"associatedTrends":[]}
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 317 - 2021-08-05 09:44:34 Invalid Data Type
+/var/www/html/app/configuration/Trends.php Line: 292 - 2021-08-05 09:47:52
+{"id":"18","userId":"2","sensorId":"5","trendName":"Test Current","trendFormula":"current","inputs":{"averagingFactor":"0.016666667"},"associatedTrends":[]}
+/var/www/html/app/configuration/Trends.php Line: 292 - 2021-08-05 10:00:14
+{"id":"18","userId":"2","sensorId":"5","trendName":"Test Current","trendFormula":"current","inputs":{"averagingFactor":"0.016666667"},"associatedTrends":[]}

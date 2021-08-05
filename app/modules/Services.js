@@ -61,7 +61,7 @@ class Services {
         return formElement;
     }
 
-    createDropDown = (id, name, required, options) => {
+    createDropDown = (id, name, options, required) => {
         const formElement = document.createElement("select");
         formElement.setAttribute("id", id);
         formElement.setAttribute("name", name);
