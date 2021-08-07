@@ -271,9 +271,18 @@
 
                     $trendArray = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
-                    $associatedTrendsArray[] = $trendArray;
+                    //$associatedTrendsArray[] = $trendArray;
+                    
+                    foreach ($trendArray as $associatedTrendTemp) {
+                        $tempID['trendId'] = (int) $associatedTrendTemp["id"];
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($this->getConfiguredTrend($tempID), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                
+                        $associatedTrendsArray[] = $this->getConfiguredTrend($tempID);
+                    }
+                    
                 }
 
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($associatedTrendsArray) . "\n", 3, "/var/www/html/app/php-errors.log");
                 $trend["associatedTrends"] = $associatedTrendsArray;
 
                 // Inputs
@@ -289,9 +298,8 @@
 
                 $trend["inputs"] = $inputsArray;
 
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend) . "\n", 3, "/var/www/html/app/php-errors.log");
                 
-
                 $sensor = Sensor::getSensor($trend["sensorId"]);
 
                 $DataPoints = new DataPoints();
@@ -299,7 +307,8 @@
                 $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], "null", "null");
 
                 $trendDataPoints = array(
-                    "id" => $sensor->getId()
+                    "trend" => $trend
+                    , "id" => $sensor->getId()
                     , "sensorId" => $sensor->getSensorId()
                     , "sensor_name" => $sensor->getSensorName()
                     , "user_id" => $sensor->getUserId()
@@ -311,6 +320,8 @@
                         case "mA":
                             $dataPointValue = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
                             $dataPointType = "mA Conversion";
+
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                         case "Amp Hours":
                             $dataPointValue = $this->Formulas->current($rawDataPoint->getDataValue(), $trend["inputs"]["averagingFactor"]);
@@ -322,22 +333,22 @@
                     }
 
                     array_push($trendDataPoints["points"], 
-                                    array(
-                                        "id" => $rawDataPoint->getDataPointId()
-                                        , "user_id" => $rawDataPoint->getUserId()
-                                        , "sensor_id" => $rawDataPoint->getSensorId()
-                                        , "date_time" => $rawDataPoint->getDate()
-                                        , "data_type" => $dataPointType
-                                        , "data_value" => $dataPointValue
-                                        , "custom_value" => $rawDataPoint->getCustomValue()
-                                    )
-                                );
-
-                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $dataPoint . "\n", 3, "/var/www/html/app/php-errors.log");
-                    //array_push($trendDataPoints, $dataPoint);
+                        array(
+                            "id" => $rawDataPoint->getDataPointId()
+                            , "user_id" => $rawDataPoint->getUserId()
+                            , "sensor_id" => $rawDataPoint->getSensorId()
+                            , "date_time" => $rawDataPoint->getDate()
+                            , "data_type" => $dataPointType
+                            , "data_value" => $dataPointValue
+                            , "custom_value" => $rawDataPoint->getCustomValue()
+                        )
+                    );
                 }
                 
                 $trend = $trendDataPoints;
+
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend) . "\n", 3, "/var/www/html/app/php-errors.log");
+                
                 
             }
             catch(PDOException $pdo) {

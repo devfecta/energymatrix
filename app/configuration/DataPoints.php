@@ -268,14 +268,14 @@ class DataPoints extends DataPoint {
             $sensorId = Sensor::getSensor($sensorId)->getSensorId();
 
             if ($endDateTime != "null") {
-                $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`sensor_id`=:sensor_id AND `dataPoints`.`user_id`=:user_id AND `dataPoints`.`date_time`>=:startDateTime AND `dataPoints`.`date_time`<=:endDateTime ORDER BY `date_time` ASC");
+                $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`sensor_id`=:sensor_id AND `dataPoints`.`user_id`=:user_id AND `dataPoints`.`date_time`>=:startDateTime AND `dataPoints`.`date_time`<=:endDateTime ORDER BY `date_time` DESC");
                 $statement->bindParam(":user_id", $userId, PDO::PARAM_INT);
                 $statement->bindParam(":sensor_id", $sensorId, PDO::PARAM_INT);
                 $statement->bindParam(":startDateTime", $startDateTime, PDO::PARAM_STR); 
                 $statement->bindParam(":endDateTime", $endDateTime, PDO::PARAM_STR); 
             }
             else {
-                $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`sensor_id`=:sensor_id AND `dataPoints`.`user_id`=:user_id ORDER BY `date_time` ASC LIMIT 0, 50");
+                $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`sensor_id`=:sensor_id AND `dataPoints`.`user_id`=:user_id ORDER BY `date_time` DESC LIMIT 0, 50");
                 $statement->bindParam(":user_id", $userId, PDO::PARAM_INT);
                 $statement->bindParam(":sensor_id", $sensorId, PDO::PARAM_INT);
             }
@@ -283,6 +283,9 @@ class DataPoints extends DataPoint {
             $statement->execute();
 
             $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            $columns = array_column($results, 'date_time');
+            array_multisort($columns, SORT_ASC, $results);
 
             foreach ($results as $result) {
 

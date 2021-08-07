@@ -1,6 +1,8 @@
 <?php 
 declare(strict_types=1);
 require_once('./configuration/Trends.php');
+
+require_once('./configuration/DataPoints.php');
 use PHPUnit\Framework\TestCase;
 
 final class TrendsTest extends TestCase
@@ -61,5 +63,15 @@ final class TrendsTest extends TestCase
         //var_dump($trends->getConfiguredTrends(array("sensorId" => 4, "userId" => 2)));
         $this->assertIsArray($trends->getConfiguredTrends(array("sensorId" => 4, "userId" => 2)));
     }
+
+    public function testGetConfiguredTrend(): void
+    {
+        $trends = new Trends();
+        //var_dump($trends->getConfiguredTrends(array("sensorId" => 4, "userId" => 2)));
+        $trendId['trendId'] = 16;
+        $this->assertIsArray($trends->getConfiguredTrend($trendId));
+    }
+
+    
 }
 ?>
