@@ -832,3 +832,43 @@
         }
     ]
 }
+/var/www/html/app/api.php Line: 158 - 2021-08-07 12:15:56 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "test123",
+    "trendFormula": "chillerEfficiency",
+    "inputs": "{\"heatCapacity\":\"1\",\"averagingFactor\":null,\"mAMin\":null,\"mAMax\":null,\"processMin\":null,\"processMax\":null,\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "1",
+    "associatedTrends": "[]"
+}
+/var/www/html/app/api.php Line: 158 - 2021-08-07 12:19:34 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "etaessd",
+    "trendFormula": "chillerEfficiency",
+    "inputs": "{\"heatCapacity\":\"2\",\"averagingFactor\":null,\"mAMin\":null,\"mAMax\":null,\"processMin\":null,\"processMax\":null,\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "1",
+    "associatedTrends": "[]"
+}
+/var/www/html/app/api.php Line: 158 - 2021-08-07 12:20:56 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "wdgsdfg",
+    "trendFormula": "chillerEfficiency",
+    "inputs": "{\"heatCapacity\":\"4\",\"averagingFactor\":null,\"mAMin\":null,\"mAMax\":null,\"processMin\":null,\"processMax\":null,\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "1",
+    "associatedTrends": "[]"
+}
+/var/www/html/app/api.php Line: 158 - 2021-08-07 12:21:43 {
+    "class": "Trends",
+    "method": "insertCalculatedTrend",
+    "userId": "2",
+    "trendName": "sdfg",
+    "trendFormula": "chillerEfficiency",
+    "inputs": "{\"heatCapacity\":\"3\",\"averagingFactor\":null,\"mAMin\":null,\"mAMax\":null,\"processMin\":null,\"processMax\":null,\"density\":null,\"voltage\":null,\"powerFactor\":null}",
+    "sensorId": "1",
+    "associatedTrends": "[]"
+}

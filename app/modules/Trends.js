@@ -489,11 +489,14 @@ class Trends extends Services {
         let inputGroup = HTMLElement;
 		let inputLabel = HTMLElement;
 
+        let inputsGroup = document.createElement("div");
+        inputsGroup.setAttribute("class", "row mx-3 my-2 form-group");
+
         switch (selectedValue) {
             case "chillerEfficiency":
                 // Heat Capacity
 				inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "heatCapacity");
@@ -501,36 +504,21 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "heatCapacity", "heatCapacity", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
 
-                // Associated Sensors
-				inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
-
-                inputLabel = document.createElement("label");
-                inputLabel.setAttribute("for", "associatedSensors");
-                inputLabel.innerHTML = "Associated Sensors: ";
-                inputGroup.append(inputLabel);
-
+                // Associated Sensors and Trends
                 
-                let optionsAssociatedSensors = new Array();
-                let associatedSensors = await this.getApi("Sensors", "getUserSensors", "&userId=" + userId)
-                .then(response => {
-                    //console.log(response);
-                    response.forEach(sensor => optionsAssociatedSensors[parseInt(sensor.id)] = sensor.sensor_name);
-                    return optionsAssociatedSensors;
-                })
-                .catch(e => console.log(e));
-                
-                inputGroup.append(this.createDropDown("associatedSensors", "associatedSensors", associatedSensors, true));
+                this.createAssociatedSensorsDropDown(userId, inputsGroup)
+                .then(response => inputsGroup.append(response))
+                .catch(e => console.error(e));
 
-                formulaInputs.push(inputGroup);
+                //inputsGroup.append(inputGroup);
 
                 break;
             case "current":
 				// Averaging Factor
 				inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "averagingFactor");
@@ -538,12 +526,12 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "averagingFactor", "averagingFactor", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
                 break;
             case "maConversion":
 				// mA Minimum
 				inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "mAMin");
@@ -551,10 +539,10 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "mAMin", "mAMin", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
 				// mA Maximum
 				inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "mAMax");
@@ -562,10 +550,10 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "mAMax", "mAMax", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
 				// Process Minimum
 				inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "processMin");
@@ -573,10 +561,10 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "processMin", "processMin", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
 				// Process Maximum
 				inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "processMax");
@@ -584,12 +572,12 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "processMax", "processMax", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
                 break;
             case "massFlow":
 				// Density
                 inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "density");
@@ -597,7 +585,7 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "density", "density", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
                 
                 /*
                 let optionsDuration = new Array();
@@ -613,7 +601,7 @@ class Trends extends Services {
             case "power":
 				// Voltage
                 inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "voltage");
@@ -621,10 +609,10 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "voltage", "voltage", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
 				// Power Factor
                 inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "powerFactor");
@@ -632,13 +620,17 @@ class Trends extends Services {
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "powerFactor", "powerFactor", 4, true));
 
-                formulaInputs.push(inputGroup);
+                inputsGroup.append(inputGroup);
                 break;
             default:
                 formulaSelected = false;
                 break;
         }
-        
+        // Add formula inputs to the form.
+        formulaInputs.push(inputsGroup);
+        /**
+         * Creates the sensors dropdown for the specific trend.
+         */
         if (formulaSelected) {
             const sensor = new Sensor();
 
@@ -646,7 +638,7 @@ class Trends extends Services {
             .then(response => {
 
                 inputGroup = document.createElement("div");
-                inputGroup.setAttribute("class", "col-md-12 form-group");
+                inputGroup.setAttribute("class", "col-md-12 my-2 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "companySensors");
@@ -657,8 +649,7 @@ class Trends extends Services {
                 formElement.setAttribute("id", "companySensors");
                 formElement.setAttribute("name", "companySensors");
                 formElement.setAttribute("class", "form-control");
-
-
+                /*
                 formElement.addEventListener("change", (event) => {
 
                     // Create trend dropdown and append to formulaInputs
@@ -676,13 +667,14 @@ class Trends extends Services {
                     .catch(e => console.error(e));
                     
                 });
-
+                */
 
                 formElement.required = true;
 
                 let optionElement = document.createElement("option");
                 optionElement.setAttribute("value", "");
                 optionElement.innerHTML = `Select A Sensor`;
+                optionElement.selected = true;
                 formElement.append(optionElement);
 
                 response.forEach(option => {
@@ -697,7 +689,7 @@ class Trends extends Services {
                 inputGroup.append(formElement);
 
                 //console.log(inputGroup);
-
+                // Add sensor dropdown menu to the form.
                 formulaInputs.push(inputGroup);
 
             })
@@ -716,18 +708,18 @@ class Trends extends Services {
         .then(trends => {
             
             inputGroup = document.createElement("div");
-            inputGroup.setAttribute("class", "col-md-12 form-group");
+            inputGroup.setAttribute("class", "row mx-3 my-1 form-group");
 
             inputLabel = document.createElement("label");
             inputLabel.setAttribute("for", "formulaTrends[]");
-            inputLabel.innerHTML = "Sensor Trend: ";
+            inputLabel.innerHTML = "Associated Trend: ";
             inputGroup.append(inputLabel);
 
             const formElement = document.createElement("select");
             formElement.setAttribute("id", "formulaTrends[]");
             formElement.setAttribute("name", "formulaTrends");
             formElement.setAttribute("class", "form-control");
-
+            /*
             formElement.addEventListener("change", (event) => {
 
                 let formulaInputs = document.querySelector("#formulaInputs");
@@ -741,10 +733,11 @@ class Trends extends Services {
                 .catch(e => console.error(e));
                 
             });
-
+            */
             let optionElement = document.createElement("option");
             optionElement.setAttribute("value", "");
-            optionElement.innerHTML = `Select A Sensor`;
+            optionElement.innerHTML = `Select an Associated Trend`;
+            optionElement.selected = true;
             formElement.append(optionElement);
 
             trends.forEach(option => {
@@ -757,6 +750,67 @@ class Trends extends Services {
             inputGroup.append(formElement);
         })
         .catch(e => console.error(e));
+
+        return inputGroup;
+    }
+
+    createAssociatedSensorsDropDown = async (userId, inputsGroup) => {
+
+        let inputGroup = HTMLElement;
+        let inputLabel = HTMLElement;
+        // Associated Sensors
+        inputGroup = document.createElement("div");
+        inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+
+        inputLabel = document.createElement("label");
+        inputLabel.setAttribute("for", "associatedSensors");
+        inputLabel.innerHTML = "Associated Sensors: ";
+        inputGroup.append(inputLabel);
+
+        const associatedSensors = await this.getApi("Sensors", "getUserSensors", "&userId=" + userId)
+        .then(response => {
+            //console.log(response);
+            const optionsAssociatedSensors = new Array();
+            response.forEach(sensor => optionsAssociatedSensors[parseInt(sensor.id)] = sensor.sensor_name);
+            return optionsAssociatedSensors;
+        })
+        .catch(e => console.log(e));
+        
+        inputGroup.append(this.createDropDown("associatedSensors", "associatedSensors", associatedSensors, true));
+
+        let optionElement = document.createElement("option");
+        optionElement.setAttribute("value", "");
+        optionElement.innerHTML = `Select an Associated Sensor`;
+        optionElement.selected = true;
+        inputGroup.querySelector("select").prepend(optionElement);
+
+
+
+        inputGroup.querySelector("select").addEventListener("change", (event) => {
+
+            // Create trend dropdown and append to formulaInputs
+            //let formulaInputs = document.querySelector("#formulaInputs");
+
+            let formulaInputs = document.querySelector("#formulaInputs").firstElementChild;
+
+            let sensorId = event.target.value;
+        
+            //let sensorId = event.target.options[event.target.options.selectedIndex].value;
+
+            //console.log(event.target.value);
+
+            //formElement.setAttribute("disabled", true);
+            
+            this.getFormulaTrends(userId, sensorId)
+            .then(dropdown => {
+                //formulaInputs.append(dropdown);
+                formulaInputs.append(dropdown);
+
+                this.createAssociatedSensorsDropDown(userId).then(response => formulaInputs.append(response)).catch(e => console.error(e));
+            })
+            .catch(e => console.error(e));
+            
+        });
 
         return inputGroup;
     }

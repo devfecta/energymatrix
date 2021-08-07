@@ -138,8 +138,18 @@ addTrendButton.addEventListener("click", (event) => {
         
     }
 
+    console.log(trendFormElements.formulaTrends);
+    
+    trendFormElements.associatedSensors.forEach(sensor => {
+        console.log(sensor.value);
+    });
+    console.log(trendFormElements.associatedSensors);
+
     formData.append("associatedTrends", JSON.stringify(selectedTrends));
 
+    
+    event.preventDefault();
+/*
     trends.insertCalculatedTrend(formData)
     .then(trend => {
         console.log(trend);
@@ -162,7 +172,7 @@ addTrendButton.addEventListener("click", (event) => {
         }
     })
     .catch(e => console.error(e));
-
+*/
     
     /*
     

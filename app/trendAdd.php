@@ -18,14 +18,14 @@
         <form id="trendForm" class="form-signin needs-validation" method="post" enctype="application/x-www-form-urlencoded" novalidate>
 
             <div class="row">
-                <div class="col-md-12 form-group">
+                <div class="col-md-12 my-2 form-group">
                     <label for="trendName">Trend Name: </label>
                     <input type="text" class="form-control" id="trendName" name="trendName" maxlength="32" required />
                 </div>
             </div>
 
             <div class="row">
-                <div class="col-md-12 form-group">
+                <div class="col-md-12 my-2 form-group">
                     <label for="trendFormulas">Trend Formula: </label>
                     <select class="form-control" id="trendFormulas" name="trendFormulas"></select>
                 </div>
@@ -34,7 +34,7 @@
             <div id="formulaInputs" class="row"></div>
 
             <div class="row">
-                <div class="col-md-12 form-group">
+                <div class="col-md-12 my-2 form-group">
                     <button type="button" id="addTrendButton" class="btn btn-lg btn-primary mt-2">Add Trend</button>
                 </div>
             </div>
