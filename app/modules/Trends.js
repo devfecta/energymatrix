@@ -711,12 +711,12 @@ class Trends extends Services {
             inputGroup.setAttribute("class", "row mx-3 my-1 form-group");
 
             inputLabel = document.createElement("label");
-            inputLabel.setAttribute("for", "formulaTrends[]");
+            inputLabel.setAttribute("for", "formulaTrends");
             inputLabel.innerHTML = "Associated Trend: ";
             inputGroup.append(inputLabel);
 
             const formElement = document.createElement("select");
-            formElement.setAttribute("id", "formulaTrends[]");
+            formElement.setAttribute("id", "formulaTrends");
             formElement.setAttribute("name", "formulaTrends");
             formElement.setAttribute("class", "form-control");
             /*
@@ -757,15 +757,21 @@ class Trends extends Services {
     createAssociatedSensorsDropDown = async (userId, inputsGroup) => {
 
         let inputGroup = HTMLElement;
+        let inputGroupItem = HTMLElement;
         let inputLabel = HTMLElement;
-        // Associated Sensors
+
         inputGroup = document.createElement("div");
         inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+        inputGroup.setAttribute("id", "associatedSensor");
+
+        // Associated Sensors
+        inputGroupItem = document.createElement("div");
+        inputGroupItem.setAttribute("class", "col-md-12 my-1 form-group");
 
         inputLabel = document.createElement("label");
         inputLabel.setAttribute("for", "associatedSensors");
         inputLabel.innerHTML = "Associated Sensors: ";
-        inputGroup.append(inputLabel);
+        inputGroupItem.append(inputLabel);
 
         const associatedSensors = await this.getApi("Sensors", "getUserSensors", "&userId=" + userId)
         .then(response => {
@@ -776,17 +782,17 @@ class Trends extends Services {
         })
         .catch(e => console.log(e));
         
-        inputGroup.append(this.createDropDown("associatedSensors", "associatedSensors", associatedSensors, true));
+        inputGroupItem.append(this.createDropDown("associatedSensors", "associatedSensors", associatedSensors, true));
 
         let optionElement = document.createElement("option");
         optionElement.setAttribute("value", "");
         optionElement.innerHTML = `Select an Associated Sensor`;
         optionElement.selected = true;
-        inputGroup.querySelector("select").prepend(optionElement);
+        inputGroupItem.querySelector("select").prepend(optionElement);
 
 
 
-        inputGroup.querySelector("select").addEventListener("change", (event) => {
+        inputGroupItem.querySelector("select").addEventListener("change", (event) => {
 
             // Create trend dropdown and append to formulaInputs
             //let formulaInputs = document.querySelector("#formulaInputs");
@@ -804,13 +810,15 @@ class Trends extends Services {
             this.getFormulaTrends(userId, sensorId)
             .then(dropdown => {
                 //formulaInputs.append(dropdown);
-                formulaInputs.append(dropdown);
+                inputGroupItem.append(dropdown);
 
                 this.createAssociatedSensorsDropDown(userId).then(response => formulaInputs.append(response)).catch(e => console.error(e));
             })
             .catch(e => console.error(e));
             
         });
+
+        inputGroup.append(inputGroupItem);
 
         return inputGroup;
     }

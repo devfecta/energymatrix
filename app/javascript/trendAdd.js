@@ -125,6 +125,25 @@ addTrendButton.addEventListener("click", (event) => {
     // Check to see if any trends are selected.
     let selectedTrends = [];
 
+    const associatedSensors = document.querySelectorAll("#associatedSensor");
+
+    associatedSensors.forEach(associatedSensor => {
+        let associatedSensorSelects = associatedSensor.querySelectorAll("select");
+        console.log(associatedSensorSelects);
+        
+        if (associatedSensorSelects[0].value) {
+            selectedTrends.push({
+                "sensorId" : (associatedSensorSelects[0].value)
+                , "trendId" : (associatedSensorSelects[1].value) ? associatedSensorSelects[1].value : null
+            });
+        }
+        
+        
+    });
+
+    console.log(selectedTrends);
+    
+/*
     if (trendFormElements.formulaTrends[0].value) {
 
         let formulaTrends = trendFormElements.formulaTrends;
@@ -144,12 +163,10 @@ addTrendButton.addEventListener("click", (event) => {
         console.log(sensor.value);
     });
     console.log(trendFormElements.associatedSensors);
-
+    */
     formData.append("associatedTrends", JSON.stringify(selectedTrends));
 
-    
-    event.preventDefault();
-/*
+
     trends.insertCalculatedTrend(formData)
     .then(trend => {
         console.log(trend);
@@ -172,7 +189,7 @@ addTrendButton.addEventListener("click", (event) => {
         }
     })
     .catch(e => console.error(e));
-*/
+
     
     /*
     

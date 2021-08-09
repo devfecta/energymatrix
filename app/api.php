@@ -155,7 +155,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo json_encode($trends->insertTrend($_POST));
                             break;
                         case "insertCalculatedTrend":
-                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_POST, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_POST, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                             echo json_encode($trends->insertCalculatedTrend($_POST));
                             break;
                         default:
