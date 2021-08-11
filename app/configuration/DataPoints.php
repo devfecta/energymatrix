@@ -126,7 +126,21 @@ class DataPoints extends DataPoint {
             $statement->bindParam(":sensorId", $sensor['sensorID'], PDO::PARAM_INT);
             $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
             $statement->execute();
+            $sensorData = $statement->fetch(PDO::FETCH_ASSOC);
 
+            // Gets the data type and value.
+            if (strpos($sensor['plotLabels'], '|')) {
+                $plotLabelArray = explode('|', $sensor['plotLabels']);
+                $dataType = $plotLabelArray[0];
+
+                $plotValueArray = explode('|', $sensor['plotValues']);
+                $dataValue = $plotValueArray[0];
+            }
+            else {
+                $dataType = $sensor['plotLabels'];
+                $dataValue = $sensor['plotValues'];
+            }
+            // Creates a new sensor record if it doesn't exist.
             if ($statement->rowCount() < 1) {
 
                 $sensorName =  explode(' | ', $sensor['sensorName'])[1];
@@ -134,22 +148,36 @@ class DataPoints extends DataPoint {
                 $statement = $connection->prepare("INSERT INTO `sensors` (
                     `sensorId`,
                     `userId`,
-                    `sensor_name`
+                    `sensor_name`,
+                    `dataType`
                 ) 
                 VALUES (
                     :sensorId,
                     :userId,
-                    :sensor_name
+                    :sensor_name,
+                    :dataType
                 )");
+
                 $statement->bindParam(":sensorId", $sensor['sensorID'], PDO::PARAM_INT);
                 $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
                 $statement->bindParam(":sensor_name", $sensorName, PDO::PARAM_STR);
+                $statement->bindParam(":dataType", $dataType, PDO::PARAM_STR);
                 $statement->execute();
 
             }
-
-            $plotLabels = $sensor['plotLabels'];
-            $plotValues = $sensor['plotValues'];
+            else {
+                
+                if (!$sensorData["dataType"]) {
+                    $statement = $connection->prepare("UPDATE `sensors` SET `dataType`=:dataType WHERE `id`=:id");
+                    $statement->bindParam(":id", $sensorData['id'], PDO::PARAM_INT);
+                    $statement->bindParam(":dataType", $dataType, PDO::PARAM_STR);
+                    $statement->execute();
+                }
+                
+            }
+            // NOT NEEDED anymore
+            //$plotLabels = $sensor['plotLabels'];
+            //$plotValues = $sensor['plotValues'];
 
             $statement = $connection->prepare("INSERT INTO `dataPoints` (
                 `user_id`,
@@ -168,71 +196,15 @@ class DataPoints extends DataPoint {
 
             $statement->bindValue(":user_id", $userId, PDO::PARAM_INT); 
             $statement->bindValue(":sensor_id", $sensor['sensorID'], PDO::PARAM_INT);
-            $statement->bindParam(":date_time", $sensor['messageDate'], PDO::PARAM_STR); 
+            $statement->bindParam(":date_time", $sensor['messageDate'], PDO::PARAM_STR);
+            $statement->bindParam(":data_type", $dataType, PDO::PARAM_STR);
+            $statement->bindValue(":data_value", $dataValue);
 
-
-            if (strpos($plotLabels, '|')) {
-                
-                $plotLabelArray = explode('|', $plotLabels);
-                $plotValueArray = explode('|', $plotValues);
-
-                $statement->bindParam(":data_type", $plotLabelArray[0]);
-                $statement->bindValue(":data_value", $plotValueArray[0]);
-                /* TOOK OUT BECAUSE WE JUST NEED THE FIRST VALUES
-                for ($i = 0; $i < count($plotLabelArray); $i++) {
-
-                    $statement->bindValue(":user_id", $userId, PDO::PARAM_INT);
-                    $statement->bindValue(":sensor_id", $sensor['sensorID'], PDO::PARAM_INT);
-                    $statement->bindParam(":date_time", $sensor['messageDate'], PDO::PARAM_STR);
-                    $statement->bindParam(":data_type", $plotLabelArray[$i]);
-                    $statement->bindValue(":data_value", $plotValueArray[$i]);
-                    $result = $statement->execute() ? true : false;
-                    
-                }
-                */
-            }
-            else {
-                $statement->bindParam(":data_type", $plotLabels);
-                $statement->bindValue(":data_value", $plotValues); 
-            }
             // Insert Raw Data Point
             $connection->beginTransaction();
             $result = $statement->execute() ? true : false;
             $lastInsertId = $connection->lastInsertId();
             $connection->commit();
-
-            //$statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:trendId");
-            //$statement->bindValue(":trendId", $lastInsertId, PDO::PARAM_INT);
-            //$statement->execute();
-
-            //$result = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
-
-            if ($result) {
-                // Data Point Object
-                $rawDataPoint = DataPoint::getDataPoint($lastInsertId);
-                // Sensor Object
-                $sensor = Sensor::getSensor($sensor['sensorID'], $userId);
-
-                $Formulas = new Formulas();
-
-                switch ($rawDataPoint->getDataType()) {
-                    case 'mA':
-                        $Formulas->maConversion($sensorReading, $maMin, $maMax, $processMin, $processMax);
-                        break;
-                    
-                    default:
-                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Invalid Data Type" . "\n", 3, "/var/www/html/app/php-errors.log");
-                        break;
-                }
-
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $rawDataPoint->getDataType() . "\n", 3, "/var/www/html/app/php-errors.log");
-                //$sensor = Sensor::getSensor($sensor['sensorID'], $userId);
-                
-            }
-            else {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " NO INSERT" . "\n", 3, "/var/www/html/app/php-errors.log");
-                
-            }
 
         }
         catch(PDOException $pdo) {

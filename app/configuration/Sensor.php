@@ -7,6 +7,7 @@
         private $sensorId = 0;
         private $userId = 0;
         private $sensorName = "";
+        private $dataType = "";
 
         function __construct() {}
 
@@ -35,6 +36,7 @@
                 $sensor->setSensorId($results['sensorId']);
                 $sensor->setUserId($results['userId']);
                 $sensor->setSensorName($results['sensor_name']);
+                $sensor->setSensorDataType($results['dataType']);
             }
             catch (PDOException $pdo) {
                 error_log(date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
@@ -81,15 +83,15 @@
         public function setSensorName($name) {
             $this->sensorName = $name;
         }
-        /*
-        public function getSensorAttributes() {
-            return $this->sensorAttributes;
+        
+        public function getSensorDataType() {
+            return $this->dataType;
         }
 
-        public function setSensorAttributes($attributes) {
-            $this->sensorAttributes = $attributes;
+        public function setSensorDataType($dataType) {
+            $this->dataType = $dataType;
         }
-        */
+        
 
     }
 ?>

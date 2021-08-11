@@ -94,6 +94,7 @@ class Trends extends Services {
 
                 trendButton.append(trendColumn);
 
+                console.log(trend);
                 // Associated Trends Row
                 trendColumn = document.createElement("div");
                 trendColumn.setAttribute("class", "col-md-12 d-flex");
@@ -106,7 +107,8 @@ class Trends extends Services {
                 trend.associatedTrends.forEach(trend => {
                     trendDetailRow = document.createElement("div");
                     trendDetailRow.setAttribute("class", "col-md-2");
-                    trendDetailRow.innerHTML += trend.trendName;
+
+                    trendDetailRow.innerHTML += (trend.trendName) ? trend.trendName : `Sensor: ` + trend.sensor.sensor_name;
                     trendColumn.append(trendDetailRow);
                 });
 

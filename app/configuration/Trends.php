@@ -201,13 +201,63 @@
 
                     $associatedTrendsArray = array();
 
+                    
+
                     foreach ($associatedTrends as $associatedTrend) {
 
-                        $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:id");
-                        $statement->bindValue(":id", $associatedTrend, PDO::PARAM_INT);
-                        $statement->execute();
+                        $trendSensorId = $associatedTrend["sensorId"];
+                        $trendTrendId = $associatedTrend["trendId"];
 
-                        $trendArray = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
+                        json_encode($associatedTrend["sensorId"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+
+                        if (isset($trendTrendId)) {
+                            $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:id");
+                            $statement->bindValue(":id", $trendTrendId, PDO::PARAM_INT);
+                            $statement->execute();
+
+                            $trendArray = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+                        }
+                        else {
+
+                            $DataPoints = new DataPoints();
+                            // Array of Raw Data Points
+                            $dataPointsArray = $DataPoints->getSensorDataPoints($sensor['userId'], $trendSensorId, "null", "null");
+
+                            $sensorArray = Sensor::getSensor($trendSensorId);
+
+                            $trendArray = array(
+                                "sensor" => array(
+                                    "id"=> $sensorArray->getId()
+                                    , "sensor_name" => $sensorArray->getSensorName()
+                                    , "dataType" => $sensorArray->getSensorDataType()
+                                )
+                                , "dataPoints" => array()
+                            );
+
+                            //$sensorArray->getSensorId();
+                            //$sensorArray->getUserId();
+                            //$sensorArray->getSensorName();
+                            //$sensorArray->getSensorDataType();
+
+                            foreach($dataPointsArray as $dataPoint) {
+                                
+                                array_push($trendArray["dataPoints"], 
+                                    array(
+                                        "id" => $dataPoint->getDataPointId()
+                                        , "user_id" => $dataPoint->getUserId()
+                                        , "sensor_id" => $dataPoint->getSensorId()
+                                        , "date_time" => $dataPoint->getDate()
+                                        , "data_type" => $dataPoint->getDataType()
+                                        , "data_value" => $dataPoint->getDataValue()
+                                        , "custom_value" => $dataPoint->getCustomValue()
+                                    )
+                                );
+                                
+                            }
+                        }
+                        
+                        
 
                         $associatedTrendsArray[] = $trendArray;
                     }
