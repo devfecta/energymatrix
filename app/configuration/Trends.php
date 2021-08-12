@@ -316,7 +316,7 @@
                 foreach ($associatedTrends as $associatedTrend) {
 
                     $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:id");
-                    $statement->bindValue(":id", $associatedTrend, PDO::PARAM_INT);
+                    $statement->bindValue(":id", $associatedTrend["trendId"], PDO::PARAM_INT);
                     $statement->execute();
 
                     $trendArray = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
@@ -334,7 +334,7 @@
 
                 //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($associatedTrendsArray) . "\n", 3, "/var/www/html/app/php-errors.log");
                 $trend["associatedTrends"] = $associatedTrendsArray;
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                             
                 // Inputs
                 $inputs = json_decode($trend['inputs'], true);
@@ -349,7 +349,7 @@
 
                 $trend["inputs"] = $inputsArray;
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                 
                 $sensor = Sensor::getSensor($trend["sensorId"]);
 
@@ -366,7 +366,27 @@
                     , "points" => array()
                 );
 
-                foreach ($rawDataPoints as $rawDataPoint) {
+                foreach ($rawDataPoints as $index => $rawDataPoint) {
+                    
+                    
+                    switch ($trend["trendFormula"]) {
+                        case "mAConversion":
+                            $dataPointValue = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
+                            $dataPointType = "mA Conversion";
+                            break;
+                        case "current":
+                            $dataPointValue = $this->Formulas->current($rawDataPoint->getDataValue(), $trend["inputs"]["averagingFactor"]);
+                            $dataPointType = "Current";
+                            break;
+                        case "power":
+                            $dataPointValue = $this->Formulas->power($trend["associatedTrends"][0]["points"][$index]["data_value"], $trend["inputs"]["voltage"], $trend["inputs"]["powerFactor"]);
+                            $dataPointType = "Power";
+                            break;
+                        default:
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Invalid Data Type" . "\n", 3, "/var/www/html/app/php-errors.log");
+                            break;
+                    }
+                    /*
                     switch ($rawDataPoint->getDataType()) {
                         case "mA":
                             $dataPointValue = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
@@ -381,6 +401,7 @@
                             error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Invalid Data Type" . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
+                    */
 
                     array_push($trendDataPoints["points"], 
                         array(
@@ -410,6 +431,10 @@
             finally {
                 $connection = Configuration::closeConnection();
             }
+
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+
+
             
             return $trend;
         }

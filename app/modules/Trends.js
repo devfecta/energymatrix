@@ -623,6 +623,10 @@ class Trends extends Services {
                 inputGroup.append(this.createTextBox("number", "powerFactor", "powerFactor", 4, true));
 
                 inputsGroup.append(inputGroup);
+
+                this.createAssociatedSensorsDropDown(userId, inputsGroup)
+                .then(response => inputsGroup.append(response))
+                .catch(e => console.error(e));
                 break;
             default:
                 formulaSelected = false;
@@ -793,7 +797,7 @@ class Trends extends Services {
         inputGroupItem.querySelector("select").prepend(optionElement);
 
 
-
+        // Controls what happens when the associated sensor dropdown is changed.
         inputGroupItem.querySelector("select").addEventListener("change", (event) => {
 
             // Create trend dropdown and append to formulaInputs
@@ -811,10 +815,18 @@ class Trends extends Services {
             
             this.getFormulaTrends(userId, sensorId)
             .then(dropdown => {
-                //formulaInputs.append(dropdown);
-                inputGroupItem.append(dropdown);
+                // Removes and re-appends a new associated trends dropdown menu.
+                let associatedTrendsDropdown = inputGroupItem.querySelector("#formulaTrends");
+                if (associatedTrendsDropdown) {
+                    associatedTrendsDropdown.parentNode.remove();
+                }
+                else {
+                    this.createAssociatedSensorsDropDown(userId).then(response => formulaInputs.append(response)).catch(e => console.error(e));
+                }
 
-                this.createAssociatedSensorsDropDown(userId).then(response => formulaInputs.append(response)).catch(e => console.error(e));
+                inputGroupItem.append(dropdown);
+                
+                
             })
             .catch(e => console.error(e));
             

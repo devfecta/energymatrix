@@ -1,4 +1,4 @@
 app/configuration/config.php
 app/.phpunit.result.cache
 app/phpunit
-**/app/php-errors.log
+app/php-errors.log
