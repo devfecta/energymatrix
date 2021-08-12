@@ -293,7 +293,7 @@
             return $trends;
         }
 
-        public function getConfiguredTrend($trendId) {
+        public function getConfiguredTrend($trendSearchData) {
 
             $trend = array();
 
@@ -302,7 +302,7 @@
                 $connection = Configuration::openConnection();
 
                 $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:trendId");
-                $statement->bindValue(":trendId", $trendId['trendId'], PDO::PARAM_INT);
+                $statement->bindValue(":trendId", $trendSearchData['trendId'], PDO::PARAM_INT);
 
                 $statement->execute();
 
@@ -315,6 +315,8 @@
 
                 foreach ($associatedTrends as $associatedTrend) {
 
+                    
+
                     $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:id");
                     $statement->bindValue(":id", $associatedTrend["trendId"], PDO::PARAM_INT);
                     $statement->execute();
@@ -322,12 +324,15 @@
                     $trendArray = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
                     //$associatedTrendsArray[] = $trendArray;
+                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trendArray, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                     
                     foreach ($trendArray as $associatedTrendTemp) {
-                        $tempID['trendId'] = (int) $associatedTrendTemp["id"];
+                        $tempTrendSearchData['trendId'] = (int) $associatedTrendTemp["id"];
+                        $tempTrendSearchData['startDate'] = $trendSearchData['startDate'];
+                        $tempTrendSearchData['endDate'] = $trendSearchData['endDate'];
                         //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($this->getConfiguredTrend($tempID), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                 
-                        $associatedTrendsArray[] = $this->getConfiguredTrend($tempID);
+                        $associatedTrendsArray[] = $this->getConfiguredTrend($tempTrendSearchData);
                     }
                     
                 }
@@ -355,7 +360,7 @@
 
                 $DataPoints = new DataPoints();
                 // Array of Raw Data Points
-                $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], "null", "null");
+                $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], $trendSearchData['startDate'], $trendSearchData['endDate']);
 
                 $trendDataPoints = array(
                     "trend" => $trend
@@ -367,6 +372,7 @@
                 );
 
                 foreach ($rawDataPoints as $index => $rawDataPoint) {
+                    
                     
                     
                     switch ($trend["trendFormula"]) {

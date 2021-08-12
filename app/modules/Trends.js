@@ -42,8 +42,8 @@ class Trends extends Services {
      *
      * @return  {array} Array of trend data.
      */
-     getConfiguredTrend = async (trendId) => {
-        return await this.getApi("Trends", "getConfiguredTrend", "trendId=" + trendId)
+     getConfiguredTrend = async (trendId, startDate, endDate) => {
+        return await this.getApi("Trends", "getConfiguredTrend", "trendId=" + trendId + "&startDate=" + startDate + "&endDate=" + endDate)
         .then(response => response)
         .catch(e => console.error(e));
     }
@@ -54,6 +54,10 @@ class Trends extends Services {
         .then(response => {
             const trendsList = document.querySelector("#trends");
 
+            
+
+            
+
             const trendsListGroup = document.createElement("div");
             trendsListGroup.setAttribute("class", "list-group");
 
@@ -62,7 +66,13 @@ class Trends extends Services {
                 trendButton.setAttribute("type", "button");
                 trendButton.setAttribute("class", "d-flex flex-wrap list-group-item list-group-item-action");
                 trendButton.setAttribute("value", trend.id);
-                trendButton.addEventListener("click", (event) => {this.viewTrend(trendButton.value)});
+                trendButton.addEventListener("click", (event) => {
+
+                    const startDate = document.querySelector("#startDate").value + " " + document.querySelector("#startTime").value;
+                    const endDate = document.querySelector("#endDate").value + " " + document.querySelector("#endTime").value;
+                    
+                    this.viewTrend(trendButton.value, startDate, endDate)
+                });
                 
                 let trendColumn = document.createElement("div");
                 trendColumn.setAttribute("class", "col-md-4 h5");
@@ -123,9 +133,10 @@ class Trends extends Services {
         .catch(e => console.error(e));
     }
 // WIP
-    viewTrend = (trendId) => {        
+    viewTrend = (trendId, startDate, endDate) => {
+        console.log(startDate, endDate);
         console.log(trendId);
-        this.getConfiguredTrend(trendId)
+        this.getConfiguredTrend(trendId, startDate, endDate)
         .then(dataPoints => {
             console.log(dataPoints);
 
