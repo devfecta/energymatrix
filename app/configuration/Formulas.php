@@ -66,7 +66,29 @@
 
             return round($currentAverage, 3);
         }
-        
+
+        /**
+         * General Formulas
+         */
+        public function addition($value1, $value2) {
+            return $value1 + $value2;
+        }
+
+        public function subtraction($value1, $value2) {
+            return $value1 - $value2;
+        }
+
+        public function multiplication($value1, $value2) {
+            return $value1 * $value2;
+        }
+
+        public function division($value1, $value2) {
+            return $value1 / $value2;
+        }
+
+        public function exponentiation($value1, $value2) {
+            return $value1 ^ $value2;
+        }
         /**
          * 4-20 mA Conversion: Process Value (input units) = (a – b) ÷ (c – b) x (d – e)
          * a = Sensor Reading (mA) (trend value)

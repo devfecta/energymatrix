@@ -54,10 +54,6 @@ class Trends extends Services {
         .then(response => {
             const trendsList = document.querySelector("#trends");
 
-            
-
-            
-
             const trendsListGroup = document.createElement("div");
             trendsListGroup.setAttribute("class", "list-group");
 
@@ -521,7 +517,7 @@ class Trends extends Services {
 
                 // Associated Sensors and Trends
                 
-                this.createAssociatedSensorsDropDown(userId, inputsGroup)
+                this.createAssociatedSensorsDropDown(userId, true)
                 .then(response => inputsGroup.append(response))
                 .catch(e => console.error(e));
 
@@ -635,9 +631,75 @@ class Trends extends Services {
 
                 inputsGroup.append(inputGroup);
 
-                this.createAssociatedSensorsDropDown(userId, inputsGroup)
+                this.createAssociatedSensorsDropDown(userId, true)
                 .then(response => inputsGroup.append(response))
                 .catch(e => console.error(e));
+                break;
+            case "addition":
+            case "subtraction":
+            case "multiplication":
+            case "division":
+            case "exponentiation":
+
+                // General Formula Inputs
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+                inputsGroup.setAttribute("id", "trendInputs");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "generalInput1");
+                inputLabel.innerHTML = "Input Option 1: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "generalInput1", "generalInput1", 4, true));
+
+                inputsGroup.append(inputGroup);
+
+
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+
+                let optionsValue = new Array();
+                optionsValue[0] = "Select a Secondary Variable";
+                optionsValue[1] = "Input Box";
+                optionsValue[2] = "Trend";
+                const variableOptions = this.createDropDown("variableOptions", "variableOptions", optionsValue, true);
+                variableOptions.addEventListener("change", (event) => {
+
+                    if (inputsGroup.childNodes.length > 2) {
+                        inputsGroup.lastChild.remove();
+                    }
+
+                    if (event.target.options[event.target.options.selectedIndex].value == 1) {                     
+                        
+                        inputGroup = document.createElement("div");
+                        inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+
+                        inputLabel = document.createElement("label");
+                        inputLabel.setAttribute("for", "generalInput2");
+                        inputLabel.innerHTML = "Input Option 2: ";
+                        inputGroup.append(inputLabel);
+                        inputGroup.append(this.createTextBox("number", "generalInput2", "generalInput2", 4, true));
+                        
+                        inputsGroup.append(inputGroup);
+                    }
+                    else {
+                        this.createAssociatedSensorsDropDown(userId, false)
+                        .then(response => inputsGroup.append(response))
+                        .catch(e => console.error(e));
+                    }
+                    
+                });
+
+                inputGroup.append(variableOptions);
+                inputsGroup.append(inputGroup);
+
+
+
+
+                
+
+                
+
                 break;
             default:
                 formulaSelected = false;
@@ -771,7 +833,7 @@ class Trends extends Services {
         return inputGroup;
     }
 
-    createAssociatedSensorsDropDown = async (userId, inputsGroup) => {
+    createAssociatedSensorsDropDown = async (userId, additionalSenorTrends) => {
 
         let inputGroup = HTMLElement;
         let inputGroupItem = HTMLElement;
@@ -832,7 +894,11 @@ class Trends extends Services {
                     associatedTrendsDropdown.parentNode.remove();
                 }
                 else {
-                    this.createAssociatedSensorsDropDown(userId).then(response => formulaInputs.append(response)).catch(e => console.error(e));
+                    // Creates another asscociate sensor dropdown menu.
+                    if (additionalSenorTrends) {
+                        this.createAssociatedSensorsDropDown(userId, true).then(response => formulaInputs.append(response)).catch(e => console.error(e));
+                    }
+                    
                 }
 
                 inputGroupItem.append(dropdown);

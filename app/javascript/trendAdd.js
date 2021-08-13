@@ -82,40 +82,54 @@ addTrendButton.addEventListener("click", (event) => {
         , "density" : null
         , "voltage" : null
         , "powerFactor" : null
+        , "general" : {
+            "value1" : {}
+            , "value2" : {}
+        }
     };
+
+    
 
     switch (trendFormElements.trendFormulas.value) {
         case "chillerEfficiency":
             inputs.heatCapacity = trendFormElements.heatCapacity.value;
-            //formData.append("heatCapacity", trendFormElements.heatCapacity.value);
             break;
         case "current":
             inputs.averagingFactor = trendFormElements.averagingFactor.value;
-            //formData.append("averagingFactor", trendFormElements.averagingFactor.value);
             break;
         case "maConversion":
             inputs.mAMin = trendFormElements.mAMin.value;
             inputs.mAMax = trendFormElements.mAMax.value;
             inputs.processMin = trendFormElements.processMin.value;
             inputs.processMax = trendFormElements.processMax.value;
-            //formData.append("mAMin", trendFormElements.mAMin.value);
-            //formData.append("mAMax", trendFormElements.mAMax.value);
-            //formData.append("processMin", trendFormElements.processMin.value);
-            //formData.append("processMax", trendFormElements.processMax.value);
             break;
         case "massFlow":
             inputs.density = trendFormElements.density.value;
-            //formData.append("density", trendFormElements.density.value);
             break;
         case "power":
             inputs.voltage = trendFormElements.voltage.value;
             inputs.powerFactor = trendFormElements.powerFactor.value;
-            //formData.append("voltage", trendFormElements.voltage.value);
-            //formData.append("powerFactor", trendFormElements.powerFactor.value);
+            break;
+        case "addition":
+        case "subtraction":
+        case "multiplication":
+        case "division":
+        case "exponentiation":
+            console.log(trendFormElements);
+            
+            if (trendFormElements.primaryValue.checked) {
+                Object.assign(inputs, { general : { value1 : trendFormElements.generalInput1.value } });
+            }
+            else {
+                Object.assign(inputs, { general : { value2 : trendFormElements.generalInput2.value } });
+            }
+            
             break;
         default:
             break;
     }
+
+    console.log(inputs);
 
     formData.append("inputs", JSON.stringify(inputs));
 
@@ -124,18 +138,21 @@ addTrendButton.addEventListener("click", (event) => {
 
     // Check to see if any trends are selected.
     let selectedTrends = [];
-
+    // Gets all asscociated sensor and trend groups.
     const associatedSensors = document.querySelectorAll("#associatedSensor");
-
+    // Loops through all associated sensor and trend groups.
     associatedSensors.forEach(associatedSensor => {
+        // Gets all of the dropdown menus in the asscociated sensor and trend group.
         let associatedSensorSelects = associatedSensor.querySelectorAll("select");
         console.log(associatedSensorSelects);
-        
+        // Sets associated sensor and/or trend.
         if (associatedSensorSelects[0].value) {
+// NEED CONDITION for GENERAL FORMULAS
             selectedTrends.push({
                 "sensorId" : (associatedSensorSelects[0].value)
                 , "trendId" : (associatedSensorSelects[1].value) ? associatedSensorSelects[1].value : null
             });
+
         }
         
         
@@ -166,7 +183,7 @@ addTrendButton.addEventListener("click", (event) => {
     */
     formData.append("associatedTrends", JSON.stringify(selectedTrends));
 
-
+/*
     trends.insertCalculatedTrend(formData)
     .then(trend => {
         console.log(trend);
@@ -189,7 +206,7 @@ addTrendButton.addEventListener("click", (event) => {
         }
     })
     .catch(e => console.error(e));
-
+*/
     
     /*
     
