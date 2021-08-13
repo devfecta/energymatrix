@@ -517,7 +517,7 @@ class Trends extends Services {
 
                 // Associated Sensors and Trends
                 
-                this.createAssociatedSensorsDropDown(userId, true)
+                this.createAssociatedSensorsDropDown(userId, "Associated Sensors", true)
                 .then(response => inputsGroup.append(response))
                 .catch(e => console.error(e));
 
@@ -631,7 +631,7 @@ class Trends extends Services {
 
                 inputsGroup.append(inputGroup);
 
-                this.createAssociatedSensorsDropDown(userId, true)
+                this.createAssociatedSensorsDropDown(userId, "Associated Sensors", true)
                 .then(response => inputsGroup.append(response))
                 .catch(e => console.error(e));
                 break;
@@ -645,60 +645,100 @@ class Trends extends Services {
                 inputGroup = document.createElement("div");
                 inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
                 inputsGroup.setAttribute("id", "trendInputs");
-
+                /*
                 inputLabel = document.createElement("label");
-                inputLabel.setAttribute("for", "generalInput1");
-                inputLabel.innerHTML = "Input Option 1: ";
+                inputLabel.setAttribute("for", "firstParameter");
+                inputLabel.innerHTML = "First Parameter: ";
                 inputGroup.append(inputLabel);
-                inputGroup.append(this.createTextBox("number", "generalInput1", "generalInput1", 4, true));
+                inputGroup.append(this.createTextBox("number", "firstParameter", "firstParameter", 4, true));
+                */
 
-                inputsGroup.append(inputGroup);
+                const trendInputs = inputsGroup.childNodes;
 
-
+                // First Parameter
                 inputGroup = document.createElement("div");
                 inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 let optionsValue = new Array();
-                optionsValue[0] = "Select a Secondary Variable";
+                optionsValue[0] = "Select First Parameter";
                 optionsValue[1] = "Input Box";
                 optionsValue[2] = "Trend";
-                const variableOptions = this.createDropDown("variableOptions", "variableOptions", optionsValue, true);
-                variableOptions.addEventListener("change", (event) => {
+                const firstParameterOptions = this.createDropDown("firstParameterOptions", "firstParameterOptions", optionsValue, true);
+                firstParameterOptions.addEventListener("change", (event) => {
 
-                    if (inputsGroup.childNodes.length > 2) {
-                        inputsGroup.lastChild.remove();
-                    }
-
-                    if (event.target.options[event.target.options.selectedIndex].value == 1) {                     
+                    if (event.target.options[event.target.options.selectedIndex].value == 1) {
+                        if (document.querySelectorAll("#associatedSensor")[0]) {
+                            document.querySelectorAll("#associatedSensor")[0].remove();
+                        }       
                         
                         inputGroup = document.createElement("div");
                         inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+                        inputGroup.setAttribute("id", "firstParameterInput");
+                        
+                        inputLabel = document.createElement("label");
+                        inputLabel.setAttribute("for", "firstParameter");
+                        inputLabel.innerHTML = "First Parameter: ";
+                        inputGroup.append(inputLabel);
+                        inputGroup.append(this.createTextBox("number", "firstParameter", "firstParameter", 4, true));
+
+                        trendInputs[0].after(inputGroup);
+                    }
+                    else {
+                        if (document.querySelector("#firstParameterInput")) {
+                            document.querySelector("#firstParameterInput").remove();
+                        }
+                        this.createAssociatedSensorsDropDown(userId, "First Parameter", false)
+                        .then(response => trendInputs[0].after(response))
+                        .catch(e => console.error(e));
+                    }
+                    
+                });
+
+                inputGroup.append(firstParameterOptions);
+                inputsGroup.append(inputGroup);
+
+                // Second Parameter
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+
+                optionsValue[0] = "Select Second Parameter";
+                const secondParameterOptions = this.createDropDown("secondParameterOptions", "secondParameterOptions", optionsValue, true);
+                secondParameterOptions.addEventListener("change", (event) => {
+                    
+                    if (event.target.options[event.target.options.selectedIndex].value == 1) {   
+                        
+                        if (document.querySelectorAll("#associatedSensor")[1]) {
+                            document.querySelectorAll("#associatedSensor")[1].remove();
+                        }
+                        else if (document.querySelectorAll("#associatedSensor").length == 1) {
+                            document.querySelectorAll("#associatedSensor")[0].remove();
+                        }
+                        
+                        inputGroup = document.createElement("div");
+                        inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+                        inputGroup.setAttribute("id", "secondParameterInput");
 
                         inputLabel = document.createElement("label");
-                        inputLabel.setAttribute("for", "generalInput2");
-                        inputLabel.innerHTML = "Input Option 2: ";
+                        inputLabel.setAttribute("for", "secondParameter");
+                        inputLabel.innerHTML = "Second Parameter: ";
                         inputGroup.append(inputLabel);
-                        inputGroup.append(this.createTextBox("number", "generalInput2", "generalInput2", 4, true));
+                        inputGroup.append(this.createTextBox("number", "secondParameter", "secondParameter", 4, true));
                         
                         inputsGroup.append(inputGroup);
                     }
                     else {
-                        this.createAssociatedSensorsDropDown(userId, false)
+                        if (document.querySelector("#secondParameterInput")) {
+                            document.querySelector("#secondParameterInput").remove();
+                        }
+                        this.createAssociatedSensorsDropDown(userId, "Second Parameter", false)
                         .then(response => inputsGroup.append(response))
                         .catch(e => console.error(e));
                     }
                     
                 });
 
-                inputGroup.append(variableOptions);
+                inputGroup.append(secondParameterOptions);
                 inputsGroup.append(inputGroup);
-
-
-
-
-                
-
-                
 
                 break;
             default:
@@ -833,11 +873,13 @@ class Trends extends Services {
         return inputGroup;
     }
 
-    createAssociatedSensorsDropDown = async (userId, additionalSenorTrends) => {
+    createAssociatedSensorsDropDown = async (userId, dropdownLabel, additionalSenorTrends) => {
 
         let inputGroup = HTMLElement;
         let inputGroupItem = HTMLElement;
         let inputLabel = HTMLElement;
+        // Remove spaces
+        let dropdownId = (dropdownLabel[0].toLowerCase() + dropdownLabel.slice(1)).replace(/\s/g, "");
 
         inputGroup = document.createElement("div");
         inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
@@ -848,8 +890,8 @@ class Trends extends Services {
         inputGroupItem.setAttribute("class", "col-md-12 my-1 form-group");
 
         inputLabel = document.createElement("label");
-        inputLabel.setAttribute("for", "associatedSensors");
-        inputLabel.innerHTML = "Associated Sensors: ";
+        inputLabel.setAttribute("for", dropdownId);
+        inputLabel.innerHTML = dropdownLabel + ": ";
         inputGroupItem.append(inputLabel);
 
         const associatedSensors = await this.getApi("Sensors", "getUserSensors", "&userId=" + userId)
@@ -861,7 +903,7 @@ class Trends extends Services {
         })
         .catch(e => console.log(e));
         
-        inputGroupItem.append(this.createDropDown("associatedSensors", "associatedSensors", associatedSensors, true));
+        inputGroupItem.append(this.createDropDown(dropdownId, dropdownId, associatedSensors, true));
 
         let optionElement = document.createElement("option");
         optionElement.setAttribute("value", "");
@@ -896,13 +938,12 @@ class Trends extends Services {
                 else {
                     // Creates another asscociate sensor dropdown menu.
                     if (additionalSenorTrends) {
-                        this.createAssociatedSensorsDropDown(userId, true).then(response => formulaInputs.append(response)).catch(e => console.error(e));
+                        this.createAssociatedSensorsDropDown(userId, dropdownLabel, true).then(response => formulaInputs.append(response)).catch(e => console.error(e));
                     }
                     
                 }
 
                 inputGroupItem.append(dropdown);
-                
                 
             })
             .catch(e => console.error(e));

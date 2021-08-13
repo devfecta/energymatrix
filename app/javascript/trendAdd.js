@@ -116,14 +116,25 @@ addTrendButton.addEventListener("click", (event) => {
         case "division":
         case "exponentiation":
             console.log(trendFormElements);
-            
-            if (trendFormElements.primaryValue.checked) {
-                Object.assign(inputs, { general : { value1 : trendFormElements.generalInput1.value } });
+            //if (trendFormElements.primaryValue.checked) {
+                
+            //}
+            //else {
+                
+            //}
+
+            if (trendFormElements.firstParameter[0]) {
+                Object.assign(inputs, { general : { firstParameter : (trendFormElements.formulaTrends[0].value) ? trendFormElements.formulaTrends[0].value : trendFormElements.firstParameter[0].value } });  
             }
             else {
-                Object.assign(inputs, { general : { value2 : trendFormElements.generalInput2.value } });
+                Object.assign(inputs, { general : { firstParameter : trendFormElements.firstParameter.value } });
             }
-            
+            if (trendFormElements.secondParameter[0]) {
+                Object.assign(inputs.general, { secondParameter : (trendFormElements.formulaTrends[1].value) ? trendFormElements.formulaTrends[1].value : trendFormElements.secondParameter[0].value });  
+            }
+            else {
+                Object.assign(inputs.general, { secondParameter : trendFormElements.secondParameter.value });
+            }
             break;
         default:
             break;
@@ -183,6 +194,9 @@ addTrendButton.addEventListener("click", (event) => {
     */
     formData.append("associatedTrends", JSON.stringify(selectedTrends));
 
+    for(var pair of formData.entries()) {
+        console.log(pair[0]+ ', '+ pair[1]);
+     }
 /*
     trends.insertCalculatedTrend(formData)
     .then(trend => {
