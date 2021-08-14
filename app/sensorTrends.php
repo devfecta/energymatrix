@@ -21,7 +21,7 @@
             max="<?php echo date("Y-m-d"); ?>">
     
         <input type="time" class="form-control m-2" id="startTime" name="startTimeName"
-            value="<?php echo date("h:m:s"); ?>"
+            value="<?php echo date("H:m:s"); ?>"
             min="00:00" 
             max="23:59">
     </div>
@@ -35,7 +35,7 @@
             max="<?php echo date("Y-m-d"); ?>">
 
         <input type="time" class="form-control m-2" id="endTime" name="endTime"
-            value="<?php echo date("h:m:s"); ?>"
+            value="<?php echo date("H:m:s"); ?>"
             min="00:00" 
             max="23:59">
     </div>
