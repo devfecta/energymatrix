@@ -209,7 +209,7 @@
                         $trendTrendId = $associatedTrend["trendId"];
 
                         error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
-                        json_encode($associatedTrend["sensorId"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            json_encode($associatedTrend["sensorId"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
                         if (isset($trendTrendId)) {
                             $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:id");
@@ -388,6 +388,26 @@
                             $dataPointValue = $this->Formulas->power($trend["associatedTrends"][0]["points"][$index]["data_value"], $trend["inputs"]["voltage"], $trend["inputs"]["powerFactor"]);
                             $dataPointType = "Power";
                             break;
+                            /*
+                        case "addition":
+                        case "subtraction":
+                        case "multiplication":
+                        case "division":
+                        case "exponentiation":
+
+                             firstSensorParameter firstParameter
+                            secondTrendParameter secondSensorParameter secondParameter
+                            
+                            $trend["inputs"]["general"]["secondParameter"]
+                            
+
+                            if ($trend["inputs"]["general"]["firstTrendParameter"] == $trend["associatedTrends"][0]["id"]) {}
+
+                            if ($trend["inputs"]["general"]["firstTrendParameter"] == $trend["associatedTrends"][0]["id"]) {}
+
+                            $dataPointValue = $this->Formulas->addition($trend["associatedTrends"][0]["points"][$index]["data_value"], $trend["inputs"]["voltage"], $trend["inputs"]["powerFactor"]);
+                            break;
+                            */
                         default:
                             error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Invalid Data Type" . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;

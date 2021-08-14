@@ -665,7 +665,7 @@ class Trends extends Services {
                 optionsValue[2] = "Trend";
                 const firstParameterOptions = this.createDropDown("firstParameterOptions", "firstParameterOptions", optionsValue, true);
                 firstParameterOptions.addEventListener("change", (event) => {
-
+                    // Removes the First Parameter's associated sensor dropdown.
                     if (event.target.options[event.target.options.selectedIndex].value == 1) {
                         if (document.querySelectorAll("#associatedSensor")[0]) {
                             document.querySelectorAll("#associatedSensor")[0].remove();
@@ -706,12 +706,12 @@ class Trends extends Services {
                 secondParameterOptions.addEventListener("change", (event) => {
                     
                     if (event.target.options[event.target.options.selectedIndex].value == 1) {   
-                        
-                        if (document.querySelectorAll("#associatedSensor")[1]) {
+                        // Removes the Second Parameter's associated sensor dropdown.
+                        if (document.querySelectorAll("#associatedSensor").length >= 1 && document.querySelectorAll("#associatedSensor")[0] && document.querySelectorAll("#associatedSensor")[1]) {
                             document.querySelectorAll("#associatedSensor")[1].remove();
                         }
-                        else if (document.querySelectorAll("#associatedSensor").length == 1) {
-                            document.querySelectorAll("#associatedSensor")[0].remove();
+                        else if (document.querySelectorAll("#associatedSensor")[1]) {
+                            document.querySelectorAll("#associatedSensor")[1].remove();
                         }
                         
                         inputGroup = document.createElement("div");
