@@ -52,6 +52,7 @@ class Trends extends Services {
         
         this.getConfiguredTrends(sensorId, userId)
         .then(response => {
+
             const trendsList = document.querySelector("#trends");
 
             const trendsListGroup = document.createElement("div");
@@ -93,8 +94,34 @@ class Trends extends Services {
 
                 Object.entries(trend.inputs).forEach(input => {
                     trendDetailRow = document.createElement("div");
-                    trendDetailRow.setAttribute("class", "col-md-2");
-                    trendDetailRow.innerHTML += input[0] + " : " + input[1];
+                    trendDetailRow.setAttribute("class", "col-md-1");
+                    //trendDetailRow.innerHTML += input[0] + " : " + input[1];
+                    
+
+                    if (input[1]['firstTrendParameter']) {
+                        trendDetailRow.innerHTML += "First Trend Parameter: Trend ID " + input[1]["firstTrendParameter"];
+                    }
+                    else if (input[1]['firstSensorParameter']) {
+                        trendDetailRow.innerHTML += "First Sensor Parameter: Sensor ID " + input[1]["firstSensorParameter"];
+                    }
+                    else if (input[1]['firstParameter']) {
+                        trendDetailRow.innerHTML += "First Parameter: " + input[1]["firstParameter"];
+                    }
+                    else {
+                        trendDetailRow.innerHTML += input[0] + " : " + input[1];
+                    }
+
+                    if (input[1]['secondTrendParameter']) {
+                        trendDetailRow.innerHTML += "<br/>Second Trend Parameter: Trend ID " + input[1]["secondTrendParameter"];
+                    }
+                    else if (input[1]['secondSensorParameter']) {
+                        trendDetailRow.innerHTML += "<br/>Second Sensor Parameter: Sensor ID " + input[1]["secondSensorParameter"];
+                    }
+                    else if (input[1]['secondParameter']) {
+                        trendDetailRow.innerHTML += "<br/>Second Parameter: " + input[1]["secondParameter"];
+                    }
+                    else {}
+                    //input[1].forEach(inputValue => {trendDetailRow.innerHTML += input[1].secondParameter});
                     trendColumn.append(trendDetailRow);
                 });
 
@@ -158,18 +185,20 @@ class Trends extends Services {
             });
             */
             // Create charts here
-            console.log(dataPoints.points[0]);
-            let chartId = dataPoints.sensorId + "-" + dataPoints.points[0].data_type.replace(" ", "_");
-            chart = charting.createChart(chartId);
-            // Title the Chart and Label the Chart's Axes
-            
-            chart = charting.chartData(chart, dataPoints.sensor_name + " Data", dataPoints.points[0].data_type);
-            
-            charting.plotDataPoints(chart, dataPoints.points);
-            
-            charting.buildChart(chart);
-
-            
+            //console.log(dataPoints.points[0]);
+            if (dataPoints.points.length) {
+                let chartId = dataPoints.sensorId + "-" + dataPoints.points[0].data_type.replace(" ", "_");
+                chart = charting.createChart(chartId);
+                // Title the Chart and Label the Chart's Axes
+                chart = charting.chartData(chart, dataPoints.sensor_name + " Data", dataPoints.points[0].data_type);
+                
+                charting.plotDataPoints(chart, dataPoints.points);
+                
+                charting.buildChart(chart);
+            }
+            else {
+                alert("No Data Points Found\rTry adjusting the date range.");
+            }
             /*
             const trendsList = document.querySelector("#trends");
 
