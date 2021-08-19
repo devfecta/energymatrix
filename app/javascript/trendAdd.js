@@ -150,6 +150,8 @@ addTrendButton.addEventListener("click", (event) => {
 
     formData.append("inputs", JSON.stringify(inputs));
 
+    formData.append("unitType", trendFormElements.unitType.value);
+
     formData.append("sensorId", trendFormElements.companySensors.value);
 
     // Check to see if any trends are selected.
@@ -160,7 +162,7 @@ addTrendButton.addEventListener("click", (event) => {
     associatedSensors.forEach(associatedSensor => {
         // Gets all of the dropdown menus in the asscociated sensor and trend group.
         let associatedSensorSelects = associatedSensor.querySelectorAll("select");
-        console.log(associatedSensorSelects);
+        //console.log(associatedSensorSelects);
         // Sets associated sensor and/or trend.
         if (associatedSensorSelects[0].value) {
             selectedTrends.push({

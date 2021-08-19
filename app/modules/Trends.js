@@ -83,6 +83,12 @@ class Trends extends Services {
 
                 trendButton.append(trendColumn);
 
+                trendColumn = document.createElement("div");
+                trendColumn.setAttribute("class", "col-md-4 h6");
+                trendColumn.innerHTML = `Unit Type: ${trend.unit}`;
+
+                trendButton.append(trendColumn);
+
                 // Inputs Row
                 trendColumn = document.createElement("div");
                 trendColumn.setAttribute("class", "col-md-12 d-flex");
@@ -776,6 +782,21 @@ class Trends extends Services {
         }
         // Add formula inputs to the form.
         formulaInputs.push(inputsGroup);
+
+        
+        // Unit Type
+        inputGroup = document.createElement("div");
+        inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+
+        inputLabel = document.createElement("label");
+        inputLabel.setAttribute("for", "unitType");
+        inputLabel.innerHTML = "Unit Type: ";
+        inputGroup.append(inputLabel);
+        inputGroup.append(this.createTextBox("text", "unitType", "unitType", 4, true));
+        // Add unit type to the form.
+        formulaInputs.push(inputGroup);
+
+
         /**
          * Creates the sensors dropdown for the specific trend.
          */

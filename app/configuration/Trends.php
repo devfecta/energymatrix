@@ -412,160 +412,84 @@
 
                 // Sensor Data Points
                 foreach ($rawDataPoints as $index => $rawDataPoint) {
+
+                    $firstValue = 0;
+                    $secondValue = 0;
+
+                    if (isset($trend["inputs"]["general"])) {
+                        if (!isset($trend["inputs"]["general"]["firstParameter"])) {
+                            //$firstValue = $associatedTrendsArray1["points"][$index]["data_value"];
+                            
+                            if (isset($trend["inputs"]["general"]["firstTrendParameter"]) && $trend["inputs"]["general"]["firstTrendParameter"] == $trend["associatedTrends"][0]["trend"]["id"]) {
+                                $firstValue = $associatedTrendsArray1["points"][$index]["data_value"];
+                            }
+                            else {
+                                $firstValue = $rawDataPoint->getDataValue();
+                            }
+                            
+                        }
+                        else {
+                            $firstValue = $trend["inputs"]["general"]["firstParameter"];
+                        }
+        
+                        if (!isset($trend["inputs"]["general"]["secondParameter"])) {
+                            
+                            $secondValue = $associatedTrendsArray2["points"][$index]["data_value"];
+                            /*
+                            if (isset($trend["inputs"]["general"]["secondTrendParameter"]) && $trend["inputs"]["general"]["secondTrendParameter"] == $trend["associatedTrends"][0]["trend"]["id"]) {
+                                $secondValue = $associatedTrendsArray2["points"][$index]["data_value"];
+                            }
+                            else {
+                                $secondValue = $rawDataPoint->getDataValue();
+                            }
+                            */
+                        }
+                        else {
+                            $secondValue = $trend["inputs"]["general"]["secondParameter"];
+                        }
+                    }
+                    else {
+                        $firstValue = $trend["associatedTrends"][0]["points"][$index]["data_value"];
+                    }
+                    
+                    /*
+                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
+                        "F: " . $firstValue . " S: " . $secondValue
+                        . "\n", 3, "/var/www/html/app/php-errors.log");
+                    */
                     
                     switch ($trend["trendFormula"]) {
+                        case "maConversion":
                         case "mAConversion":
                             $dataPointValue = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
-                            $dataPointType = "mA Conversion";
                             break;
                         case "current":
                             $dataPointValue = $this->Formulas->current($rawDataPoint->getDataValue(), $trend["inputs"]["averagingFactor"]);
-                            $dataPointType = "Current";
                             break;
                         case "power":
-                            $dataPointValue = $this->Formulas->power($trend["associatedTrends"][0]["points"][$index]["data_value"], $trend["inputs"]["voltage"], $trend["inputs"]["powerFactor"]);
-                            $dataPointType = "Power";
+                            $dataPointValue = $this->Formulas->power($firstValue, $trend["inputs"]["voltage"], $trend["inputs"]["powerFactor"]);
                             break;
-
                         case "addition":
-                        case "subtraction":
-                        case "multiplication":
-                        case "division":
-                        case "exponentiation":
-
-                            $firstValue = 0;
-                            $secondValue = 0;
-
-                            if (!isset($trend["inputs"]["general"]["firstParameter"])) {
-                                //$firstValue = $associatedTrendsArray1["points"][$index]["data_value"];
-                                
-                                if (isset($trend["inputs"]["general"]["firstTrendParameter"]) && $trend["inputs"]["general"]["firstTrendParameter"] == $trend["associatedTrends"][0]["trend"]["id"]) {
-                                    $firstValue = $associatedTrendsArray1["points"][$index]["data_value"];
-                                }
-                                else {
-                                    $firstValue = $rawDataPoint->getDataValue();
-                                }
-                                
-                            }
-                            else {
-                                $firstValue = $trend["inputs"]["general"]["firstParameter"];
-                            }
-            
-                            if (!isset($trend["inputs"]["general"]["secondParameter"])) {
-                                
-                                $secondValue = $associatedTrendsArray2["points"][$index]["data_value"];
-                                /*
-                                if (isset($trend["inputs"]["general"]["secondTrendParameter"]) && $trend["inputs"]["general"]["secondTrendParameter"] == $trend["associatedTrends"][0]["trend"]["id"]) {
-                                    $secondValue = $associatedTrendsArray2["points"][$index]["data_value"];
-                                }
-                                else {
-                                    $secondValue = $rawDataPoint->getDataValue();
-                                }
-                                */
-                            }
-                            else {
-                                $secondValue = $trend["inputs"]["general"]["secondParameter"];
-                            }
-
-
-                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
-                                "F: " . $firstValue . " S: " . $secondValue
-                                . "\n", 3, "/var/www/html/app/php-errors.log");
-
-
-
-                            
-                            if (!isset($trend["inputs"]["general"]["firstParameter"])) {
-                                /*
-                                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
-                                $trend["inputs"]["general"]["firstTrendParameter"] ." == ". $trend["associatedTrends"][0]["trend"]["id"] 
-                                . "\n", 3, "/var/www/html/app/php-errors.log");
-                                */
-
-                                
-                                
-                                
-                                
-
-                                
-                                /* OLD
-                                if (isset($trend["inputs"]["general"]["firstTrendParameter"]) && $trend["inputs"]["general"]["firstTrendParameter"] == $trend["associatedTrends"][0]["trend"]["id"]) {
-                                    $tempTrendSearchData['trendId'] = (int) $trend["inputs"]["general"]["firstTrendParameter"];
-                                }
-                                else {
-                                    $tempTrendSearchData['trendId'] = (int) $trend["inputs"]["general"]["firstSensorParameter"];
-                                }
-
-                                
-                                if ($tempTrendSearchData['trendId']) {
-                                    
-                                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
-                                        "1 TrendData: " . json_encode($tempTrendSearchData, JSON_PRETTY_PRINT)
-                                        . "\n", 3, "/var/www/html/app/php-errors.log");
-
-                                    $associatedTrendsArray[] = $this->getConfiguredTrend($tempTrendSearchData);
-                                    
-                                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
-                                        "1 DataValue: " . json_encode($associatedTrendsArray, JSON_PRETTY_PRINT)
-                                        . "\n", 3, "/var/www/html/app/php-errors.log");
-                                    
-                                    $firstValue = isset($trend["inputs"]["general"]["secondTrendParameter"]) ? $associatedTrendsArray[0]["points"][$index]["data_value"] : $rawDataPoint->getDataValue() + $associatedTrendsArray[0]["points"][$index]["data_value"];
-
-                                    //$firstValue = $rawDataPoint->getDataValue() + $associatedTrendsArray[0]["points"][$index]["data_value"];
-                                }
-                                */
-                            }
-                            else {
-                                //$firstValue = $trend["inputs"]["general"]["firstParameter"];
-                            }
-                            
-                            
-                            /*
-                            if (!isset($trend["inputs"]["general"]["secondParameter"])) {
-                                if (isset($trend["inputs"]["general"]["secondTrendParameter"]) && $trend["inputs"]["general"]["secondTrendParameter"] == $trend["associatedTrends"][0]["id"]) {
-                                    $tempTrendSearchData['trendId'] = (int) $trend["inputs"]["general"]["secondTrendParameter"];
-                                }
-                                else {
-                                    $tempTrendSearchData['trendId'] = (int) $trend["inputs"]["general"]["secondSensorParameter"];
-                                }
-
-                                
-                                if ($tempTrendSearchData['trendId']) {
-
-                                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
-                                    //    "2 TrendData: " . json_encode($tempTrendSearchData, JSON_PRETTY_PRINT)
-                                    //    . "\n", 3, "/var/www/html/app/php-errors.log");
-                                
-                                    $associatedTrendsArray2 = $this->getConfiguredTrend($tempTrendSearchData);
-                                   
-                                    $secondValue = isset($trend["inputs"]["general"]["firstTrendParameter"]) ? $associatedTrendsArray2[0]["points"][$index]["data_value"] : $rawDataPoint->getDataValue() + $associatedTrendsArray2[0]["points"][$index]["data_value"];
-                                    
-                                    //$secondValue = $rawDataPoint->getDataValue() + $associatedTrendsArray[0]["points"][$index]["data_value"];
-                                }
-                                
-                            }
-                            else {
-                                $secondValue = $trend["inputs"]["general"]["secondParameter"];
-                            }
-                            */
-                            // Aligns with the raw data points
-                            /*
-                            $dataPointValue = $associatedTrendsArray1["points"][$index]["data_value"], $associatedTrendsArray2["points"][$index]["data_value"]
-
-                            $dataPointValue = $associatedTrendsArray1["points"][$index]["data_value"], $rawDataPoint->getDataValue()
-
-                            $dataPointValue = $associatedTrendsArray1["points"][$index]["data_value"], $trend["inputs"]["general"]["secondParameter"]
-                            */
-                            
-                            
-                            
-
                             $dataPointValue = $this->Formulas->addition($firstValue, $secondValue);
-                            $dataPointType = "General";
-                            
                             break;
+                        case "subtraction":
+                            $dataPointValue = $this->Formulas->subtraction($firstValue, $secondValue);
+                            break;
+                        case "multiplication":
+                            $dataPointValue = $this->Formulas->multiplication($firstValue, $secondValue);
+                            break;
+                        case "division":
+                            $dataPointValue = $this->Formulas->division($firstValue, $secondValue);
+                            break;
+                        case "exponentiation":
+                            $dataPointValue = $this->Formulas->exponentiation($firstValue, $secondValue);
+                            break;
+                        case "massFlow":
+                            // WIP massFlow($volumetricFlow, $density);
+                        case "chillerEfficiency":
+                            // WIP chillerEfficiency($massFlow, $heatCapacity, $chilledMediaReturn, $chilledMediaSupply, $power);
                         default:
-                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Invalid Data Type" . "\n", 3, "/var/www/html/app/php-errors.log");
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $trend["trendFormula"] . " Formula Not Found" . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
                     }
                     /*
@@ -573,6 +497,7 @@
                                 "DataPointValue: " . json_encode($trendDataPoints["points"], JSON_PRETTY_PRINT)
                                 . "\n", 3, "/var/www/html/app/php-errors.log");
                     */
+                    $dataPointType = ($trend["unit"]) ? $trend["unit"] : 'undefined';
 
                     array_push($trendDataPoints["points"], 
                         array(
@@ -622,6 +547,7 @@
                     `trendName`,
                     `trendFormula`,
                     `inputs`,
+                    `unit`,
                     `associatedTrends`
                 ) 
                 VALUES (
@@ -630,6 +556,7 @@
                     :trendName,
                     :trendFormula,
                     :inputs,
+                    :unitType,
                     :associatedTrends
                 )");
                 
@@ -638,6 +565,7 @@
                 $statement->bindParam(":trendName", $data->trendName, PDO::PARAM_STR);
                 $statement->bindParam(":trendFormula", $data->trendFormula, PDO::PARAM_STR);
                 $statement->bindParam(":inputs", $data->inputs, PDO::PARAM_STR);
+                $statement->bindParam(":unitType", $data->unitType, PDO::PARAM_STR);
                 $statement->bindValue(":associatedTrends", $data->associatedTrends, PDO::PARAM_STR);
 
                 $connection->beginTransaction();
