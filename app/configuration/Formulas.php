@@ -118,7 +118,7 @@
          * b = Averaging factor (input value)
         */
         public function current($ampHours, $averagingFactor) {
-            $amps = $ampHours + $averagingFactor;
+            $amps = $ampHours * $averagingFactor;
             return $amps;
         }
         
@@ -128,8 +128,8 @@
          * b = Voltage (VAC) (input value)
          * c = Power Factor (%) (input value)
         */
-        public function power($current, $voltage, $powerFactor) {
-            $kw = $current * $voltage * sqrt(3) * $powerFactor / 1000;
+        public function power($current, $voltage, $phaseNumber, $powerFactor) {
+            $kw = $current * $voltage * sqrt($phaseNumber) * $powerFactor / 1000;
             return $kw;
         }
         

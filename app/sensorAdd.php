@@ -6,7 +6,7 @@
     require_once('configuration/Users.php');
 ?>
 
-<script type="module" src="./javascript/sensorAdd.js"></script>
+<script type="module" src="./javascript/sensorAdd.js?v=<?php echo rand(1, 10); ?>"></script>
 
 <section class="container-fluid row">
     

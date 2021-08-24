@@ -695,13 +695,25 @@ class Trends extends Services {
                 inputGroup.append(this.createTextBox("number", "voltage", "voltage", 4, true));
 
                 inputsGroup.append(inputGroup);
+                // Number of Phases
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+
+                inputLabel = document.createElement("label");
+                inputLabel.setAttribute("for", "phaseNumber");
+                inputLabel.innerHTML = "Number of Phases: ";
+                inputGroup.append(inputLabel);
+                inputGroup.append(this.createTextBox("number", "phaseNumber", "phaseNumber", 4, true));
+
+                inputsGroup.append(inputGroup);
+
 				// Power Factor
                 inputGroup = document.createElement("div");
                 inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "powerFactor");
-                inputLabel.innerHTML = "Power Factor: ";
+                inputLabel.innerHTML = "Power Factor (percentage as decimal): ";
                 inputGroup.append(inputLabel);
                 inputGroup.append(this.createTextBox("number", "powerFactor", "powerFactor", 4, true));
 

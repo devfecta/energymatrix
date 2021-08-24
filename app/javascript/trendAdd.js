@@ -81,11 +81,8 @@ addTrendButton.addEventListener("click", (event) => {
         , "processMax" : null
         , "density" : null
         , "voltage" : null
+        , "phaseNumber" : null
         , "powerFactor" : null
-        , "general" : {
-            "value1" : {}
-            , "value2" : {}
-        }
     };
 
     
@@ -108,6 +105,7 @@ addTrendButton.addEventListener("click", (event) => {
             break;
         case "power":
             inputs.voltage = trendFormElements.voltage.value;
+            inputs.phaseNumber = trendFormElements.phaseNumber.value;
             inputs.powerFactor = trendFormElements.powerFactor.value;
             break;
         case "addition":

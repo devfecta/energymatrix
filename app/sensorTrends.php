@@ -4,7 +4,7 @@
 	include("template/header.php");
 ?>
 
-<script type="module" src="./javascript/sensorTrends.js"></script>
+<script type="module" src="./javascript/sensorTrends.js?v=<?php echo rand(1, 10); ?>"></script>
 
 <section id="userSectionResults" class="container-fluid row">
     <div id="charts" class="d-flex justify-content-around row"></div>

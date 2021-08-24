@@ -457,7 +457,11 @@
                         "F: " . $firstValue . " S: " . $secondValue
                         . "\n", 3, "/var/www/html/app/php-errors.log");
                     */
-                    
+                    /*
+                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
+                        json_encode($trend["inputs"], JSON_PRETTY_PRINT)
+                        . "\n", 3, "/var/www/html/app/php-errors.log");
+                    */
                     switch ($trend["trendFormula"]) {
                         case "maConversion":
                         case "mAConversion":
@@ -467,7 +471,7 @@
                             $dataPointValue = $this->Formulas->current($rawDataPoint->getDataValue(), $trend["inputs"]["averagingFactor"]);
                             break;
                         case "power":
-                            $dataPointValue = $this->Formulas->power($firstValue, $trend["inputs"]["voltage"], $trend["inputs"]["powerFactor"]);
+                            $dataPointValue = $this->Formulas->power($firstValue, $trend["inputs"]["voltage"], $trend["inputs"]["phaseNumber"], $trend["inputs"]["powerFactor"]);
                             break;
                         case "addition":
                             $dataPointValue = $this->Formulas->addition($firstValue, $secondValue);

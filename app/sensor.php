@@ -6,7 +6,7 @@
 	//require_once('configuration/Sensor.php');
 ?>
 
-<script type="module" src="./javascript/charting.js"></script>
+<script type="module" src="./javascript/charting.js?v=<?php echo rand(1, 10); ?>"></script>
 
 <style>
 
