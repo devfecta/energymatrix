@@ -144,9 +144,9 @@ class Charting extends Services {
         dataPoints.forEach(point => {
 
             const date = new Date(point.date_time);
-            xAxislabels = [...xAxislabels, date.getHours() +":"+ ("0" + date.getMinutes()).slice(-2)];
+            xAxislabels = [...xAxislabels, (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() +":"+ ("0" + date.getMinutes()).slice(-2)];
 
-            pointData = [...pointData, point.data_value];
+            pointData = [...pointData, point.data_value.toFixed(3)];
 
             lineShadingColor = [...lineShadingColor, 'rgba(' + pointColor + ', 0.2)'];
             lineColor = [...lineColor, 'rgba(' + pointColor + ', 0.7)'];
@@ -203,7 +203,7 @@ class Charting extends Services {
                         display: true,
                         scaleLabel: {
                             display: true,
-                            labelString: 'Time'
+                            labelString: 'Time Range'
                         }
                     }],
                     yAxes: [{

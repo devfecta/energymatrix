@@ -56,12 +56,12 @@ class Trends extends Services {
             const trendsList = document.querySelector("#trends");
 
             const trendsListGroup = document.createElement("div");
-            trendsListGroup.setAttribute("class", "list-group");
-
+            trendsListGroup.setAttribute("class", "row list-group");
+            // Configured Trend Row
             response.forEach(trend => {
                 const trendButton = document.createElement("button");
                 trendButton.setAttribute("type", "button");
-                trendButton.setAttribute("class", "d-flex flex-wrap list-group-item list-group-item-action");
+                trendButton.setAttribute("class", "d-flex flex-wrap list-group-item list-group-item-action border-0 mt-3");
                 trendButton.setAttribute("value", trend.id);
                 trendButton.addEventListener("click", (event) => {
 
@@ -91,16 +91,18 @@ class Trends extends Services {
 
                 // Inputs Row
                 trendColumn = document.createElement("div");
-                trendColumn.setAttribute("class", "col-md-12 d-flex");
+                trendColumn.setAttribute("class", "col-md-12 d-flex flex-wrap");
 
                 let trendDetailRow = document.createElement("div");
                 trendDetailRow.setAttribute("class", "col-md-1");
                 trendDetailRow.innerHTML = `<strong>Inputs: </strong>`;
                 trendColumn.append(trendDetailRow);
 
+                let columnCount = Math.round((Object.entries(trend.inputs).length/12)) > 3 ? Math.round((Object.entries(trend.inputs).length/12)) : 3;
+
                 Object.entries(trend.inputs).forEach(input => {
                     trendDetailRow = document.createElement("div");
-                    trendDetailRow.setAttribute("class", "col-md-1");
+                    trendDetailRow.setAttribute("class", "px-1 col-md-" + columnCount);
                     //trendDetailRow.innerHTML += input[0] + " : " + input[1];
                     
 
@@ -154,6 +156,45 @@ class Trends extends Services {
                 trendButton.append(trendColumn);
 
                 trendsListGroup.append(trendButton);
+
+                // Modify Buttons
+
+                trendColumn = document.createElement("div");
+                trendColumn.setAttribute("class", "d-flex justify-content-around");
+
+                const trendEditButton = document.createElement("button");
+                trendEditButton.setAttribute("type", "button");
+                trendEditButton.setAttribute("class", "btn btn-secondary col-md-5");
+                trendEditButton.setAttribute("value", trend.id);
+                trendEditButton.innerHTML = `Edit ${trend.trendName}`;
+                trendEditButton.addEventListener("click", (event) => {
+
+                    //this.editConfiguredTrend(trendEditButton.value);
+                    
+                });
+
+                trendColumn.append(trendEditButton);
+
+                const trendDeleteButton = document.createElement("button");
+                trendDeleteButton.setAttribute("type", "button");
+                trendDeleteButton.setAttribute("class", "btn btn-danger col-md-5");
+                trendDeleteButton.setAttribute("value", trend.id);
+                trendDeleteButton.innerHTML = `Delete ${trend.trendName}`;
+                trendDeleteButton.addEventListener("click", (event) => {
+
+                    let confirmation = confirm("This will also delete dependent trends. Delete?");
+
+                    if (confirmation) {
+                        //this.deleteConfiguredTrend(trendDeleteButton.value);
+                    }
+                    
+                });
+
+                trendColumn.append(trendDeleteButton);
+
+                trendsListGroup.append(trendColumn);
+
+
             });
 
             trendsList.append(trendsListGroup);
@@ -792,7 +833,7 @@ class Trends extends Services {
         inputLabel.setAttribute("for", "unitType");
         inputLabel.innerHTML = "Unit Type: ";
         inputGroup.append(inputLabel);
-        inputGroup.append(this.createTextBox("text", "unitType", "unitType", 4, true));
+        inputGroup.append(this.createTextBox("text", "unitType", "unitType", 16, true));
         // Add unit type to the form.
         formulaInputs.push(inputGroup);
 
@@ -948,7 +989,7 @@ class Trends extends Services {
         .then(response => {
             //console.log(response);
             const optionsAssociatedSensors = new Array();
-            response.forEach(sensor => optionsAssociatedSensors[parseInt(sensor.id)] = sensor.sensor_name);
+            response.forEach(sensor => optionsAssociatedSensors[parseInt(sensor.id)] = sensor.sensor_name + " (ID: " + sensor.sensorId + ")");
             return optionsAssociatedSensors;
         })
         .catch(e => console.log(e));
