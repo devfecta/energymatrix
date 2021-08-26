@@ -20,6 +20,8 @@ class Sidebar extends Services {
 
         menuButton.append(dashboardButton);
         sidebarMenu.append(menuButton);
+
+        
         
         if (userType > 0) {
             this.getAdminSidebar(sidebarMenu);
@@ -383,7 +385,8 @@ class Sidebar extends Services {
                         window.location.href = "sensor.php?sensorId=" + sensor.id + "&userId=" + companyId;
                     }
                 };
-                sensorSubMenu.append(this.getMenuItem(subMenuItem));
+                // Hidden if not an admin
+                (userType > 0) ? sensorSubMenu.append(this.getMenuItem(subMenuItem)) : null;
                 // Creates the Edit Sensor button and adds it to the specific sensor sub menu.
                 subMenuItem = {
                     "parentId" : "sensor" + sensor.id
@@ -396,7 +399,9 @@ class Sidebar extends Services {
                         window.location.href = "sensorEdit.php?sensorId=" + sensor.id + "&userId=" + companyId
                     }
                 };
-                sensorSubMenu.append(this.getMenuItem(subMenuItem));
+                //sensorSubMenu.append(this.getMenuItem(subMenuItem));
+                // Hidden if not an admin
+                (userType > 0) ? sensorSubMenu.append(this.getMenuItem(subMenuItem)) : null;
                 // Creates the View Sensor Trends button and adds it to the specific sensor sub menu.
                 subMenuItem = {
                     "parentId" : "sensor" + sensor.id
@@ -497,14 +502,14 @@ class Sidebar extends Services {
     /**
      * Adds menu items to the user's sidebar by creating HTML button elements for specific menu categories.
      */
-    getUserSidebar = (menu) => {
+    getUserSidebar = (sidebarMenu, userType) => {
         // Logs out after idle for 1 hour.
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
+            console.log(userId);
 
-            menu.append(this.getSensorsMenu(userId));
-
-            return menu;
+            this.getSensorMenu(userId, userType)
+            sidebarMenu.append(this.getSensorMenu(userId, userType));
         }
         else {
             alert("logging out");

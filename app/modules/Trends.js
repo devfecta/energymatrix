@@ -55,6 +55,10 @@ class Trends extends Services {
 
             const trendsList = document.querySelector("#trends");
 
+            const trendsListMessage = document.createElement("div");
+            trendsListMessage.setAttribute("class", "alert alert-warning");
+            trendsListMessage.innerHTML = `No Trends Found`;
+
             const trendsListGroup = document.createElement("div");
             trendsListGroup.setAttribute("class", "row list-group");
             // Configured Trend Row
@@ -165,16 +169,25 @@ class Trends extends Services {
                 // Modify Buttons
 
                 trendColumn = document.createElement("div");
-                trendColumn.setAttribute("class", "d-flex justify-content-around");
+                trendColumn.setAttribute("class", "d-flex justify-content-around align-items-center");
+
+                const visibleTrendCheckbox = this.createSwitchCheckbox("visibleTrend" + trend.id, "visibleTrend" + trend.id, "Visible Trend", true);
+                visibleTrendCheckbox.addEventListener("change", event => {
+                    console.log(event.target.checked);
+                });
+                
+                trendColumn.append(visibleTrendCheckbox);
+
 
                 const trendEditButton = document.createElement("button");
                 trendEditButton.setAttribute("type", "button");
                 trendEditButton.setAttribute("class", "btn btn-primary col-md-5");
                 trendEditButton.setAttribute("value", trend.id);
+            trendEditButton.setAttribute("disabled", true);
                 trendEditButton.innerHTML = `Edit ${trend.trendName}`;
                 trendEditButton.addEventListener("click", (event) => {
 
-                    //this.editConfiguredTrend(trendEditButton.value);
+                    this.editConfiguredTrend(trendEditButton.value);
                     
                 });
 
@@ -204,7 +217,14 @@ class Trends extends Services {
 
             });
 
-            trendsList.append(trendsListGroup);
+            if (trendsListGroup.innerHTML) {
+                trendsList.append(trendsListGroup);
+            }
+            else {
+                trendsList.append(trendsListMessage);
+            }
+
+            
             //console.log(response);
         })
         .catch(e => console.error(e));
@@ -503,6 +523,28 @@ class Trends extends Services {
         .then(response => response)
         .catch(e => console.error(e));
         
+    }
+    /**
+     * Displays the edit configured trend form.
+     *
+     * @param   {int}  trendId  Trend ID
+     *
+     * @return  {json}  JSON about the editted trend.
+     */
+    editConfiguredTrend = async (trendId) => {
+
+        let formData = new FormData();
+        formData.append("class", "Trends");
+        formData.append("method", "editConfiguredTrend");
+        formData.append("userId", sensorForm.company.value);
+        formData.append("sensorId", sensorForm.sensorId.value);
+        formData.append("sensorName", sensorForm.sensorName.value);
+        formData.append("id", sensorForm.updateSensorButton.value);
+
+        return await this.postApi(formData)
+        .then(response => response)
+        .catch(e => console.log(e));
+
     }
 
     

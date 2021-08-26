@@ -105,6 +105,29 @@ class Services {
         formElement.required = required;
         return formElement;
     }
+
+    createSwitchCheckbox = (id, name, labelText, checked) => {
+
+        const formElement = document.createElement("div");
+        formElement.setAttribute("class", "form-check form-switch");
+
+        const formCheckbox = document.createElement("input");
+        formCheckbox.setAttribute("type", "checkbox");
+        formCheckbox.setAttribute("id", id);
+        formCheckbox.setAttribute("name", name);
+        formCheckbox.setAttribute("class", "form-check-input");
+        formCheckbox.setAttribute("checked", checked);
+        //formElement.style.width = "auto";
+        //formElement.style.display = "inline-block";
+        const formLabel = document.createElement("label");
+        formLabel.setAttribute("for", id);
+        formLabel.setAttribute("class", "form-check-label");
+        formLabel.innerHTML = labelText;
+
+        formElement.append(formCheckbox, formLabel);
+
+        return formElement;
+    }
 }
 
 export default Services;
