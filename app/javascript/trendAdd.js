@@ -64,7 +64,7 @@ addTrendButton.addEventListener("click", (event) => {
 
     let formData = new FormData();
     formData.append("class", "Trends");
-    formData.append("method", "insertCalculatedTrend");
+    formData.append("method", "insertConfiguredTrend");
 
     //console.log(document.querySelector("form").elements);
     formData.append("userId", userId);
@@ -199,7 +199,7 @@ addTrendButton.addEventListener("click", (event) => {
         console.log(pair[0]+ ', '+ pair[1]);
      }
 */
-    trends.insertCalculatedTrend(formData)
+    trends.insertConfiguredTrend(formData)
     .then(trend => {
         //console.log(trend);
         

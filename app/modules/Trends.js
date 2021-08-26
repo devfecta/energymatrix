@@ -59,9 +59,14 @@ class Trends extends Services {
             trendsListGroup.setAttribute("class", "row list-group");
             // Configured Trend Row
             response.forEach(trend => {
+
+                const trendRow = document.createElement("div");
+                trendRow.setAttribute("class", " list-group-item list-group-item-action");
+                trendRow.setAttribute("id", "trend" + trend.id);
+
                 const trendButton = document.createElement("button");
                 trendButton.setAttribute("type", "button");
-                trendButton.setAttribute("class", "d-flex flex-wrap list-group-item list-group-item-action border-0 mt-3");
+                trendButton.setAttribute("class", "d-flex flex-wrap bg-transparent border-0 mt-3");
                 trendButton.setAttribute("value", trend.id);
                 trendButton.addEventListener("click", (event) => {
 
@@ -135,7 +140,7 @@ class Trends extends Services {
 
                 trendButton.append(trendColumn);
 
-                console.log(trend);
+                //console.log(trend);
                 // Associated Trends Row
                 trendColumn = document.createElement("div");
                 trendColumn.setAttribute("class", "col-md-12 d-flex");
@@ -155,7 +160,7 @@ class Trends extends Services {
 
                 trendButton.append(trendColumn);
 
-                trendsListGroup.append(trendButton);
+                //trendsListGroup.append(trendButton);
 
                 // Modify Buttons
 
@@ -164,7 +169,7 @@ class Trends extends Services {
 
                 const trendEditButton = document.createElement("button");
                 trendEditButton.setAttribute("type", "button");
-                trendEditButton.setAttribute("class", "btn btn-secondary col-md-5");
+                trendEditButton.setAttribute("class", "btn btn-primary col-md-5");
                 trendEditButton.setAttribute("value", trend.id);
                 trendEditButton.innerHTML = `Edit ${trend.trendName}`;
                 trendEditButton.addEventListener("click", (event) => {
@@ -185,14 +190,16 @@ class Trends extends Services {
                     let confirmation = confirm("This will also delete dependent trends. Delete?");
 
                     if (confirmation) {
-                        //this.deleteConfiguredTrend(trendDeleteButton.value);
+                        this.deleteConfiguredTrend(trendDeleteButton.value);
                     }
                     
                 });
 
                 trendColumn.append(trendDeleteButton);
 
-                trendsListGroup.append(trendColumn);
+                trendRow.append(trendButton, trendColumn);
+
+                trendsListGroup.append(trendRow);
 
 
             });
@@ -450,7 +457,7 @@ class Trends extends Services {
 
     }
     /**
-     * Inserts a new trend into the database.
+     * Inserts a new trend into the database. CUSTOMER SIDE
      *
      * @param   {FormData}  trendForm  Form data of the new trend.
      *
@@ -470,13 +477,35 @@ class Trends extends Services {
      *
      * @return  {json}  JSON of the new trend data.
      */
-     insertCalculatedTrend = async (trendForm) => {
+     insertConfiguredTrend = async (trendForm) => {
 
         return await this.postApi(trendForm)
         .then(response => response)
         .catch(e => console.error(e));
     
     }
+
+    /**
+     * Deletes a configured trend and associated trends from the database.
+     *
+     * @param   {int}  trendId  Trend ID.
+     *
+     * @return  {json}  JSON of the trend data deleted.
+     */
+     deleteConfiguredTrend = async (trendId) => {
+
+        let formData = new FormData();
+        formData.append("class", "Trends");
+        formData.append("method", "deleteConfiguredTrend");
+        formData.append("trendId", trendId);
+        
+        return await this.postApi(formData)
+        .then(response => response)
+        .catch(e => console.error(e));
+        
+    }
+
+    
     /**
      * Creates a trend row in the list of trends.
      *

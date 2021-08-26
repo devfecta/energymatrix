@@ -536,7 +536,7 @@
             return $trend;
         }
 
-        public function insertCalculatedTrend($formData) {
+        public function insertConfiguredTrend($formData) {
             $result = array();
 
             $data = json_decode(json_encode($formData), false);
@@ -597,6 +597,54 @@
             }
 
             return $result;
+        }
+        /**
+         * Deletes a configured trend and associated trends from the database.
+         *
+         * @param   int  $trendId  Trend ID.
+         *
+         * @return  boolean    Boolean about the deleted trend.
+         */
+        public function deleteConfiguredTrend($trendId) {
+
+            $result = false;
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Trend ID: " . $trendId . "\n", 3, "/var/www/html/app/php-errors.log");
+           
+            try {
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:trendId");
+                $statement->bindValue(":trendId", $trendId, PDO::PARAM_INT);
+                $statement->execute();
+
+                $configuredTrend = $statement->fetch(PDO::FETCH_ASSOC);
+
+                $associatedTrends = json_decode($configuredTrend["associatedTrends"], false);
+
+                foreach ($associatedTrends as $associatedTrend) {
+                    if(isset($associatedTrend->trendId)) {
+                        //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Associated Trend ID: " . $associatedTrend->trendId . "\n", 3, "/var/www/html/app/php-errors.log");
+                        $this->deleteConfiguredTrend($associatedTrend->trendId);
+                    }
+                }
+
+                $statement = $connection->prepare("DELETE FROM `trendsConfigurations` WHERE `id`=:trendId");
+                $statement->bindParam(":trendId", $trendId, PDO::PARAM_INT);
+                $result = $statement->execute() ? true : false;
+                
+            }
+            catch(PDOException $pdo) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                Configuration::closeConnection();
+            }
+            
+            return $result;
+
         }
 
         public function getFormulas() {
