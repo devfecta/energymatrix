@@ -116,7 +116,7 @@ class Services {
         formCheckbox.setAttribute("id", id);
         formCheckbox.setAttribute("name", name);
         formCheckbox.setAttribute("class", "form-check-input");
-        formCheckbox.setAttribute("checked", checked);
+        (checked) ? formCheckbox.setAttribute("checked", "checked") : formCheckbox.removeAttribute("checked");
         //formElement.style.width = "auto";
         //formElement.style.display = "inline-block";
         const formLabel = document.createElement("label");

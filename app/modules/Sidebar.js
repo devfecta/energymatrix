@@ -411,7 +411,8 @@ class Sidebar extends Services {
                     , "buttonClasses" : ["d-flex"]
                     , "buttonValue" : ""
                     , "buttonClick" : function (event) {
-                        window.location.href = "sensorTrends.php?sensorId=" + sensor.id + "&userId=" + companyId
+                        window.location.href = "sensorTrends.php?sensorId=" + sensor.id + "&userId=" + companyId;
+                        
                     }
                 };
                 sensorSubMenu.append(this.getMenuItem(subMenuItem));
@@ -506,10 +507,22 @@ class Sidebar extends Services {
         // Logs out after idle for 1 hour.
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
-            console.log(userId);
 
-            this.getSensorMenu(userId, userType)
-            sidebarMenu.append(this.getSensorMenu(userId, userType));
+            // Displays just the View Trend button.
+            let menuItem = {
+                "parentId" : "trends" + userId
+                , "subMenuId" : "trendsSub" + userId
+                , "buttonTitle" : "View Trends"
+                , "buttonText" : '<span class="fas fa-bars pe-1"></span> View Trends'
+                , "buttonClasses" : ["d-flex"]
+                , "buttonValue" : ""
+                , "buttonClick" : function (event) {
+                    window.location.href = "sensorTrends.php?sensorId=&userId=" + userId;
+                    
+                }
+            };
+
+            sidebarMenu.append(this.getMenuItem(menuItem));
         }
         else {
             alert("logging out");

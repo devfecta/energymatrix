@@ -187,9 +187,15 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `userId`=:userId AND  `sensorId`=:sensorId ORDER BY `id` DESC");
-                $statement->bindValue(":userId", $sensor['userId'], PDO::PARAM_INT);
-                $statement->bindValue(":sensorId", $sensor['sensorId'], PDO::PARAM_INT);
+                if (isset($sensor['sensorId']) && !empty(trim($sensor['sensorId'])) && $sensor['sensorId'] != "null") {
+                    $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `userId`=:userId AND `sensorId`=:sensorId ORDER BY `id` DESC");
+                    $statement->bindValue(":userId", $sensor['userId'], PDO::PARAM_INT);
+                    $statement->bindValue(":sensorId", $sensor['sensorId'], PDO::PARAM_INT);
+                }
+                else {
+                    $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `userId`=:userId ORDER BY `id` DESC");
+                    $statement->bindValue(":userId", $sensor['userId'], PDO::PARAM_INT);
+                }
 
                 $statement->execute();
 
@@ -200,8 +206,6 @@
                     $associatedTrends = json_decode($trend['associatedTrends'], true);
 
                     $associatedTrendsArray = array();
-
-                    
 
                     foreach ($associatedTrends as $associatedTrend) {
 
@@ -645,6 +649,44 @@
             
             return $result;
 
+        }
+        /**
+         * Sets the visibility of a configured trend on the customer side of the app.
+         *
+         * @param   array  $formData  An array with the trend ID and visibility boolean.
+         */
+        public function setTrendVisibility($formData) {
+            //$formData["trendId"]
+            //$formData["isVisible"]
+            $result = false;
+            $data = json_decode(json_encode($formData), false);
+
+            try {
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("UPDATE `trendsConfigurations` SET `isVisible`=:isVisible WHERE `id`=:trendId");
+
+                
+
+                $isVisible = ($data->isVisible === 'true')? 1 : 0;
+
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $data->trendId . " == " . $data->isVisible . " == " . $isVisible . "\n", 3, "/var/www/html/app/php-errors.log");
+
+                $statement->bindParam(":trendId", $data->trendId, PDO::PARAM_INT);
+                $statement->bindParam(":isVisible", $isVisible, PDO::PARAM_INT);
+                $result = $statement->execute() ? true : false;
+            }
+            catch(PDOException $pdo) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+
+            return $result;
         }
 
         public function getFormulas() {
