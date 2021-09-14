@@ -4,6 +4,6 @@ const trends = new Trends();
 
 const url = new URLSearchParams(document.location.search);
 const userId = url.get("userId");
-const sensorId = url.get("sensorId");
+const trendId = url.get("trendId");
 
-trends.listConfiguredTrends(sensorId, userId);
+trends.listUserConfiguredTrends(trendId, userId);

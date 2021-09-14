@@ -86,6 +86,7 @@ class Services {
         formElement.setAttribute("class", "form-control");
         formElement.setAttribute("min", min);
         formElement.setAttribute("max", max);
+        formElement.setAttribute("value", min);
         formElement.style.width = "auto";
         formElement.style.display = "inline-block";
         formElement.required = required;
@@ -100,6 +101,7 @@ class Services {
         formElement.setAttribute("class", "form-control");
         formElement.setAttribute("min", min);
         formElement.setAttribute("max", max);
+        formElement.setAttribute("value", min);
         formElement.style.width = "auto";
         formElement.style.display = "inline-block";
         formElement.required = required;

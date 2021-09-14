@@ -75,7 +75,7 @@
             return $trend;
         }
 
-        public function getTrends($userId, $sensorId) {
+        public function getUserConfiguredTrends($trend) {
 
             $trends = array();
 
@@ -83,9 +83,8 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("SELECT * FROM `trends` WHERE `userId`=:userId AND  `sensorId`=:sensorId ORDER BY `operationalStartTIME` DESC");
-                $statement->bindValue(":userId", $userId, PDO::PARAM_INT);
-                $statement->bindValue(":sensorId", $sensorId, PDO::PARAM_INT);
+                $statement = $connection->prepare("SELECT * FROM `trendsUserConfigurations` WHERE `trendId`=:trendId ORDER BY `id` DESC");
+                $statement->bindValue(":trendId", $trend["trendId"], PDO::PARAM_INT);
 
                 $statement->execute();
 
@@ -113,7 +112,9 @@
          *
          * @return  array            An array of new trend information.
          */
-        public function insertTrend($formData) {
+        public function insertUserConfiguredTrend($formData) {
+
+            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($formData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             $result = array();
 
@@ -123,9 +124,8 @@
 
                 $connection = Configuration::openConnection();
 
-                $statement = $connection->prepare("INSERT INTO `trends` (
-                    `userId`,
-                    `sensorId`,
+                $statement = $connection->prepare("INSERT INTO `trendsUserConfigurations` (
+                    `trendId`,
                     `lowestLevel`,
                     `highestLevel`,
                     `operationalMinimum`,
@@ -134,8 +134,7 @@
                     `operationalDuration`
                 ) 
                 VALUES (
-                    :userId,
-                    :sensorId,
+                    :trendId,
                     :lowestLevel,
                     :highestLevel,
                     :operationalMinimum,
@@ -143,8 +142,7 @@
                     :operationalStartTime,
                     :operationalDuration
                 )");
-                $statement->bindParam(":userId", $data->userId, PDO::PARAM_INT);
-                $statement->bindValue(":sensorId", $data->sensorId, PDO::PARAM_INT);
+                $statement->bindParam(":trendId", $data->trendId, PDO::PARAM_INT);
                 $statement->bindParam(":lowestLevel", $data->lowestLevel, PDO::PARAM_INT);
                 $statement->bindParam(":highestLevel", $data->highestLevel, PDO::PARAM_INT);
                 $statement->bindParam(":operationalMinimum", $data->operationalMinimum, PDO::PARAM_INT);
@@ -158,7 +156,7 @@
                 $connection->commit();
 
 
-                $statement = $connection->prepare("SELECT * FROM `trends` WHERE `id`=:trendId");
+                $statement = $connection->prepare("SELECT * FROM `trendsUserConfigurations` WHERE `id`=:trendId");
                 $statement->bindValue(":trendId", $lastInsertId, PDO::PARAM_INT);
                 $statement->execute();
 
@@ -656,8 +654,7 @@
          * @param   array  $formData  An array with the trend ID and visibility boolean.
          */
         public function setTrendVisibility($formData) {
-            //$formData["trendId"]
-            //$formData["isVisible"]
+
             $result = false;
             $data = json_decode(json_encode($formData), false);
 
@@ -666,11 +663,44 @@
 
                 $statement = $connection->prepare("UPDATE `trendsConfigurations` SET `isVisible`=:isVisible WHERE `id`=:trendId");
 
-                
+                $isVisible = ($data->isVisible === 'true')? 1 : 0;
+
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $data->trendId . " == " . $data->isVisible . " == " . $isVisible . "\n", 3, "/var/www/html/app/php-errors.log");
+
+                $statement->bindParam(":trendId", $data->trendId, PDO::PARAM_INT);
+                $statement->bindParam(":isVisible", $isVisible, PDO::PARAM_INT);
+                $result = $statement->execute() ? true : false;
+            }
+            catch(PDOException $pdo) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                $connection = Configuration::closeConnection();
+            }
+
+            return $result;
+        }
+        /**
+         * Sets the visibility of a user configured trend on the customer dashboard.
+         *
+         * @param   array  $formData  An array with the trend ID and visibility boolean.
+         */
+        public function setDashboardVisibility($formData) {
+
+            $result = false;
+            $data = json_decode(json_encode($formData), false);
+
+            try {
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("UPDATE `trendsUserConfigurations` SET `isVisible`=:isVisible WHERE `id`=:trendId");
 
                 $isVisible = ($data->isVisible === 'true')? 1 : 0;
 
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $data->trendId . " == " . $data->isVisible . " == " . $isVisible . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $data->trendId . " == " . $data->isVisible . " == " . $isVisible . "\n", 3, "/var/www/html/app/php-errors.log");
 
                 $statement->bindParam(":trendId", $data->trendId, PDO::PARAM_INT);
                 $statement->bindParam(":isVisible", $isVisible, PDO::PARAM_INT);

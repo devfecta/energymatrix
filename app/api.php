@@ -150,9 +150,12 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 case "Trends":
                     $trends = new Trends();
                     switch ($_POST['method']) {
-                        case "insertTrend":
+                        case "insertUserConfiguredTrend":
                             // error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getTrends((int)$_GET['userId'], (int)$_GET['sensorId'])) . "\n", 3, "/var/www/html/app/php-errors.log");
-                            echo json_encode($trends->insertTrend($_POST));
+                            echo json_encode($trends->insertUserConfiguredTrend($_POST));
+                            break;
+                        case "setDashboardVisibility":
+                            echo $trends->setDashboardVisibility($_POST);
                             break;
                         case "insertConfiguredTrend":
                             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_POST, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
@@ -307,6 +310,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             break;
                         case "getConfiguredTrend":
                             echo json_encode($trends->getConfiguredTrend($_GET), JSON_PRETTY_PRINT);
+                            break;
+                        case "getUserConfiguredTrends":
+                            echo json_encode($trends->getUserConfiguredTrends($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getFormulas":
                             echo json_encode($trends->getFormulas(), JSON_PRETTY_PRINT);

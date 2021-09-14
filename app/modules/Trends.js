@@ -48,11 +48,17 @@ class Trends extends Services {
         .catch(e => console.error(e));
     }
 
+    getUserConfiguredTrends = async (trendId) => {
+        return await this.getApi("Trends", "getUserConfiguredTrends", "trendId=" + trendId)
+        .then(response => response)
+        .catch(e => console.error(e));
+    }
+
     listConfiguredTrends = (sensorId, userId) => {
 
         let userType = document.cookie.match(new RegExp('userType=([^=;]+)'));
 
-        console.log(userType[1]);
+        //console.log(userType[1]);
         
         this.getConfiguredTrends(sensorId, userId)
         .then(response => {
@@ -170,8 +176,11 @@ class Trends extends Services {
                     trendButton.append(trendColumn);
 
                     //trendsListGroup.append(trendButton);
-
+                    /**
+                     * This code displays buttons for the admin and user on the View Trends page.
+                     */
                     if (userType[1] > 0) {
+                        // Admin Area Trend Buttons
                         // Modify Buttons
                         trendColumn = document.createElement("div");
                         trendColumn.setAttribute("class", "d-flex justify-content-around align-items-center");
@@ -222,14 +231,67 @@ class Trends extends Services {
                         trendColumn.append(trendDeleteButton);
 
                         trendRow.append(trendButton, trendColumn);
-
                         
                     }
                     else {
-
                         trendRow.append(trendButton);
-                        //trendsListGroup.append(trendButton);
+                        // User Area Trend Buttons
+                        const trendAccordionRow = document.createElement("div");
+                        trendAccordionRow.setAttribute("class", "accordion accordion-flush bg-light shadow-sm");
+                        trendAccordionRow.setAttribute("id", "trendAccordion" + trend.id);
+
+                        const trendAccordionItems = document.createElement("div");
+                        trendAccordionItems.setAttribute("class", "accordion-item");
+
+                        const trendAccordionItemButton = document.createElement("button");
+                        trendAccordionItemButton.setAttribute("type", "button");
+                        trendAccordionItemButton.setAttribute("id", "trendButton" + trend.id);
+                        trendAccordionItemButton.setAttribute("class", "accordion-button collapsed");
+                        trendAccordionItemButton.setAttribute("data-bs-toggle", "collapse");
+                        trendAccordionItemButton.setAttribute("data-bs-target", "#trends" + trend.id);
+                        trendAccordionItemButton.setAttribute("aria-expanded", "false");
+                        trendAccordionItemButton.setAttribute("aria-controls", "trends" + trend.id);
+                        trendAccordionItemButton.innerHTML = `${trend.trendName} Configure Trends`;
+
+
+                        const trendAccordionItem = document.createElement("div");
+                        trendAccordionItem.setAttribute("id", "trends" + trend.id);
+                        trendAccordionItem.setAttribute("class", "accordion-collapse collapse");
+                        trendAccordionItem.setAttribute("aria-labelledby", "trendButton" + trend.id);
+                        trendAccordionItem.setAttribute("data-bs-parent", "#trendAccordion" + trend.id);
+
+                        const trendAccordionItemBody = document.createElement("div");
+                        trendAccordionItemBody.setAttribute("class", "accordion-body");
+/*
+                        // Dashboard Visibility
+                        const visibleTrendCheckbox = this.createSwitchCheckbox("visibleTrend" + trend.id, "visibleTrend" + trend.id, "Show In Dashboard", (/1/i).test(trend.isVisible));
+                        visibleTrendCheckbox.addEventListener("change", event => {
+
+                            let formData = new FormData();
+                            formData.append("class", "Trends");
+                            formData.append("method", "setDashboardVisibility");
+                            formData.append("trendId", trend.id);
+                            formData.append("isVisible", event.target.checked);
+                            
+                            this.setTrendVisibility(formData);
+                            console.log(trend.id, event.target.checked);
+                        });
+
+                        trendAccordionItemBody.append(visibleTrendCheckbox);
+*/
+
+                        trendAccordionItemBody.append(this.listUserConfiguredTrends(trend.id));
+
+                        trendAccordionItem.append(trendAccordionItemBody);
+
+                        trendAccordionItems.append(trendAccordionItemButton, trendAccordionItem);
+
+                        trendAccordionRow.append(trendAccordionItems);
+
+                        trendRow.append(trendAccordionRow);
+                        
                     }
+
 
                     trendsListGroup.append(trendRow);
                     
@@ -284,57 +346,67 @@ class Trends extends Services {
         .catch(e => console.error(e));
     }
 
-    /**
-     * Builds the list of trends for a specific sensor.
-     *
-     * @param   {int}  sensorId
-     * @param   {int}  userId
-     */
-    MOVEtoUSERSIDElistTrends = (sensorId, userId) => {
+    setDashboardVisibility = (formData) => {
+        return this.postApi(formData)
+        .then(response => response)
+        .catch(e => console.error(e));
+    }
 
-        this.getTrends(sensorId, userId)
+    /**
+     * Builds the list of user configured trends for a specific admin configured trend.
+     *
+     * @param   {int}  trendId
+     * 
+     * @return  {HTMLElement} Table of user configured trends.
+     */
+     listUserConfiguredTrends = (trendId) => {
+
+        //let userConfiguredTrends = HTMLElement;
+
+        // Table
+        const trendsTable = document.createElement("table");
+        trendsTable.setAttribute("class", "table table-striped table-hover");
+
+        this.getUserConfiguredTrends(trendId)
         .then(response => {
-            const trendsListing = document.querySelector("#trends");
-            // Table
-            const trendsTable = document.createElement("table");
-            trendsTable.setAttribute("class", "table table-striped table-hover");
+            
             // Table Header
             const trendsTableHeader = document.createElement("thead");
             const trendsTableHeaderRow = document.createElement("tr");
 
-            const trendsTableHeaderRowColumnSensorId = document.createElement("th");
-            trendsTableHeaderRowColumnSensorId.setAttribute("scope", "col");
-            trendsTableHeaderRowColumnSensorId.setAttribute("class", "col-lg-1");
-            trendsTableHeaderRowColumnSensorId.innerHTML = "Sensor ID<br/>";
-            trendsTableHeaderRowColumnSensorId.append(this.createTextBox("text", "sensorId", "sensorId", 6, false));
-            trendsTableHeaderRow.append(trendsTableHeaderRowColumnSensorId);
+            const trendsTableHeaderRowColumnVisibility = document.createElement("th");
+            trendsTableHeaderRowColumnVisibility.setAttribute("scope", "col");
+            trendsTableHeaderRowColumnVisibility.setAttribute("class", "col-lg-1");
+            trendsTableHeaderRow.append(trendsTableHeaderRowColumnVisibility);
+
+
 
             const trendsTableHeaderRowColumnLowestLevel = document.createElement("th");
             trendsTableHeaderRowColumnLowestLevel.setAttribute("scope", "col");
             trendsTableHeaderRowColumnLowestLevel.setAttribute("class", "col-lg-1");
             trendsTableHeaderRowColumnLowestLevel.innerHTML = "Lowest Level<br/>";
-            trendsTableHeaderRowColumnLowestLevel.append(this.createTextBox("number", "lowestLevel", "lowestLevel", 4, true));
+            trendsTableHeaderRowColumnLowestLevel.append(this.createTextBox("number", "lowestLevel" + trendId, "lowestLevel" + trendId, 4, true));
             trendsTableHeaderRow.append(trendsTableHeaderRowColumnLowestLevel);
 
             const trendsTableHeaderRowColumnHighestLevel = document.createElement("th");
             trendsTableHeaderRowColumnHighestLevel.setAttribute("scope", "col");
             trendsTableHeaderRowColumnHighestLevel.setAttribute("class", "col-lg-1");
             trendsTableHeaderRowColumnHighestLevel.innerHTML = "Highest Level<br/>";
-            trendsTableHeaderRowColumnHighestLevel.append(this.createTextBox("number", "highestLevel", "highestLevel", 4, true));
+            trendsTableHeaderRowColumnHighestLevel.append(this.createTextBox("number", "highestLevel" + trendId, "highestLevel" + trendId, 4, true));
             trendsTableHeaderRow.append(trendsTableHeaderRowColumnHighestLevel);
 
             const trendsTableHeaderRowColumnOperationMin = document.createElement("th");
             trendsTableHeaderRowColumnOperationMin.setAttribute("scope", "col");
             trendsTableHeaderRowColumnOperationMin.setAttribute("class", "col-lg-1");
             trendsTableHeaderRowColumnOperationMin.innerHTML = "Operational Minimum<br/>";
-            trendsTableHeaderRowColumnOperationMin.append(this.createTextBox("number", "operationMin", "operationMin", 4, true));
+            trendsTableHeaderRowColumnOperationMin.append(this.createTextBox("number", "operationMin" + trendId, "operationMin" + trendId, 4, true));
             trendsTableHeaderRow.append(trendsTableHeaderRowColumnOperationMin);
 
             const trendsTableHeaderRowColumnOperationMax = document.createElement("th");
             trendsTableHeaderRowColumnOperationMax.setAttribute("scope", "col");
             trendsTableHeaderRowColumnOperationMax.setAttribute("class", "col-lg-1");
             trendsTableHeaderRowColumnOperationMax.innerHTML = "Operational Maximum<br/>";
-            trendsTableHeaderRowColumnOperationMax.append(this.createTextBox("number", "operationMax", "operationMax", 4, true));
+            trendsTableHeaderRowColumnOperationMax.append(this.createTextBox("number", "operationMax" + trendId, "operationMax" + trendId, 4, true));
             trendsTableHeaderRow.append(trendsTableHeaderRowColumnOperationMax);
 
             const trendsTableHeaderRowColumnStartTime = document.createElement("th");
@@ -343,8 +415,8 @@ class Trends extends Services {
             trendsTableHeaderRowColumnStartTime.innerHTML = "Start Date/Time<br/>";
             let minDate = new Date();
             minDate.setFullYear(minDate.getFullYear() - 5);
-            trendsTableHeaderRowColumnStartTime.append(this.createDateBox("startDate", "startDate", minDate.toLocaleDateString("fr-CA"), "", true));
-            trendsTableHeaderRowColumnStartTime.append(this.createTimeBox("startTime", "startTime", "00:00", "23:59", true));
+            trendsTableHeaderRowColumnStartTime.append(this.createDateBox("startDate" + trendId, "startDate" + trendId, minDate.toLocaleDateString("fr-CA"), "", true));
+            trendsTableHeaderRowColumnStartTime.append(this.createTimeBox("startTime" + trendId, "startTime" + trendId, "00:00", "23:59", true));
             trendsTableHeaderRow.append(trendsTableHeaderRowColumnStartTime);
 
             const trendsTableHeaderRowColumnDuration = document.createElement("th");
@@ -358,7 +430,7 @@ class Trends extends Services {
             optionsDuration[4] = "4 Hours";
             optionsDuration[2] = "2 Hours";
             optionsDuration[1] = "1 Hour";
-            trendsTableHeaderRowColumnDuration.append(this.createDropDown("duration", "duration", optionsDuration, true));
+            trendsTableHeaderRowColumnDuration.append(this.createDropDown("duration" + trendId, "duration" + trendId, optionsDuration, true));
             trendsTableHeaderRow.append(trendsTableHeaderRowColumnDuration);
             const trendsTableHeaderRowColumnButtons = document.createElement("th");
             trendsTableHeaderRowColumnButtons.setAttribute("scope", "col");
@@ -371,19 +443,18 @@ class Trends extends Services {
 
                 let formData = new FormData();
                 formData.append("class", "Trends");
-                formData.append("method", "insertTrend");
-                formData.append("userId", userId);
-                formData.append("sensorId", document.querySelector("#sensorId").value);
-                formData.append("lowestLevel", document.querySelector("#lowestLevel").value);
-                formData.append("highestLevel", document.querySelector("#highestLevel").value);
-                formData.append("operationalMinimum", document.querySelector("#operationMin").value);
-                formData.append("operationalMaximum", document.querySelector("#operationMax").value);
-                formData.append("operationalStartTime", document.querySelector("#startDate").value + " " + document.querySelector("#startTime").value);
-                formData.append("operationalDuration", document.querySelector("#duration").value);
+                formData.append("method", "insertUserConfiguredTrend");
+                formData.append("trendId", trendId);
+                formData.append("lowestLevel", document.querySelector("#lowestLevel" + trendId).value);
+                formData.append("highestLevel", document.querySelector("#highestLevel" + trendId).value);
+                formData.append("operationalMinimum", document.querySelector("#operationMin" + trendId).value);
+                formData.append("operationalMaximum", document.querySelector("#operationMax" + trendId).value);
+                formData.append("operationalStartTime", document.querySelector("#startDate" + trendId).value + " " + document.querySelector("#startTime" + trendId).value);
+                formData.append("operationalDuration", document.querySelector("#duration" + trendId).value);
 
-                this.insertTrend(formData)
+                this.insertUserConfiguredTrend(formData)
                 .then(response => {
-                    document.querySelector("#trendsList").prepend(this.createTrendRow(response));
+                    document.querySelector("#trendsList" + trendId).prepend(this.createUserTrendRow(response));
                 })
                 .catch(e => console.error(e));;
 
@@ -399,17 +470,23 @@ class Trends extends Services {
             trendsTable.append(trendsTableHeader);
             // Table Body
             const trendsTableBody = document.createElement("tbody");
-            trendsTableBody.id = "trendsList";
+            trendsTableBody.id = "trendsList" + trendId;
 
             // Loops through trends pulled from the database.
             response.forEach(trend => {
-                trendsTableBody.append(this.createTrendRow(trend));
+                trendsTableBody.append(this.createUserTrendRow(trend));
             });
 
+
+
             trendsTable.append(trendsTableBody);
-            trendsListing.append(trendsTable);
+
+
+            
         })
         .catch(e => console.error(e));
+
+        return trendsTable;
 
     }
     /**
@@ -419,7 +496,7 @@ class Trends extends Services {
      *
      * @return  {json}  JSON of the new trend data.
      */
-    insertTrend = async (trendForm) => {
+     insertUserConfiguredTrend = async (trendForm) => {
 
         return await this.postApi(trendForm)
         .then(response => response)
@@ -491,13 +568,27 @@ class Trends extends Services {
      *
      * @return  {HTMLElement}
      */
-    createTrendRow = (trend) => {
+    createUserTrendRow = (trend) => {
         let trendsTableBodyRow = document.createElement("tr");
         trendsTableBodyRow.addEventListener("click", event => console.log(trend.id));
 
-        let trendsTableBodyColumnSensorId = document.createElement("td");
-        trendsTableBodyColumnSensorId.innerHTML = trend.sensorId;
-        trendsTableBodyRow.append(trendsTableBodyColumnSensorId);
+        // Dashboard Visibility
+        let trendsTableBodyColumnVisibility = document.createElement("td");
+        const visibleTrendCheckbox = this.createSwitchCheckbox("visibleTrend" + trend.id, "visibleTrend" + trend.id, "Show In Dashboard", (/1/i).test(trend.isVisible));
+        visibleTrendCheckbox.addEventListener("change", event => {
+
+            let formData = new FormData();
+            formData.append("class", "Trends");
+            formData.append("method", "setDashboardVisibility");
+            formData.append("trendId", trend.id);
+            formData.append("isVisible", event.target.checked);
+            
+            this.setTrendVisibility(formData);
+            console.log(trend.id, event.target.checked);
+        });
+
+        trendsTableBodyColumnVisibility.append(visibleTrendCheckbox);
+        trendsTableBodyRow.append(trendsTableBodyColumnVisibility);
 
         let trendsTableBodyColumnLowestLevel = document.createElement("td");
         trendsTableBodyColumnLowestLevel.innerHTML = trend.lowestLevel;
