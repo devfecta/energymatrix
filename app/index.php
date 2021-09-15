@@ -4,6 +4,13 @@
 	include("template/header.php");
 ?>
 
+<script type="module" src="./javascript/index.js?v=<?php echo rand(1, 10); ?>"></script>
+
+
+<div id="dashboard"></div>
+
+
+
 <link href="https://cdn.anychart.com/releases/v8/css/anychart-ui.min.css" rel="stylesheet" type="text/css">
 <link href="https://cdn.anychart.com/releases/v8/fonts/css/anychart-font.min.css" rel="stylesheet" type="text/css">
 
@@ -18,11 +25,12 @@
   // The data used in this sample can be obtained from the CDN
   // https://cdn.anychart.com/samples/bullet-chart/horizontal-bullet-chart-with-ranges/data.json
   anychart.data.loadJsonFile(
-    'https://cdn.anychart.com/samples/bullet-chart/horizontal-bullet-chart-with-ranges/data.json',
+    './data.json',
     function (data) {
       var dataSet = data;
 
       var table = anychart.standalones.table();
+      console.log(table);
       table.getCol(1).width(100).hAlign('right').cellPadding(0, 10, 0, 0);
       table.getRow(0).fontSize(15);
       table.cellBorder(null);
@@ -35,16 +43,6 @@
         [null, 'Region', null, null],
         [null, 'Alabama', createBulletChart('Alabama'), null],
         [null, 'Alaska', createBulletChart('Alaska'), null],
-        [null, 'Arizona', createBulletChart('Arizona'), null],
-        [null, 'Idaho', createBulletChart('Idaho'), null],
-        [null, 'Illinois', createBulletChart('Illinois'), null],
-        [null, 'Indiana', createBulletChart('Indiana'), null],
-        [null, 'Ohio', createBulletChart('Ohio'), null],
-        [null, 'Oklahoma', createBulletChart('Oklahoma'), null],
-        [null, 'Oregon', createBulletChart('Oregon'), null],
-        [null, 'Vermont', createBulletChart('Vermont'), null],
-        [null, 'Virginia', createBulletChart('Virginia'), null],
-        [null, 'Washington', createBulletChart('Washington'), null],
         [null, null, null, null]
       ]);
       table.getCol(0).width(40);
@@ -61,17 +59,20 @@
       table.getCell(0, 1).colSpan(2).border().right('white');
 
       table.getCell(1, 0).border().bottom('white');
-      table.getCell(1, 3).border().bottom('white');
-      table.getCell(14, 1).border().right('white');
+      table.getCell(1, 3).border().bottom('red');
+      //table.getCell(14, 1).border().right('white');
 
       table.container('container');
       table.vAlign('middle');
       table.draw();
 
       function createBulletChart(name) {
+        console.log("name: ", name);
         var data = dataSet[name];
         var target = summ(data.toGoal);
         var actual = summ(data.actualSales);
+
+        console.log("target: ", target, "actual: ", actual);
         /*
         var bullet = anychart.bullet([
           { Horizontal Line },
@@ -142,11 +143,22 @@ body,
 #container {
   width: 100%;
   height: 100%;
+  min-height: 500px;
   margin: 0;
   padding: 0;
 }</style>
 
 <div id="container"></div>
+
+
+
+
+
+
+
+
+
+
 
 <?php
     include("template/footer.php");

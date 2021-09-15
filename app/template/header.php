@@ -48,4 +48,4 @@
 
 
                 <main class="col-md-9 ms-sm-auto col-lg-9">
-                    <section class="py-3">
+                    <section class="py-3 h-100">
