@@ -295,22 +295,31 @@ class Charting extends Services {
     }
 
 
-    getBulletChart = (chartDiv, lowestValue, highestValue, operationMinValue, operationMaxValue, currentAverageValue, averageValue) => {
+    getBulletChart = (chartDiv, trend) => {
 
         //const dashboard = document.querySelector("#dashboard");
         //console.log(chartDiv.clientWidth);
 
+        let lowestValue = parseFloat(trend.lowestLevel);
+        let highestValue = parseFloat(trend.highestLevel);
+        let operationMinValue = parseFloat(trend.operationalMinimum);
+        let operationMaxValue = parseFloat(trend.operationalMaximum);
+        
+
         const chartOverallWidth = chartDiv.clientWidth;
 
-        console.log(lowestValue, highestValue, operationMinValue, operationMaxValue, currentAverageValue, averageValue);
+        //console.log("chartOverallWidth", chartOverallWidth);
 
-        let lowestRangeValue = lowestValue + operationMinValue;
-        let highestRangeValue = highestValue - operationMaxValue;
-        let normalRangeValue = Math.abs(highestValue - (highestRangeValue + lowestRangeValue));
+        //let chartRatio = chartOverallWidth / highestValue;
 
-        console.log(lowestRangeValue, highestRangeValue, normalRangeValue);
+        //console.log("ID:", trend.id, "lowestValue", lowestValue, "highestValue", highestValue, "operationMinValue", operationMinValue, "operationMaxValue", operationMaxValue, "currentAverageValue", trend.currentAverageValue, "averageValue", trend.averageValue);
 
-        let chartRatio = chartOverallWidth / highestValue ;
+        let pixelRatio = chartOverallWidth / highestValue;
+
+        let lowestRangeValue =  chartOverallWidth * (((operationMinValue - lowestValue) * pixelRatio) / chartOverallWidth);
+        let normalRangeValue = chartOverallWidth * (((operationMaxValue - operationMinValue) * pixelRatio) / chartOverallWidth);
+        let highestRangeValue = chartOverallWidth * (((highestValue - operationMaxValue) * pixelRatio) / chartOverallWidth);
+        let totalRange = lowestRangeValue + normalRangeValue + highestRangeValue;
 
         const bulletChart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         bulletChart.setAttribute("id", "bulletChart");
@@ -325,88 +334,90 @@ class Charting extends Services {
 
         const lowestRange = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         lowestRange.setAttribute("id", "lowestRange");
-        lowestRange.setAttribute("width", lowestRangeValue * chartRatio);
+        lowestRange.setAttribute("width", lowestRangeValue);
         lowestRange.setAttribute("height", "20");
         lowestRange.setAttribute("style", "fill:#dd2c00; fill-rule:evenodd;");
-        lowestRange.setAttribute("x", lowestValue > 0 ? 0 : lowestValue);
-        lowestRange.setAttribute("y", "10");
+        lowestRange.setAttribute("x", (lowestValue > 0) ? 0 : lowestValue);
+        lowestRange.setAttribute("y", "20");
 
         //console.log("lowestRange", parseInt(lowestRange.getAttribute("width")));
 
         const normalRange = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         normalRange.setAttribute("id", "normalRange");
-        normalRange.setAttribute("width", normalRangeValue * chartRatio);
+        normalRange.setAttribute("width", normalRangeValue);
         normalRange.setAttribute("height", "20");
         normalRange.setAttribute("style", "fill:#006b00; fill-rule:evenodd;");
         normalRange.setAttribute("x", parseInt(lowestRange.getAttribute("width")));
-        normalRange.setAttribute("y", "10");
+        normalRange.setAttribute("y", "20");
 
         //console.log("normalRange", parseInt(normalRange.getAttribute("width")), "lowRange", parseInt(lowestRange.getAttribute("width")));
 
         const highestRange = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         highestRange.setAttribute("id", "highestRange");
-        highestRange.setAttribute("width", highestRangeValue * chartRatio);
+        highestRange.setAttribute("width", highestRangeValue);
         highestRange.setAttribute("height", "20");
         highestRange.setAttribute("style", "fill:#dd2c00; fill-rule:evenodd;");
         highestRange.setAttribute("x", parseInt(normalRange.getAttribute("width")) + parseInt(lowestRange.getAttribute("width")));
-        highestRange.setAttribute("y", "10");
+        highestRange.setAttribute("y", "20");
 
         const currentAverage = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         currentAverage.setAttribute("id", "currentAverage");
-        currentAverage.setAttribute("width", currentAverageValue * chartRatio);
-        currentAverage.setAttribute("height", "20");
-        currentAverage.setAttribute("style", "fill:#fff; fill-opacity:0.5; fill-rule:evenodd;");
-        currentAverage.setAttribute("x", lowestValue > 0 ? 0 : lowestValue);
-        currentAverage.setAttribute("y", "10");
+        currentAverage.setAttribute("width", chartOverallWidth * (((trend.currentAverageValue - lowestValue) * pixelRatio) / chartOverallWidth));
+        currentAverage.setAttribute("height", "10");
+        currentAverage.setAttribute("style", "fill:#fcba03; fill-opacity:0.75; fill-rule:evenodd;");
+        currentAverage.setAttribute("x", (lowestValue > 0) ? 0 : lowestValue);
+        currentAverage.setAttribute("y", "25");
 
         const average = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         average.setAttribute("id", "average");
         average.setAttribute("width", "5");
         average.setAttribute("height", "30");
-        average.setAttribute("style", "fill:#aaa;fill-rule:evenodd;");
-        average.setAttribute("x", averageValue * chartRatio);
-        average.setAttribute("y", "10");
+        average.setAttribute("style", "fill:#777;fill-rule:evenodd;");
+        average.setAttribute("x", chartOverallWidth * (((trend.averageValue - lowestValue) * pixelRatio) / chartOverallWidth));
+        average.setAttribute("y", "15");
 
         bulletChartLayer.append(lowestRange, normalRange, highestRange, currentAverage, average);
+
+        //bulletChartLayer.append(lowestRange, normalRange, highestRange, currentAverage, average);
 
         // Value Labels
         const lowestValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         lowestValueLabel.setAttribute("id", "lowestValue");
-        lowestValueLabel.setAttribute("style", "font-size:1vh; color:#000; dominant-baseline:start; text-anchor:start");
+        lowestValueLabel.setAttribute("style", "font-size:2vh; fill:#dd2c00; dominant-baseline:start; text-anchor:start");
         lowestValueLabel.setAttribute("x", lowestValue > 0 ? 0 : lowestValue);
-        lowestValueLabel.setAttribute("y", "40");
+        lowestValueLabel.setAttribute("y", "60");
         lowestValueLabel.innerHTML = lowestValue;
 
         const highestValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         highestValueLabel.setAttribute("id", "highestValue");
-        highestValueLabel.setAttribute("style", "font-size:1vh; color:#000; dominant-baseline:end; text-anchor:end");
-        highestValueLabel.setAttribute("x", highestValue * chartRatio);
-        highestValueLabel.setAttribute("y", "40");
+        highestValueLabel.setAttribute("style", "font-size:2vh; fill:#dd2c00; dominant-baseline:end; text-anchor:end");
+        highestValueLabel.setAttribute("x", totalRange);
+        highestValueLabel.setAttribute("y", "60");
         highestValueLabel.setAttribute("xml:space", "preserve");
         highestValueLabel.innerHTML = highestValue;
 
         const operationMinValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         operationMinValueLabel.setAttribute("id", "operationMinValue");
-        operationMinValueLabel.setAttribute("style", "font-size:1vh; color:#000 dominant-baseline: middle; text-anchor: middle");
-        operationMinValueLabel.setAttribute("x", operationMinValue * chartRatio);
-        operationMinValueLabel.setAttribute("y", "40");
+        operationMinValueLabel.setAttribute("style", "font-size:2vh; fill:#006b00; dominant-baseline: middle; text-anchor: middle; text-align:center");
+        operationMinValueLabel.setAttribute("x", parseInt(lowestRange.getAttribute("width")));
+        operationMinValueLabel.setAttribute("y", "60");
         operationMinValueLabel.innerHTML = operationMinValue;
 
         const operationMaxValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         operationMaxValueLabel.setAttribute("id", "operationMaxValue");
-        operationMaxValueLabel.setAttribute("style", "font-size:1vh; color:#000 dominant-baseline: middle; text-anchor: middle");
-        operationMaxValueLabel.setAttribute("x", operationMaxValue * chartRatio);
-        operationMaxValueLabel.setAttribute("y", "40");
+        operationMaxValueLabel.setAttribute("style", "font-size:2vh; fill:#006b00; dominant-baseline: middle; text-anchor: middle; text-align:center");
+        operationMaxValueLabel.setAttribute("x", parseInt(normalRange.getAttribute("width")) + parseInt(lowestRange.getAttribute("width")));
+        operationMaxValueLabel.setAttribute("y", "60");
         operationMaxValueLabel.setAttribute("xml:space", "preserve");
         operationMaxValueLabel.innerHTML = operationMaxValue;
 
         const averageValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         averageValueLabel.setAttribute("id", "averageValue");
-        averageValueLabel.setAttribute("style", "font-size:1vh; color:#000; dominant-baseline: middle; text-anchor: middle");
-        averageValueLabel.setAttribute("x", averageValue * chartRatio);
-        averageValueLabel.setAttribute("y", "50");
-        averageValueLabel.setAttribute("xml:space", "preserve");
-        averageValueLabel.innerHTML = averageValue;
+        averageValueLabel.setAttribute("style", "font-size:1.25vh; fill:#999; dominant-baseline: middle; text-anchor: middle; text-align:center");
+        averageValueLabel.setAttribute("x", chartOverallWidth * (((trend.averageValue - lowestValue) * pixelRatio) / chartOverallWidth));
+        averageValueLabel.setAttribute("y", "10");
+        //averageValueLabel.setAttribute("xml:space", "preserve");
+        averageValueLabel.innerHTML = trend.averageValue + " (Last " + trend.operationalDuration + " Hr Avg)";
 
         bulletChartLayer.append(lowestValueLabel, highestValueLabel, operationMinValueLabel, operationMaxValueLabel, averageValueLabel);
 

@@ -30,6 +30,8 @@ class Dashboard {
                 // Array of only visible trends.
                 const visibleTrends = userTrends.filter(userTrend => parseInt(userTrend.isVisible));
 
+                //console.log(visibleTrends);
+
                 visibleTrends.forEach(visibleTrend => {
 
                     trends.getUserConfiguredTrends(visibleTrend.id)
@@ -41,25 +43,20 @@ class Dashboard {
 
                         visibleUserTrends.forEach(trend => {
 
-                                console.log(trend.lowestLevel);
+                                // console.log(trend.lowestLevel);
 
-                                let lowestValue = parseFloat(trend.lowestLevel);
-                                let highestValue = parseFloat(trend.highestLevel);
-                                let operationMinValue = parseFloat(trend.operationalMinimum);
-                                let operationMaxValue = parseFloat(trend.operationalMaximum);
-                                let currentAverageValue = 75;
-                                let averageValue = 100;
-        
+                                trend.currentAverageValue = Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
+                                trend.averageValue = Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
+
+                                
                                 const bulletChartDiv = document.createElement("div");
                                 bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
                                 bulletChartDiv.setAttribute("class", "col-md-6 p-1");
-                                //bulletChartDiv.innerHTML = visibleTrends.trendName;
-
-                                bulletChartDiv.innerHTML = currentAverageValue;
+                                bulletChartDiv.innerHTML = visibleTrend.trendName + " " + trend.currentAverageValue + visibleTrend.unit;
         
                                 dashboard.append(bulletChartDiv);
         
-                                charting.getBulletChart(bulletChartDiv, lowestValue, highestValue, operationMinValue, operationMaxValue, currentAverageValue, averageValue);
+                                charting.getBulletChart(bulletChartDiv, trend);
     
 
                         });
