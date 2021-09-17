@@ -145,8 +145,8 @@ class Charting extends Services {
 
             const date = new Date(point.date_time);
             xAxislabels = [...xAxislabels, (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() +":"+ ("0" + date.getMinutes()).slice(-2)];
-
-            pointData = [...pointData, point.data_value.toFixed(3)];
+//console.log(parseFloat(point.data_value).toFixed(3));
+            pointData = [...pointData, parseFloat(point.data_value).toFixed(3)];
 
             lineShadingColor = [...lineShadingColor, 'rgba(' + pointColor + ', 0.2)'];
             lineColor = [...lineColor, 'rgba(' + pointColor + ', 0.7)'];
@@ -398,26 +398,31 @@ class Charting extends Services {
 
         const operationMinValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         operationMinValueLabel.setAttribute("id", "operationMinValue");
-        operationMinValueLabel.setAttribute("style", "font-size:2vh; fill:#006b00; dominant-baseline: middle; text-anchor: middle; text-align:center");
+        operationMinValueLabel.setAttribute("style", `font-size:2vh; fill:#006b00; dominant-baseline:${(lowestValue ==! operationMinValue) ? "middle" : "start"}; text-anchor:${(lowestValue ==! operationMinValue) ? "middle" : "start"}`);
         operationMinValueLabel.setAttribute("x", parseInt(lowestRange.getAttribute("width")));
         operationMinValueLabel.setAttribute("y", "60");
         operationMinValueLabel.innerHTML = operationMinValue;
 
         const operationMaxValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         operationMaxValueLabel.setAttribute("id", "operationMaxValue");
-        operationMaxValueLabel.setAttribute("style", "font-size:2vh; fill:#006b00; dominant-baseline: middle; text-anchor: middle; text-align:center");
+        operationMaxValueLabel.setAttribute("style", `font-size:2vh; fill:#006b00; dominant-baseline:${(totalRange ==! operationMaxValue) ? "middle" : "end"}; text-anchor:${(totalRange ==! operationMaxValue) ? "middle" : "end"}`);
         operationMaxValueLabel.setAttribute("x", parseInt(normalRange.getAttribute("width")) + parseInt(lowestRange.getAttribute("width")));
         operationMaxValueLabel.setAttribute("y", "60");
         operationMaxValueLabel.setAttribute("xml:space", "preserve");
         operationMaxValueLabel.innerHTML = operationMaxValue;
 
+        const averageValueLabelPositionX = chartOverallWidth * (((trend.averageValue - lowestValue) * pixelRatio) / chartOverallWidth);
+        const averageValueLabelPositionMinX = 50;
+        const averageValueLabelPositionMaxX = totalRange - 50;
+        const averageValueLabelPosition = (averageValueLabelPositionX <= averageValueLabelPositionMinX) ? "start" : (averageValueLabelPositionX >= averageValueLabelPositionMaxX) ? "end" : "middle";
+
         const averageValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         averageValueLabel.setAttribute("id", "averageValue");
-        averageValueLabel.setAttribute("style", "font-size:1.25vh; fill:#999; dominant-baseline: middle; text-anchor: middle; text-align:center");
-        averageValueLabel.setAttribute("x", chartOverallWidth * (((trend.averageValue - lowestValue) * pixelRatio) / chartOverallWidth));
+        averageValueLabel.setAttribute("style", `font-size:1.25vh; fill:#999; dominant-baseline:${averageValueLabelPosition}; text-anchor:${averageValueLabelPosition}`);
+        averageValueLabel.setAttribute("x", averageValueLabelPositionX);
         averageValueLabel.setAttribute("y", "10");
         //averageValueLabel.setAttribute("xml:space", "preserve");
-        averageValueLabel.innerHTML = trend.averageValue + " (Last " + trend.operationalDuration + " Hr Avg)";
+        averageValueLabel.innerHTML = trend.averageValue + `${trend.unit} (Last ${trend.operationalDuration} Hr Avg)`;
 
         bulletChartLayer.append(lowestValueLabel, highestValueLabel, operationMinValueLabel, operationMaxValueLabel, averageValueLabel);
 

@@ -73,5 +73,20 @@ final class TrendsTest extends TestCase
     }
 
     
+    public function testGetConfiguredTrendCurrentAverage(): void
+    {
+        $trends = new Trends();
+        //var_dump($trends->getConfiguredTrends(array("sensorId" => 4, "userId" => 2)));
+        $trend['trendId'] = 29;
+        $trend['startDate'] = "2021-08-04 12:00:00";
+        $trend['endDate'] = "2021-08-04 21:00:00";
+
+        $trend['startDate'] = "null";
+        $trend['endDate'] = "null";
+
+        $this->assertIsArray($trends->getConfiguredTrendCurrentAverage($trend));
+    }
+
+    
 }
 ?>

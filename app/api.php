@@ -314,6 +314,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                         case "getUserConfiguredTrends":
                             echo json_encode($trends->getUserConfiguredTrends($_GET), JSON_PRETTY_PRINT);
                             break;
+                        case "getConfiguredTrendAverages":
+                            echo json_encode($trends->getConfiguredTrendAverages($_GET), JSON_PRETTY_PRINT);
+                            break;
                         case "getFormulas":
                             echo json_encode($trends->getFormulas(), JSON_PRETTY_PRINT);
                             break;

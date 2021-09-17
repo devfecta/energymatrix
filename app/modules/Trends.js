@@ -503,6 +503,19 @@ class Trends extends Services {
         .catch(e => console.error(e));
     
     }
+
+
+
+
+    getConfiguredTrendAverages = async (trendId, startDate, endDate) => {
+        return await this.getApi("Trends", "getConfiguredTrendAverages", "trendId=" + trendId + "&startDate=" + startDate + "&endDate=" + endDate)
+        .then(response => response)
+        .catch(e => console.error(e));
+    }
+
+
+
+
     /**
      * Inserts a new trend into the database.
      *
