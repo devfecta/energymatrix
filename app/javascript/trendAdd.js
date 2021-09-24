@@ -61,10 +61,15 @@ const addTrendButton = document.querySelector("#addTrendButton");
 addTrendButton.addEventListener("click", (event) => {
 
     const trendFormElements = document.querySelector("form").elements;
+    // For the general inputs.
+    const ordinals = ["first", "second", "third", "fourth", "fifth"];
 
     let formData = new FormData();
     formData.append("class", "Trends");
     formData.append("method", "insertConfiguredTrend");
+
+    // Creates a general property in the inputs JSON object.
+    //Object.assign(inputs, { general : {} });
 
     //console.log(document.querySelector("form").elements);
     formData.append("userId", userId);
@@ -83,9 +88,11 @@ addTrendButton.addEventListener("click", (event) => {
         , "voltage" : null
         , "phaseNumber" : null
         , "powerFactor" : null
+        , "general" : {}
     };
 
-    
+    // Check to see if any trends are selected.
+    let selectedTrends = [];
 
     switch (trendFormElements.trendFormulas.value) {
         case "chillerEfficiency":
@@ -113,38 +120,39 @@ addTrendButton.addEventListener("click", (event) => {
         case "multiplication":
         case "division":
         case "exponentiation":
-            // Creates a general property in the inputs JSON object.
-            Object.assign(inputs, { general : {} });
-
-            if (trendFormElements.firstParameter.nextSibling && trendFormElements.firstParameter.nextSibling.querySelector("select").value) {
-                Object.assign(inputs.general, { firstTrendParameter : trendFormElements.firstParameter.nextSibling.querySelector("select").value });
-            }
-            else if (trendFormElements.firstParameter.parentElement && trendFormElements.firstParameter.parentElement.querySelector("select")) {
-                Object.assign(inputs.general, { firstSensorParameter : trendFormElements.firstParameter.parentElement.querySelector("select").value });
-            }
-            else {
+            if (trendFormElements.firstParameter.localName === "input") {
                 Object.assign(inputs.general, { firstParameter : trendFormElements.firstParameter.value });
             }
 
-            if (trendFormElements.secondParameter.nextSibling && trendFormElements.secondParameter.nextSibling.querySelector("select").value) {
-                Object.assign(inputs.general, { secondTrendParameter : trendFormElements.secondParameter.nextSibling.querySelector("select").value });
-            }
-            else if (trendFormElements.secondParameter.parentElement && trendFormElements.secondParameter.parentElement.querySelector("select")) {
-                Object.assign(inputs.general, { secondSensorParameter : trendFormElements.secondParameter.parentElement.querySelector("select").value });
-            }
-            else {
+            if (trendFormElements.secondParameter.localName === "input") {
                 Object.assign(inputs.general, { secondParameter : trendFormElements.secondParameter.value });
             }
-            /*
-            Object.assign(inputs.general, { firstParameter : (trendFormElements.firstParameter.nextSibling && trendFormElements.firstParameter.nextSibling.querySelector("select").value) ? 
-                trendFormElements.firstParameter.nextSibling.querySelector("select").value : trendFormElements.firstParameter.value });
-            Object.assign(inputs.general, { secondParameter : (trendFormElements.secondParameter.nextSibling && trendFormElements.secondParameter.nextSibling.querySelector("select").value) ? 
-                trendFormElements.secondParameter.nextSibling.querySelector("select").value : trendFormElements.secondParameter.value });
-            */
             break;
         default:
             break;
     }
+
+    document.querySelectorAll("#associatedSensor").forEach( (associatedSensorTrend, index) => {
+
+        let sensorTrend = associatedSensorTrend.querySelectorAll("select");
+
+        console.log(sensorTrend);
+
+        if (sensorTrend[0].value) {
+
+            selectedTrends.push({
+                "sensorId" : (sensorTrend[0].value) ? sensorTrend[0].value : null
+                , "trendId" : (sensorTrend[1] && sensorTrend[1].value.length) ? sensorTrend[1].value : null
+            });
+
+            inputs["general"][ordinals[index] + "SensorParameter"] = (sensorTrend[0]) ? sensorTrend[0].value : null;
+
+            inputs["general"][ordinals[index] + "TrendParameter"] = (sensorTrend[1]) ? sensorTrend[1].value : null;
+            
+        }
+        
+       
+    });
 
     formData.append("inputs", JSON.stringify(inputs));
 
@@ -152,53 +160,16 @@ addTrendButton.addEventListener("click", (event) => {
 
     formData.append("sensorId", trendFormElements.companySensors.value);
 
-    // Check to see if any trends are selected.
-    let selectedTrends = [];
-    // Gets all asscociated sensor and trend groups.
-    const associatedSensors = document.querySelectorAll("#associatedSensor");
-    // Loops through all associated sensor and trend groups.
-    associatedSensors.forEach(associatedSensor => {
-        // Gets all of the dropdown menus in the asscociated sensor and trend group.
-        let associatedSensorSelects = associatedSensor.querySelectorAll("select");
-        //console.log(associatedSensorSelects);
-        // Sets associated sensor and/or trend.
-        if (associatedSensorSelects[0].value) {
-            selectedTrends.push({
-                "sensorId" : (associatedSensorSelects[0].value)
-                , "trendId" : (associatedSensorSelects[1].value) ? associatedSensorSelects[1].value : null
-            });
-        }
-    });
+    console.log(selectedTrends);
+    console.log(inputs);
 
-    //console.log(selectedTrends);
-    
-/*
-    if (trendFormElements.formulaTrends[0].value) {
-
-        let formulaTrends = trendFormElements.formulaTrends;
-        
-        formulaTrends.forEach(element => {
-            if (element.value !== "") {
-                selectedTrends.push(element.value)
-                
-            }
-        });
-        
-    }
-
-    console.log(trendFormElements.formulaTrends);
-    
-    trendFormElements.associatedSensors.forEach(sensor => {
-        console.log(sensor.value);
-    });
-    console.log(trendFormElements.associatedSensors);
-    */
     formData.append("associatedTrends", JSON.stringify(selectedTrends));
 /*
     for(var pair of formData.entries()) {
         console.log(pair[0]+ ', '+ pair[1]);
      }
 */
+
     trends.insertConfiguredTrend(formData)
     .then(trend => {
         //console.log(trend);
@@ -209,10 +180,11 @@ addTrendButton.addEventListener("click", (event) => {
             document.querySelector("#message").innerHTML = "Trend Added";
             document.querySelectorAll('input[type="number"]').forEach(field => {field.value = ""});
             document.querySelectorAll('input[type="text"]').forEach(field => {field.value = ""});
-
+            
             setInterval(() => {
                 window.location.href = `./sensorTrends.php?sensorId=${trend.sensorId}&userId=${trend.userId}`;
             }, 1000);
+            
         }
         else {
             document.querySelector("#message").classList.remove("alert-success");

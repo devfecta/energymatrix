@@ -296,9 +296,6 @@ class Trends extends Services {
                     trendsListGroup.append(trendRow);
                     
                 }
-
-
-
                 
             });
 
@@ -414,7 +411,7 @@ class Trends extends Services {
             trendsTableHeaderRowColumnStartTime.setAttribute("class", "col-lg-4");
             trendsTableHeaderRowColumnStartTime.innerHTML = "Start Date/Time<br/>";
             let minDate = new Date();
-            minDate.setFullYear(minDate.getFullYear() - 5);
+            //minDate.setFullYear(minDate.getFullYear() - 5);
             trendsTableHeaderRowColumnStartTime.append(this.createDateBox("startDate" + trendId, "startDate" + trendId, minDate.toLocaleDateString("fr-CA"), "", true));
             trendsTableHeaderRowColumnStartTime.append(this.createTimeBox("startTime" + trendId, "startTime" + trendId, "00:00", "23:59", true));
             trendsTableHeaderRow.append(trendsTableHeaderRowColumnStartTime);
@@ -866,10 +863,11 @@ class Trends extends Services {
                 firstParameterOptions.addEventListener("change", (event) => {
                     // Removes the First Parameter's associated sensor dropdown.
                     if (event.target.options[event.target.options.selectedIndex].value == 1) {
-                        if (document.querySelectorAll("#associatedSensor")[0]) {
-                            document.querySelectorAll("#associatedSensor")[0].remove();
-                        }       
                         
+                        if (event.target.parentElement.nextSibling.getAttribute("id") === "associatedSensor") {
+                            event.target.parentElement.nextSibling.remove();
+                        }
+
                         inputGroup = document.createElement("div");
                         inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
                         inputGroup.setAttribute("id", "firstParameterInput");
@@ -883,9 +881,10 @@ class Trends extends Services {
                         trendInputs[0].after(inputGroup);
                     }
                     else {
-                        if (document.querySelector("#firstParameterInput")) {
-                            document.querySelector("#firstParameterInput").remove();
+                        if (event.target.parentElement.nextSibling.getAttribute("id") === "firstParameterInput") {
+                            event.target.parentElement.nextSibling.remove();
                         }
+
                         this.createAssociatedSensorsDropDown(userId, "First Parameter", false)
                         .then(response => trendInputs[0].after(response))
                         .catch(e => console.error(e));
@@ -904,14 +903,12 @@ class Trends extends Services {
                 const secondParameterOptions = this.createDropDown("secondParameterOptions", "secondParameterOptions", optionsValue, true);
                 secondParameterOptions.addEventListener("change", (event) => {
                     
-                    if (event.target.options[event.target.options.selectedIndex].value == 1) {   
-                        // Removes the Second Parameter's associated sensor dropdown.
-                        if (document.querySelectorAll("#associatedSensor").length >= 1 && document.querySelectorAll("#associatedSensor")[0] && document.querySelectorAll("#associatedSensor")[1]) {
-                            document.querySelectorAll("#associatedSensor")[1].remove();
-                        }
-                        else if (document.querySelectorAll("#associatedSensor")[1]) {
-                            document.querySelectorAll("#associatedSensor")[1].remove();
-                        }
+                    if (event.target.options[event.target.options.selectedIndex].value == 1) {  
+                        console.log(event.target.parentElement.nextSibling);
+                        
+                        if (event.target.parentElement.nextSibling && event.target.parentElement.nextSibling.getAttribute("id") === "associatedSensor") {
+                            event.target.parentElement.nextSibling.remove();
+                        } 
                         
                         inputGroup = document.createElement("div");
                         inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
@@ -926,9 +923,10 @@ class Trends extends Services {
                         inputsGroup.append(inputGroup);
                     }
                     else {
-                        if (document.querySelector("#secondParameterInput")) {
-                            document.querySelector("#secondParameterInput").remove();
+                        if (event.target.parentElement.nextSibling && event.target.parentElement.nextSibling.getAttribute("id") === "secondParameterInput") {
+                            event.target.parentElement.nextSibling.remove();
                         }
+                        
                         this.createAssociatedSensorsDropDown(userId, "Second Parameter", false)
                         .then(response => inputsGroup.append(response))
                         .catch(e => console.error(e));
@@ -975,7 +973,7 @@ class Trends extends Services {
 
                 inputLabel = document.createElement("label");
                 inputLabel.setAttribute("for", "companySensors");
-                inputLabel.innerHTML = "Sensor: ";
+                inputLabel.innerHTML = "Sensor: <em>(This assigns the trend to a sensor in the sidebar.)</em>";
                 inputGroup.append(inputLabel);
 
                 const formElement = document.createElement("select");
@@ -1116,6 +1114,8 @@ class Trends extends Services {
             return optionsAssociatedSensors;
         })
         .catch(e => console.log(e));
+
+        
         
         inputGroupItem.append(this.createDropDown(dropdownId, dropdownId, associatedSensors, true));
 
@@ -1135,12 +1135,6 @@ class Trends extends Services {
             let formulaInputs = document.querySelector("#formulaInputs").firstElementChild;
 
             let sensorId = event.target.value;
-        
-            //let sensorId = event.target.options[event.target.options.selectedIndex].value;
-
-            //console.log(event.target.value);
-
-            //formElement.setAttribute("disabled", true);
             
             this.getFormulaTrends(userId, sensorId)
             .then(dropdown => {
@@ -1152,7 +1146,11 @@ class Trends extends Services {
                 else {
                     // Creates another asscociate sensor dropdown menu.
                     if (additionalSenorTrends) {
-                        this.createAssociatedSensorsDropDown(userId, dropdownLabel, true).then(response => formulaInputs.append(response)).catch(e => console.error(e));
+                        // Limits the number of associated sensors to 3 on screen.
+                        if (document.querySelectorAll("#associatedSensor").length <= 2) {
+                            this.createAssociatedSensorsDropDown(userId, dropdownLabel, true).then(response => formulaInputs.append(response)).catch(e => console.error(e));
+                        }
+                        
                     }
                     
                 }

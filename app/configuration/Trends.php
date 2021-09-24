@@ -113,7 +113,11 @@
 
             $average = 0;
 
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+
             $data = $this->getConfiguredTrend($trendSearchData);
+
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($data, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             $dataPoints = array();
 
@@ -515,11 +519,13 @@
                     $firstValue = 0;
                     $secondValue = 0;
 
+                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend["inputs"]["general"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+
                     if (isset($trend["inputs"]["general"])) {
                         if (!isset($trend["inputs"]["general"]["firstParameter"])) {
                             //$firstValue = $associatedTrendsArray1["points"][$index]["data_value"];
                             
-                            if (isset($trend["inputs"]["general"]["firstTrendParameter"]) && $trend["inputs"]["general"]["firstTrendParameter"] == $trend["associatedTrends"][0]["trend"]["id"]) {
+                            if (isset($trend["inputs"]["general"]["firstTrendParameter"]) && !empty($trend["inputs"]["general"]["firstTrendParameter"]) && $trend["inputs"]["general"]["firstTrendParameter"] == $trend["associatedTrends"][0]["trend"]["id"]) {
                                 $firstValue = $associatedTrendsArray1["points"][$index]["data_value"];
                             }
                             else {
