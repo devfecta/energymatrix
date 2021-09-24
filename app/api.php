@@ -315,6 +315,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo json_encode($trends->getUserConfiguredTrends($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getConfiguredTrendAverages":
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getConfiguredTrendAverages($_GET), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                             echo json_encode($trends->getConfiguredTrendAverages($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getFormulas":

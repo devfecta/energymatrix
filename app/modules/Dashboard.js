@@ -62,22 +62,33 @@ class Dashboard {
                             .then(response => {
 
                                 console.log("visibleTrend.id", visibleTrend.id, "response", response);
+
+                                if (response) {
+
+                                    trend.latestDataPointValue = (response.latestDataPoint) ? response.latestDataPoint : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
+
+                                    trend.currentAverageValue = (response.currentAverage) ? response.currentAverage : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
+    
+                                    //trend.currentAverageValue = Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
+                                    trend.averageValue = (response.average) ? response.average : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
+        
+                                    trend.unit = visibleTrend.unit;
+                                    
+                                    const bulletChartDiv = document.createElement("div");
+                                    bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
+                                    bulletChartDiv.setAttribute("class", "col-md-6 p-1");
+                                    bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + visibleTrend.unit + `)</span></p>`;
+            
+                                    dashboard.append(bulletChartDiv);
+            
+                                    charting.getBulletChart(bulletChartDiv, trend);
+
+                                }
+                                else {
+                                    alert("invalid date");
+                                }
                             
-                                trend.currentAverageValue = (response.currentAverage) ? response.currentAverage : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-    
-                                //trend.currentAverageValue = Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-                                trend.averageValue = (response.average) ? response.average : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-    
-                                trend.unit = visibleTrend.unit;
                                 
-                                const bulletChartDiv = document.createElement("div");
-                                bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
-                                bulletChartDiv.setAttribute("class", "col-md-6 p-1");
-                                bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Current Average: ` + trend.currentAverageValue + visibleTrend.unit + `)</span></p>`;
-        
-                                dashboard.append(bulletChartDiv);
-        
-                                charting.getBulletChart(bulletChartDiv, trend);
 
 
                                 

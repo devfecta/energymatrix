@@ -150,11 +150,11 @@
 
             $average = $this->Formulas->currentAverage($dataPoints, 0);
 
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($average, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
+            // Sets the data and time to get data points up to the current date and time.
             $trendSearchData["startDate"] = "2000-01-01 00:00:00";
             $trendSearchData["endDate"] = date("Y-m-d h:m:s");
-
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             $currentAverage = 0;
 
@@ -191,9 +191,12 @@
 
             $currentAverage = $this->Formulas->currentAverage($dataPoints, 0);
             
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($currentAverage, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($currentAverage, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
-            return ["currentAverage" => $currentAverage, "average" => $average];
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode(count($dataPoints), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($dataPoints[0]->getDataValue(), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+
+            return ["latestDataPoint" => $dataPoints[count($dataPoints)-1]->getDataValue(), "currentAverage" => $currentAverage, "average" => $average];
         }
 
 
@@ -519,7 +522,7 @@
                     $firstValue = 0;
                     $secondValue = 0;
 
-                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend["inputs"]["general"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend["inputs"]["general"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
                     if (isset($trend["inputs"]["general"])) {
                         if (!isset($trend["inputs"]["general"]["firstParameter"])) {

@@ -360,6 +360,15 @@ class Charting extends Services {
         highestRange.setAttribute("x", parseInt(normalRange.getAttribute("width")) + parseInt(lowestRange.getAttribute("width")));
         highestRange.setAttribute("y", "20");
 
+        const latestDataPoint = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        latestDataPoint.setAttribute("id", "latestDataPoint");
+        latestDataPoint.setAttribute("width", chartOverallWidth * (((trend.latestDataPointValue - lowestValue) * pixelRatio) / chartOverallWidth));
+        latestDataPoint.setAttribute("height", "10");
+        latestDataPoint.setAttribute("style", "fill:#fcba03; fill-opacity:0.75; fill-rule:evenodd;");
+        latestDataPoint.setAttribute("x", (lowestValue > 0) ? 0 : lowestValue);
+        latestDataPoint.setAttribute("y", "25");
+
+        /*
         const currentAverage = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         currentAverage.setAttribute("id", "currentAverage");
         currentAverage.setAttribute("width", chartOverallWidth * (((trend.currentAverageValue - lowestValue) * pixelRatio) / chartOverallWidth));
@@ -367,16 +376,24 @@ class Charting extends Services {
         currentAverage.setAttribute("style", "fill:#fcba03; fill-opacity:0.75; fill-rule:evenodd;");
         currentAverage.setAttribute("x", (lowestValue > 0) ? 0 : lowestValue);
         currentAverage.setAttribute("y", "25");
+        */
+        const currentAverage = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        currentAverage.setAttribute("id", "currentAverage");
+        currentAverage.setAttribute("width", "5");
+        currentAverage.setAttribute("height", "30");
+        currentAverage.setAttribute("style", "fill:#000;fill-rule:evenodd;");
+        currentAverage.setAttribute("x", chartOverallWidth * (((trend.currentAverageValue - lowestValue) * pixelRatio) / chartOverallWidth));
+        currentAverage.setAttribute("y", "15");
 
         const average = document.createElementNS("http://www.w3.org/2000/svg", "rect");
         average.setAttribute("id", "average");
         average.setAttribute("width", "5");
         average.setAttribute("height", "30");
-        average.setAttribute("style", "fill:#777;fill-rule:evenodd;");
+        average.setAttribute("style", "fill:#888;fill-rule:evenodd;");
         average.setAttribute("x", chartOverallWidth * (((trend.averageValue - lowestValue) * pixelRatio) / chartOverallWidth));
         average.setAttribute("y", "15");
 
-        bulletChartLayer.append(lowestRange, normalRange, highestRange, currentAverage, average);
+        bulletChartLayer.append(lowestRange, normalRange, highestRange, latestDataPoint, currentAverage, average);
 
         //bulletChartLayer.append(lowestRange, normalRange, highestRange, currentAverage, average);
 
@@ -411,6 +428,18 @@ class Charting extends Services {
         operationMaxValueLabel.setAttribute("xml:space", "preserve");
         operationMaxValueLabel.innerHTML = operationMaxValue;
 
+        const currentAverageValueLabelPositionX = chartOverallWidth * (((trend.currentAverageValue - lowestValue) * pixelRatio) / chartOverallWidth);
+        const currentAverageValueLabelPositionMinX = 50;
+        const currentAverageValueLabelPositionMaxX = totalRange - 50;
+        const currentAverageValueLabelPosition = (currentAverageValueLabelPositionX <= currentAverageValueLabelPositionMinX) ? "start" : (currentAverageValueLabelPositionX >= currentAverageValueLabelPositionMaxX) ? "end" : "middle";
+
+        const currentAverageValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        currentAverageValueLabel.setAttribute("id", "averageValue");
+        currentAverageValueLabel.setAttribute("style", `font-size:1.25vh; fill:#000; dominant-baseline:${currentAverageValueLabelPosition}; text-anchor:${currentAverageValueLabelPosition}`);
+        currentAverageValueLabel.setAttribute("x", currentAverageValueLabelPositionX);
+        currentAverageValueLabel.setAttribute("y", "10");
+        currentAverageValueLabel.innerHTML = trend.currentAverageValue + `${trend.unit} (Current Avg)`;
+
         const averageValueLabelPositionX = chartOverallWidth * (((trend.averageValue - lowestValue) * pixelRatio) / chartOverallWidth);
         const averageValueLabelPositionMinX = 50;
         const averageValueLabelPositionMaxX = totalRange - 50;
@@ -418,13 +447,12 @@ class Charting extends Services {
 
         const averageValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         averageValueLabel.setAttribute("id", "averageValue");
-        averageValueLabel.setAttribute("style", `font-size:1.25vh; fill:#999; dominant-baseline:${averageValueLabelPosition}; text-anchor:${averageValueLabelPosition}`);
+        averageValueLabel.setAttribute("style", `font-size:1.25vh; fill:#888; dominant-baseline:${averageValueLabelPosition}; text-anchor:${averageValueLabelPosition}`);
         averageValueLabel.setAttribute("x", averageValueLabelPositionX);
-        averageValueLabel.setAttribute("y", "10");
-        //averageValueLabel.setAttribute("xml:space", "preserve");
+        averageValueLabel.setAttribute("y", "55");
         averageValueLabel.innerHTML = trend.averageValue + `${trend.unit} (Last ${trend.operationalDuration} Hr Avg)`;
 
-        bulletChartLayer.append(lowestValueLabel, highestValueLabel, operationMinValueLabel, operationMaxValueLabel, averageValueLabel);
+        bulletChartLayer.append(lowestValueLabel, highestValueLabel, operationMinValueLabel, operationMaxValueLabel, currentAverageValueLabel, averageValueLabel);
 
         bulletChart.append(bulletChartLayer);
 
