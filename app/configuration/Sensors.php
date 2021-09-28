@@ -1,6 +1,7 @@
 <?php
     require_once('Configuration.php');
     require_once('Sensor.php');
+    require_once('DataPoints.php');
 
     class Sensors extends Sensor {
 
@@ -150,17 +151,25 @@
 
             $result = false;
 
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorId . "\n", 3, "/var/www/html/app/php-errors.log");
-           
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorId . "\n", 3, "/var/www/html/app/php-errors.log");
 
             try {
                 $connection = Configuration::openConnection();
+                // Gets the front-end sensor ID.
+                $sensorId = Sensor::getSensor($sensorId)->getSensorId();
 
-                $statement = $connection->prepare("DELETE FROM `sensors` WHERE `id`=:id AND `userId`=:userId");
+                $statement = $connection->prepare("DELETE FROM `sensors` WHERE `sensor_id`=:sensorId AND `userId`=:userId");
 
-                $statement->bindParam(":id", $sensorId, PDO::PARAM_INT);
+                $statement->bindParam(":sensorId", $sensorId, PDO::PARAM_INT);
                 $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
                 $result = $statement->execute() ? true : false;
+
+                if ($result) {
+                    $statement = $connection->prepare("DELETE FROM `dataPoints` WHERE `user_id`=:userId AND `sensor_id`=:sensorId");
+                    $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
+                    $statement->bindParam(":sensorId", $sensorId, PDO::PARAM_INT);
+                    $statement->execute();
+                }
             }
             catch(PDOException $pdo) {
                 error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");

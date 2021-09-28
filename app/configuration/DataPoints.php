@@ -331,6 +331,60 @@ class DataPoints extends DataPoint {
 
     }
 
+    public function getUserSensorDataPoints($userId, $sensorId) {
+
+        $dataPoints = array();
+
+        try {
+            
+            $connection = Configuration::openConnection();
+
+            if (isset($sensorId)) {
+                $sensorId = Sensor::getSensor($sensorId)->getSensorId();
+
+                $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`user_id`=:user_id AND `dataPoints`.`sensor_id`=:sensorId ORDER BY `date_time`");
+                $statement->bindParam(":user_id", $userId, PDO::PARAM_INT);
+                $statement->bindParam(":sensor_id", $sensorId, PDO::PARAM_INT);
+            }
+            else {
+                $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`user_id`=:user_id ORDER BY `date_time`");
+                $statement->bindParam(":user_id", $userId, PDO::PARAM_INT);
+            }
+            
+            
+            $statement->execute();
+
+            $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            foreach ($results as $result) {
+
+                $dataPoint = new DataPoint();
+
+                $dataPoint->setDataPointId($result['id']);
+                $dataPoint->setUserId($result['user_id']);
+                $dataPoint->setSensorId($result['sensor_id']);
+                $dataPoint->setDate($result['date_time']);
+                $dataPoint->setDataType($result['data_type']);
+                $dataPoint->setDataValue($result['data_value']);
+                $dataPoint->setCustomValue($result['custom_value']);
+
+                array_push($dataPoints, $dataPoint);
+            }
+        }
+        catch(PDOException $pdo) {
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+        }
+        catch (Exception $e) {
+            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+        }
+        finally {
+            $connection = Configuration::closeConnection();
+        }
+
+        return $dataPoints;
+
+    }
+
     public function getSensorDataTypes($sensorId) {
 
         $dataTypes = array();

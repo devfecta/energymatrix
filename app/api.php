@@ -115,6 +115,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
         if (isset($_POST["class"])) {
             
             switch ($_POST['class']) {
+                case "Users":
+                    $Users = new Users();
+                    switch ($_POST['method']) {
+                        case "deleteCompany":
+                            $result =  $Users->deleteCompany($_POST);
+                            echo $result;
+                            break;
+                        default:
+                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
+                            break;
+                    }
+                    break;
                 case "DataPoints":
                     $DataPoints = new DataPoints();
                     switch ($_POST['method']) {

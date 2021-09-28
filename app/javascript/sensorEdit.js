@@ -42,7 +42,7 @@ sensor.getSensor(id)
                 document.querySelector("#message").innerHTML = "Sensor Was Not Updated";
             }
         })
-        .catch(e => console.log(e));
+        .catch(e => console.error(e));
         
     }, false);
 

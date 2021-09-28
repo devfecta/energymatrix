@@ -1,4 +1,5 @@
 import Services from "./Services.js";
+import Users from "./Users.js";
 
 class Sidebar extends Services {
 
@@ -68,6 +69,44 @@ class Sidebar extends Services {
 
         return menuButton;
     }
+
+    
+    /**
+     * Creates the Delete Company button.
+     *
+     * @return  {HTMLElement}
+     */
+     getDeleteCompanyButton = (companyId) => {
+        const menuButton = document.createElement("div");
+        menuButton.setAttribute("class", "accordion-item");
+        menuButton.setAttribute("id","deleteCompanyButton");
+
+        const deleteButton = document.createElement("button");
+        deleteButton.setAttribute("type", "button");
+        deleteButton.setAttribute("class", "btn btn-light text-nowrap m-2");
+        deleteButton.setAttribute("value", companyId);
+        deleteButton.addEventListener("click", (event) => {
+            let confirmation = confirm("This will also delete dependent sensors and trends. Delete?");
+
+            if (confirmation) {
+                const users = new Users();
+                users.deleteCompany(event.target.value)
+                .then(response => {
+                    window.location.href = "./";
+                })
+                .catch(e => console.error(e));
+
+                
+            }
+            
+        }, false);
+        deleteButton.innerHTML = '<span class="fas fa-trash"></span> Delete Company';
+
+        menuButton.append(deleteButton);
+
+        return menuButton;
+    }
+
     /**
      * Creates the Add Sensor button.
      *
@@ -167,6 +206,8 @@ class Sidebar extends Services {
                 let companyMenu = this.getMenuItem(menuItem);
                 // Company Sub Menu
                 let companySubMenu = this.getSubMenuItem(menuItem);
+                // Append Delete Company Button
+                companySubMenu.append(this.getDeleteCompanyButton(company.id));
                 // Append Add Sensor Button
                 companySubMenu.append(this.getAddSensorButton(company.id));
                 // Append Add Tremd Button
@@ -186,55 +227,6 @@ class Sidebar extends Services {
         .catch(error => console.error(error));
 
         return companiesMenu;
-    }
-    /**
-     * Appends the list of companies to the companies menu in the admin sidebar.
-     * 
-     * @return  {HTMLElement}
-     */
-    getCompanyMenuListOLD = () => {
-
-        // Creates the sub-menu area for the add companies button and list of companies.
-        const menu = document.createElement("div");
-        menu.setAttribute("id","companies");
-        menu.setAttribute("class", "accordion-collapse border-0 collapse");
-        menu.setAttribute("aria-labelledby", "companiesButton");
-        menu.setAttribute("data-bs-parent", "#companiesButton");
-        // Appends the Add Company button.
-        menu.append(this.getAddCompanyButton());
-
-        this.getApi("Users", "getCompanies")
-        .then(companies => {
-            companies.forEach(company => {
-                // Company menu item.
-                const companyMenu = document.createElement('div');
-                companyMenu.setAttribute("class", "accordion-item");
-                companyMenu.setAttribute("id","companyMenu" + company.id);
-                // Company button with the company name.
-                const companyButton = document.createElement('button');
-                companyButton.setAttribute("class", "accordion-button border-0 collapsed");
-                companyButton.setAttribute("type", "button");
-                companyButton.setAttribute("data-bs-toggle", "collapse");
-                companyButton.setAttribute("data-bs-target", "#sensorsMenuItems" + company.id);
-                companyButton.setAttribute("aria-expanded", "false");
-                companyButton.setAttribute("aria-controls", "sensorsMenuItems" + company.id);
-                companyButton.innerHTML = company.company + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${company.id})</em>`;
-                // Appends the company button with the company name.                
-                companyMenu.append(companyButton);
-                
-                companyMenu.append(this.getSensorsMenu(company.id));
-
-                companyMenu.append(this.getTrendsMenu(company.id));
-
-                //console.log(companyMenu);
-
-                menu.append(companyMenu);
-            });
-            
-        })
-        .catch(error => console.error(error));
-
-        return menu;
     }
     /**
      * Creates the sensor menu items for specific company menu items.
