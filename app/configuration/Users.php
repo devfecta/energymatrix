@@ -46,12 +46,13 @@
 
             try {
                 $connection = Configuration::openConnection();
-
+                // Deletes User, Sensors, and Trends
                 $statement = $connection->prepare("DELETE FROM `users` WHERE `id`=:id");
                 $statement->bindParam(":id", $data->userId, PDO::PARAM_INT);
                 $result = $statement->execute() ? true : false;
 
                 if ($result) {
+                    // Deletes user Data Points.
                     $statement = $connection->prepare("DELETE FROM `dataPoints` WHERE `user_id`=:userId");
                     $statement->bindParam(":userId", $data->userId, PDO::PARAM_INT);
                     $statement->execute();

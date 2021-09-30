@@ -1,7 +1,6 @@
 <?php
     require_once('Configuration.php');
     require_once('Sensor.php');
-    require_once('DataPoints.php');
 
     class Sensors extends Sensor {
 
@@ -93,17 +92,21 @@
                 $statement = $connection->prepare("INSERT INTO `sensors` (
                     `sensorId`,
                     `userId`,
-                    `sensor_name`
+                    `sensor_name`,
+                    `dataType`
                 ) 
                 VALUES (
                     :sensorId,
                     :userId,
-                    :sensor_name
+                    :sensor_name,
+                    :dataType
                 )");
 
                 $statement->bindParam(":sensorId", $data->sensorId, PDO::PARAM_INT);
                 $statement->bindParam(":userId", $data->company, PDO::PARAM_INT);
                 $statement->bindParam(":sensor_name", $data->sensorName, PDO::PARAM_STR);
+                $statement->bindParam(":dataType", $data->dataType, PDO::PARAM_STR);
+                
                 $result = $statement->execute() ? true : false;
             }
             catch(PDOException $pdo) {
@@ -151,20 +154,19 @@
 
             $result = false;
 
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorId . "\n", 3, "/var/www/html/app/php-errors.log");
-
             try {
                 $connection = Configuration::openConnection();
-                // Gets the front-end sensor ID.
+                // Gets the front-end sensor ID using the database's sensor primary key.
                 $sensorId = Sensor::getSensor($sensorId)->getSensorId();
-
-                $statement = $connection->prepare("DELETE FROM `sensors` WHERE `sensor_id`=:sensorId AND `userId`=:userId");
+                // Deletes the Sensor and Trends
+                $statement = $connection->prepare("DELETE FROM `sensors` WHERE `sensorId`=:sensorId AND `userId`=:userId");
 
                 $statement->bindParam(":sensorId", $sensorId, PDO::PARAM_INT);
                 $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
                 $result = $statement->execute() ? true : false;
 
                 if ($result) {
+                    // Deletes sensor Data Points.
                     $statement = $connection->prepare("DELETE FROM `dataPoints` WHERE `user_id`=:userId AND `sensor_id`=:sensorId");
                     $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
                     $statement->bindParam(":sensorId", $sensorId, PDO::PARAM_INT);

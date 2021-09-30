@@ -26,10 +26,11 @@ class Services {
         let formData = 'class=' + className + '&method=' + methodName + '&' + parameters;
     
         let url = "./api.php";
+
+        
     
         return await fetch(url + "?" + formData)
         .then(response => response.json())
-        .then(json => json)
         .catch(error => console.log(error));
     
     }

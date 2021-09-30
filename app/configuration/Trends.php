@@ -388,7 +388,7 @@
 
         public function getConfiguredTrend($trendSearchData) {
 
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trendSearchData['trendId'], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
             $trend = array();
 
             try {
@@ -401,6 +401,8 @@
                 $statement->execute();
 
                 $trend = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+
+                //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
                 // Associated Trends
                 $associatedTrends = json_decode($trend['associatedTrends'], true);
@@ -643,8 +645,6 @@
 
             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
-
-            
             return $trend;
         }
 

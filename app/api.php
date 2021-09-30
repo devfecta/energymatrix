@@ -34,10 +34,12 @@ $encodedJSON = null;
 //echo json_encode($_POST, false);
 //exit();
 
+header('Content-Type: application/json; charset=utf-8');
+
 switch ($_SERVER['REQUEST_METHOD']) {
     case "POST":
     //echo "REQUEST_METHOD Post";
-        header('Content-Type: application/json; charset=utf-8');
+        
         //$post = json_decode($_POST, false);
         // Creates
         if (isset($_GET['class']) && !empty($_GET['class'])) {
@@ -88,6 +90,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     }
                     break;
                 case "Sensors":
+                    // Might be able to delete
+                    /*
                     $Sensors = new Sensors();
                     switch ($_GET['method']) {
                         case "addSensor":
@@ -106,6 +110,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             break;
                     }
                     break;
+                    */
                 default:
                     echo json_encode(array("error" => 'GET CLASS ERROR: The '.$_GET['class'].' class does not exist.\n'), JSON_PRETTY_PRINT);
                     break;
@@ -321,6 +326,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             echo json_encode($trends->getConfiguredTrends($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getConfiguredTrend":
+                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getConfiguredTrend($_GET), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            
                             echo json_encode($trends->getConfiguredTrend($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getUserConfiguredTrends":

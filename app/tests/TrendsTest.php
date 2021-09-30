@@ -57,7 +57,7 @@ final class TrendsTest extends TestCase
         $this->assertIsArray($trends->getTrends(2, 111111));
     }
     
-    public function testGetConfiguredTrends(): void
+    public function OtestGetConfiguredTrends(): void
     {
         $trends = new Trends();
         //var_dump($trends->getConfiguredTrends(array("sensorId" => 4, "userId" => 2)));
@@ -72,16 +72,19 @@ final class TrendsTest extends TestCase
         $trendId['trendId'] = 16;
         $trend = json_decode('{
                 "class": "Trends",
-                "method": "getConfiguredTrendAverages",
-                "trendId": "30",
+                "method": "getConfiguredTrend",
+                "trendId": "2",
                 "startDate": "2021-07-01 12:0:0",
-                "endDate": "2021-07-02 0:0:0"
+                "endDate": "2021-10-02 0:0:0"
             }', false);
+
+            var_dump("test");
+        var_dump($trends->getConfiguredTrend($trend));
         $this->assertIsArray($trends->getConfiguredTrend($trend));
     }
 
     
-    public function testGetConfiguredTrendCurrentAverage(): void
+    public function OtestGetConfiguredTrendCurrentAverage(): void
     {
         $trends = new Trends();
         //var_dump($trends->getConfiguredTrends(array("sensorId" => 4, "userId" => 2)));

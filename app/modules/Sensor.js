@@ -25,11 +25,15 @@ class Sensor extends Services {
 
     addSensor = async (sensorForm) => {
         let formData = new FormData();
+
+        console.log(sensorForm.company.value, sensorForm.sensorId.value, sensorForm.sensorName.value);
+
         formData.append("class", "Sensors");
         formData.append("method", "addSensor");
         formData.append("company", sensorForm.company.value);
         formData.append("sensorId", sensorForm.sensorId.value);
         formData.append("sensorName", sensorForm.sensorName.value);
+        formData.append("dataType", sensorForm.dataType.value);
 
         return await this.postApi(formData)
         .then(response => response)

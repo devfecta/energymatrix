@@ -76,7 +76,7 @@ class Sidebar extends Services {
      *
      * @return  {HTMLElement}
      */
-     getDeleteCompanyButton = (companyId) => {
+     getDeleteCompanyButton = (companyId, companyName) => {
         const menuButton = document.createElement("div");
         menuButton.setAttribute("class", "accordion-item");
         menuButton.setAttribute("id","deleteCompanyButton");
@@ -86,21 +86,20 @@ class Sidebar extends Services {
         deleteButton.setAttribute("class", "btn btn-light text-nowrap m-2");
         deleteButton.setAttribute("value", companyId);
         deleteButton.addEventListener("click", (event) => {
+
             let confirmation = confirm("This will also delete dependent sensors and trends. Delete?");
 
             if (confirmation) {
                 const users = new Users();
                 users.deleteCompany(event.target.value)
                 .then(response => {
-                    window.location.href = "./";
+                    document.querySelector("#company" + event.target.value).remove();
                 })
                 .catch(e => console.error(e));
-
-                
             }
             
         }, false);
-        deleteButton.innerHTML = '<span class="fas fa-trash"></span> Delete Company';
+        deleteButton.innerHTML = '<span class="fas fa-trash"></span> Delete ' + companyName;
 
         menuButton.append(deleteButton);
 
@@ -207,7 +206,7 @@ class Sidebar extends Services {
                 // Company Sub Menu
                 let companySubMenu = this.getSubMenuItem(menuItem);
                 // Append Delete Company Button
-                companySubMenu.append(this.getDeleteCompanyButton(company.id));
+                companySubMenu.append(this.getDeleteCompanyButton(company.id, company.company));
                 // Append Add Sensor Button
                 companySubMenu.append(this.getAddSensorButton(company.id));
                 // Append Add Tremd Button

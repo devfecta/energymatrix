@@ -48,6 +48,13 @@
                     <input type="text" class="form-control" id="sensorName" name="sensorName" maxlength="32" required />
                 </div>
             </div>
+            <div class="row">
+                <div class="col-md-12 form-group">
+                    <label for="dataType">Data Type: </label>
+                    <input type="text" class="form-control" id="dataType" name="dataType" maxlength="16" required />
+                </div>
+            </div>
+            
 <!--
             <div class="row">
                 <div class="col-md-12 form-group">

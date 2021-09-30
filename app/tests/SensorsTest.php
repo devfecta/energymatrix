@@ -42,9 +42,15 @@ final class SensorsTest extends TestCase
         ];
         $this->assertEquals(true, $sensors->addSensor($test));
 
-        
-
         //$this->assertInstanceOf(Sensor::class, $sensors->getSensor());
+
+    }
+
+    public function testDeleteSensor(): void
+    {
+        $sensors = new Sensors();
+        
+        $this->assertEquals(true, $sensors->deleteSensor(7, 3));
 
     }
 

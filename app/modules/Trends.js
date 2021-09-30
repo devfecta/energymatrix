@@ -223,7 +223,10 @@ class Trends extends Services {
                             let confirmation = confirm("This will also delete dependent trends. Delete?");
 
                             if (confirmation) {
-                                this.deleteConfiguredTrend(trendDeleteButton.value);
+                                let deleted = this.deleteConfiguredTrend(trendDeleteButton.value);
+                                if (deleted) {
+                                    document.querySelector("#trend" + trendDeleteButton.value).remove();
+                                }
                             }
                             
                         });
@@ -311,8 +314,13 @@ class Trends extends Services {
     }
 
     viewTrend = (trendId, startDate, endDate) => {
-        //console.log(startDate, endDate);
-        //console.log(trendId);
+        console.log(startDate, endDate);
+        console.log(trendId);
+
+        this.getConfiguredTrend(trendId, startDate, endDate)
+        .then(response => console.log(response))
+        .catch(e => console.error(e));
+
         this.getConfiguredTrend(trendId, startDate, endDate)
         .then(dataPoints => {
             //console.log(dataPoints);
@@ -958,6 +966,8 @@ class Trends extends Services {
         // Add unit type to the form.
         formulaInputs.push(inputGroup);
 
+//console.log(formulaInputs.forEach(element => (element.id == "unitType") ? element.value = "test" : ""));
+
 
         /**
          * Creates the sensors dropdown for the specific trend.
@@ -967,6 +977,8 @@ class Trends extends Services {
 
             await sensor.getUserSensors(userId)
             .then(response => {
+
+                //formulaInputs.forEach(element => (element.querySelector("#unitType") ? element.querySelector("#unitType").value = "test" : ""));
 
                 inputGroup = document.createElement("div");
                 inputGroup.setAttribute("class", "col-md-12 my-2 form-group");
