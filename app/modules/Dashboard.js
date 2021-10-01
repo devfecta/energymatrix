@@ -46,22 +46,20 @@ class Dashboard {
                         visibleUserTrends.forEach(trend => {
 
                             let durationEndDateTime = new Date(trend.operationalStartTime);
-                            durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + durationEndDateTime.getMinutes() + ":" + durationEndDateTime.getSeconds();
+                            durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + durationEndDateTime.getMinutes() + ":" + ("0" + durationEndDateTime.getSeconds()).slice(-2);
 
                             let durationStartDateTime = new Date(trend.operationalStartTime);
                             durationStartDateTime = durationStartDateTime.setHours(durationStartDateTime.getHours() - trend.operationalDuration);
                             durationStartDateTime = new Date(durationStartDateTime);
-                            durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + durationStartDateTime.getMinutes() + ":" + durationStartDateTime.getSeconds();
+                            durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + durationStartDateTime.getMinutes() + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
 
-                            console.log("visibleTrend.id", visibleTrend.id, "Start Date", durationStartDateTime, "End Date", durationEndDateTime);
+                            //console.log("visibleTrend.id", visibleTrend.id, "Start Date", durationStartDateTime, "End Date", durationEndDateTime);
+                            trend.operationalEndTime = durationStartDateTime;
 
-                            
-                            
-                           
-                            trends.getConfiguredTrendAverages(visibleTrend.id, durationStartDateTime, durationEndDateTime)
+                            trends.getUserConfiguredTrendAverages(trend)
                             .then(response => {
 
-                                console.log("visibleTrend.id", visibleTrend.id, "response", response);
+                                //console.log("visibleTrend.id", visibleTrend.id, "response", response);
 
                                 if (response) {
 
@@ -80,6 +78,8 @@ class Dashboard {
                                     bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + visibleTrend.unit + `)</span></p>`;
             
                                     dashboard.append(bulletChartDiv);
+
+                                    //console.log("trend", trend);
             
                                     charting.getBulletChart(bulletChartDiv, trend);
 

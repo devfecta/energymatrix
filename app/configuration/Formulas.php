@@ -58,17 +58,13 @@
                 }
             }
 
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($data, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-
             // Number of numbers within the range.
             $count = count($data);
             // Adds up the numbers in the range.
             $sum = array_sum($data);
 
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($count ." = ". $sum, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
             // Calculates the range average.
             $currentAverage = ($count > 0) ? $sum / $count : 0;
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode("currentAverage = ". $currentAverage, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             return round($currentAverage, 3);
         }

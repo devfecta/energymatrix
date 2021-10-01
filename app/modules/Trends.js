@@ -512,8 +512,8 @@ class Trends extends Services {
 
 
 
-    getConfiguredTrendAverages = async (trendId, startDate, endDate) => {
-        return await this.getApi("Trends", "getConfiguredTrendAverages", "trendId=" + trendId + "&startDate=" + startDate + "&endDate=" + endDate)
+    getUserConfiguredTrendAverages = async (trend) => {
+        return await this.getApi("Trends", "getUserConfiguredTrendAverages", "trend=" + JSON.stringify(trend))
         .then(response => response)
         .catch(e => console.error(e));
     }

@@ -320,7 +320,7 @@ class Charting extends Services {
         let normalRangeValue = chartOverallWidth * (((operationMaxValue - operationMinValue) * pixelRatio) / chartOverallWidth);
         let highestRangeValue = chartOverallWidth * (((highestValue - operationMaxValue) * pixelRatio) / chartOverallWidth);
         let totalRange = lowestRangeValue + normalRangeValue + highestRangeValue;
-
+        
         const bulletChart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         bulletChart.setAttribute("id", "bulletChart");
         bulletChart.setAttribute("width", "100%");

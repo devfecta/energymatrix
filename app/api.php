@@ -333,9 +333,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
                         case "getUserConfiguredTrends":
                             echo json_encode($trends->getUserConfiguredTrends($_GET), JSON_PRETTY_PRINT);
                             break;
-                        case "getConfiguredTrendAverages":
-                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getConfiguredTrendAverages($_GET), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-                            echo json_encode($trends->getConfiguredTrendAverages($_GET), JSON_PRETTY_PRINT);
+                        case "getUserConfiguredTrendAverages":
+                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_GET, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getUserConfiguredTrendAverages($_GET), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            echo json_encode($trends->getUserConfiguredTrendAverages($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getFormulas":
                             echo json_encode($trends->getFormulas(), JSON_PRETTY_PRINT);

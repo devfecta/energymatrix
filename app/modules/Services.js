@@ -22,12 +22,10 @@ class Services {
     }
     
     getApi = async (className, methodName, parameters) => {
-    
+
         let formData = 'class=' + className + '&method=' + methodName + '&' + parameters;
     
         let url = "./api.php";
-
-        
     
         return await fetch(url + "?" + formData)
         .then(response => response.json())

@@ -109,61 +109,24 @@
         }
 
 
-        public function getConfiguredTrendAverages($trendSearchData) {
+        public function getUserConfiguredTrendAverages($trend) {
+
+            $trend = json_decode($trend["trend"], false);
 
             $average = 0;
-
-            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-
-            $data = $this->getConfiguredTrend($trendSearchData);
-
-            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($data, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-
-            $dataPoints = array();
-
-            foreach ($data["points"] as $point) {
-
-                /*
-                "id": "4040",
-                "user_id": "2",
-                "sensor_id": "528911",
-                "date_time": "2021-07-01 17:05:54",
-                "data_type": "kW",
-                "data_value": 1.0911920087683924,
-                "custom_value": "0.000"
-                 */ 
-
-                //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($point, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-                
-                $dataPoint = new DataPoint();
-                $dataPoint->setDataPointId($point["id"]);
-                $dataPoint->setUserId($point["user_id"]);
-                $dataPoint->setSensorId($point["sensor_id"]);
-                $dataPoint->setDate($point["date_time"]);
-                $dataPoint->setDataType($point["data_type"]);
-                $dataPoint->setDataValue($point["data_value"]);
-                $dataPoint->setCustomValue($point["custom_value"]);
-
-                array_push($dataPoints, $dataPoint);
-                
-            }
-
-            $average = $this->Formulas->currentAverage($dataPoints, 0);
-
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($average, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-
-            // Sets the data and time to get data points up to the current date and time.
-            $trendSearchData["startDate"] = "2000-01-01 00:00:00";
-            $trendSearchData["endDate"] = date("Y-m-d h:m:s");
-
             $currentAverage = 0;
+            $operationalEndTime = strtotime($trend->operationalEndTime);
+            $operationalStartTime = strtotime($trend->operationalStartTime);
+
+            //$trendSearchData = array("trendId" => $trend->trendId, "startDate" => $trend->operationalEndTime, "endDate" => $trend->operationalStartTime);
+            $trendSearchData = array("trendId" => $trend->trendId, "startDate" => "2000-01-01 00:00:00", "endDate" => date("Y-m-d h:m:s"));
 
             $data = $this->getConfiguredTrend($trendSearchData);
 
-            $dataPoints = array();
+            $allDataPoints = array();
+            $durationDataPoints = array();
 
             foreach ($data["points"] as $point) {
-
                 /*
                 "id": "4040",
                 "user_id": "2",
@@ -173,33 +136,50 @@
                 "data_value": 1.0911920087683924,
                 "custom_value": "0.000"
                  */ 
-
-                //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($point, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                 
-                $dataPoint = new DataPoint();
-                $dataPoint->setDataPointId($point["id"]);
-                $dataPoint->setUserId($point["user_id"]);
-                $dataPoint->setSensorId($point["sensor_id"]);
-                $dataPoint->setDate($point["date_time"]);
-                $dataPoint->setDataType($point["data_type"]);
-                $dataPoint->setDataValue($point["data_value"]);
-                $dataPoint->setCustomValue($point["custom_value"]);
+                $operationalMinimum = floatval($trend->operationalMinimum);
+                $operationalMaximum = floatval($trend->operationalMaximum);
+                $dataPointDataValue = floatval($point["data_value"]);
 
-                array_push($dataPoints, $dataPoint);
-                
+                // All Data Points
+                if ($dataPointDataValue >= $operationalMinimum && $dataPointDataValue <= $operationalMaximum) {
+                    $dataPoint = new DataPoint();
+                    $dataPoint->setDataPointId($point["id"]);
+                    $dataPoint->setUserId($point["user_id"]);
+                    $dataPoint->setSensorId($point["sensor_id"]);
+                    $dataPoint->setDate($point["date_time"]);
+                    $dataPoint->setDataType($point["data_type"]);
+                    $dataPoint->setDataValue($point["data_value"]);
+                    $dataPoint->setCustomValue($point["custom_value"]);
+    
+                    array_push($allDataPoints, $dataPoint);
+                    
+                    // Duration Data Points
+                    $dataPointDateTime = strtotime($dataPoint->getDate());
+                    if ($dataPointDateTime >= $operationalEndTime && $dataPointDateTime <= $operationalStartTime) {
+                        $dataPoint = new DataPoint();
+                        $dataPoint->setDataPointId($point["id"]);
+                        $dataPoint->setUserId($point["user_id"]);
+                        $dataPoint->setSensorId($point["sensor_id"]);
+                        $dataPoint->setDate($point["date_time"]);
+                        $dataPoint->setDataType($point["data_type"]);
+                        $dataPoint->setDataValue($point["data_value"]);
+                        $dataPoint->setCustomValue($point["custom_value"]);
+        
+                        array_push($durationDataPoints, $dataPoint);
+                    }
+                }
             }
 
-            $currentAverage = $this->Formulas->currentAverage($dataPoints, 0);
+            $average = $this->Formulas->currentAverage($durationDataPoints, 0);
+            $currentAverage = $this->Formulas->currentAverage($allDataPoints, 0);
             
             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($currentAverage, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-
             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode(count($dataPoints), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($dataPoints[0]->getDataValue(), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode(["latestDataPoint" => $allDataPoints[count($allDataPoints)-1]->getDataValue(), "currentAverage" => $currentAverage, "average" => $average], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
-            return ["latestDataPoint" => $dataPoints[count($dataPoints)-1]->getDataValue(), "currentAverage" => $currentAverage, "average" => $average];
+            return ["latestDataPoint" => $allDataPoints[count($allDataPoints)-1]->getDataValue(), "currentAverage" => $currentAverage, "average" => $average];
         }
-
-
 
         /**
          * Inserts a new trend into the database and returns an array of the new trend information.
@@ -210,7 +190,7 @@
          */
         public function insertUserConfiguredTrend($formData) {
 
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($formData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($formData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             $result = array();
 
@@ -458,6 +438,7 @@
                     . "\n", 3, "/var/www/html/app/php-errors.log");
                 */
                 $DataPoints = new DataPoints();
+
                 // Array of Raw Data Points
                 $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], $trendSearchData['startDate'], $trendSearchData['endDate']);
 
