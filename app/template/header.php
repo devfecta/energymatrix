@@ -34,7 +34,7 @@
             <button class="navbar-toggler position-absolute d-md-none collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="true" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <input class="form-control form-control-dark w-100 me-md-3" type="text" placeholder="Search" aria-label="Search">
+            <input style="display: none" class="form-control form-control-dark w-100 me-md-3" type="text" placeholder="Search" aria-label="Search">
             
         </header>
 

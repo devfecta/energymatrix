@@ -1,4 +1,5 @@
 <?php
+//error_reporting(E_ERROR | E_WARNING | E_PARSE | E_NOTICE);
 /**
  * May be able to remove this in production
  */
@@ -327,7 +328,6 @@ switch ($_SERVER['REQUEST_METHOD']) {
                             break;
                         case "getConfiguredTrend":
                             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends->getConfiguredTrend($_GET), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-                            
                             echo json_encode($trends->getConfiguredTrend($_GET), JSON_PRETTY_PRINT);
                             break;
                         case "getUserConfiguredTrends":

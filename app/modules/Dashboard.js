@@ -46,12 +46,12 @@ class Dashboard {
                         visibleUserTrends.forEach(trend => {
 
                             let durationEndDateTime = new Date(trend.operationalStartTime);
-                            durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + durationEndDateTime.getMinutes() + ":" + ("0" + durationEndDateTime.getSeconds()).slice(-2);
+                            durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + ("0" + durationEndDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationEndDateTime.getSeconds()).slice(-2);
 
                             let durationStartDateTime = new Date(trend.operationalStartTime);
                             durationStartDateTime = durationStartDateTime.setHours(durationStartDateTime.getHours() - trend.operationalDuration);
                             durationStartDateTime = new Date(durationStartDateTime);
-                            durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + durationStartDateTime.getMinutes() + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
+                            durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + ("0" +durationStartDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
 
                             //console.log("visibleTrend.id", visibleTrend.id, "Start Date", durationStartDateTime, "End Date", durationEndDateTime);
                             trend.operationalEndTime = durationStartDateTime;
@@ -59,23 +59,26 @@ class Dashboard {
                             trends.getUserConfiguredTrendAverages(trend)
                             .then(response => {
 
-                                //console.log("visibleTrend.id", visibleTrend.id, "response", response);
+                                //console.log("latestDataPoint", response.latestDataPoint, "currentAverage", response.currentAverage, "average", response.average, "response", response);
+                                //console.log("latestDataPoint", response.latestDataPoint, "currentAverage", response.currentAverage, "average", response.average, "response", response);
 
                                 if (response) {
 
+                                    trend.latestDataPointValue = response.latestDataPoint;
+                                    trend.currentAverageValue = response.currentAverage;
+                                    trend.averageValue = response.average;
+                                    /*
                                     trend.latestDataPointValue = (response.latestDataPoint) ? response.latestDataPoint : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-
                                     trend.currentAverageValue = (response.currentAverage) ? response.currentAverage : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-    
-                                    //trend.currentAverageValue = Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
                                     trend.averageValue = (response.average) ? response.average : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-        
+                                    */
                                     trend.unit = visibleTrend.unit;
                                     
                                     const bulletChartDiv = document.createElement("div");
                                     bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
                                     bulletChartDiv.setAttribute("class", "col-md-6 p-1");
-                                    bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + visibleTrend.unit + `)</span></p>`;
+                                    bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + visibleTrend.unit
+                                                             + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${durationStartDateTime} - ${durationEndDateTime}</span></p>`;
             
                                     dashboard.append(bulletChartDiv);
 
@@ -87,10 +90,6 @@ class Dashboard {
                                 else {
                                     alert("invalid date");
                                 }
-                            
-                                
-
-
                                 
                             })
                             .catch(e => console.error(e));
