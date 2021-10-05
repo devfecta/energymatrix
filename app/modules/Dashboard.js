@@ -17,10 +17,12 @@ class Dashboard extends Services {
 
 
     buildDashboard = (dashboard) => {
+        // Refresh Page after 5 minutes
+        setTimeout(() => {
+            confirm("Refresh");
+        }, 50000);
 
         const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
-
-        //console.log(userId);
 
         let userType = 0;
         if (document.cookie.includes('; ') && document.cookie.includes('userType')) {
@@ -43,16 +45,10 @@ class Dashboard extends Services {
                 // Array of only visible trends.
                 const visibleTrends = userTrends.filter(userTrend => parseInt(userTrend.isVisible));
 
-                //console.log(visibleTrends);
-
                 visibleTrends.forEach(visibleTrend => {
-
-                    //console.log(visibleTrend.id);
 
                     trends.getUserConfiguredTrends(visibleTrend.id)
                     .then(userConfiguredTrend => {
-
-                        //console.log(userConfiguredTrend);
 
                         const visibleUserTrends = userConfiguredTrend.filter(userTrend => parseInt(userTrend.isVisible));
 
@@ -66,60 +62,27 @@ class Dashboard extends Services {
                             durationStartDateTime = new Date(durationStartDateTime);
                             durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + ("0" +durationStartDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
 
-                            //console.log("visibleTrend.id", visibleTrend.id, "Start Date", durationStartDateTime, "End Date", durationEndDateTime);
                             trend.operationalEndTime = durationStartDateTime;
 
-                            let i = 0;
-                            let trendsInterval = setInterval(() => {
-                                i++;
-                                //console.log(trend.id);
-                                //console.log("userId", visibleTrend.userId);
-                                //console.log("sensorId", visibleTrend.sensorId);
-
-                                this.checkDataPointCount(visibleTrend.userId, visibleTrend.sensorId)
-                                .then(result => {
-                                    if (result) {
-                                        console.log("Change");
-                                    }
-                                    else {
-                                        console.log("No Change");
-                                    }
-                                })
-                                .catch(e => console.error(e));
-
-                                if (i == 3) {
-                                    clearInterval(trendsInterval);
-                                }
-
-                            }, 10000);
-
+                            // Draws Bullet Charts Once
                             trends.getUserConfiguredTrendAverages(trend)
                             .then(response => {
-
-                                //console.log("latestDataPoint", response.latestDataPoint, "currentAverage", response.currentAverage, "average", response.average, "response", response);
-                                //console.log("latestDataPoint", response.latestDataPoint, "currentAverage", response.currentAverage, "average", response.average, "response", response);
 
                                 if (response) {
 
                                     trend.latestDataPointValue = response.latestDataPoint;
                                     trend.currentAverageValue = response.currentAverage;
                                     trend.averageValue = response.average;
-                                    /*
-                                    trend.latestDataPointValue = (response.latestDataPoint) ? response.latestDataPoint : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-                                    trend.currentAverageValue = (response.currentAverage) ? response.currentAverage : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-                                    trend.averageValue = (response.average) ? response.average : Math.floor((Math.random() * (parseFloat(trend.highestLevel) - parseFloat(trend.lowestLevel + 1))) + parseFloat(trend.lowestLevel));
-                                    */
+                                    
                                     trend.unit = visibleTrend.unit;
                                     
                                     const bulletChartDiv = document.createElement("div");
                                     bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
                                     bulletChartDiv.setAttribute("class", "col-md-6 p-1");
                                     bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + visibleTrend.unit
-                                                             + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${durationStartDateTime} - ${durationEndDateTime}</span></p>`;
+                                                            + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${durationStartDateTime} - ${durationEndDateTime}</span></p>`;
             
                                     dashboard.append(bulletChartDiv);
-
-                                    //console.log("trend", trend);
             
                                     charting.getBulletChart(bulletChartDiv, trend);
 
@@ -130,15 +93,73 @@ class Dashboard extends Services {
                                 
                             })
                             .catch(e => console.error(e));
-
                             
 
                         });
 
+
+                        let i = 0; // REMOVE in Productions
+                        let trendsInterval = setInterval(() => {
+                            i++; 
+                            
+                            // Check to see if there was a change to the sensors data point count.
+                            this.checkDataPointCount(visibleTrend.userId, visibleTrend.sensorId)
+                            .then(result => {
+                                // There's a change in the data point count, re-draw bullet charts.
+                                if (result) {
+
+                                    //console.log("Change");
+                                    // Gets new trend bullet charts.
+                                    visibleUserTrends.forEach(trend => {
+
+                                        let durationEndDateTime = new Date(trend.operationalStartTime);
+                                        durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + ("0" + durationEndDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationEndDateTime.getSeconds()).slice(-2);
+            
+                                        let durationStartDateTime = new Date(trend.operationalStartTime);
+                                        durationStartDateTime = durationStartDateTime.setHours(durationStartDateTime.getHours() - trend.operationalDuration);
+                                        durationStartDateTime = new Date(durationStartDateTime);
+                                        durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + ("0" +durationStartDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
+            
+                                        trend.operationalEndTime = durationStartDateTime;
+            
+                                        document.querySelector("#bulletSvgChart" + trend.id).remove();
+
+                                        trends.getUserConfiguredTrendAverages(trend)
+                                        .then(response => {
+                                            
+                                            if (response) {
+
+                                                trend.latestDataPointValue = response.latestDataPoint;
+                                                trend.currentAverageValue = response.currentAverage;
+                                                trend.averageValue = response.average;
+                                                trend.unit = visibleTrend.unit;
+                                                const bulletChartDiv = document.querySelector("#bulletChart" + trend.id);
+                        
+                                                charting.getBulletChart(bulletChartDiv, trend);
+
+                                            }
+                                            else { alert("invalid date"); }
+                                            
+                                        })
+                                        .catch(e => console.error(e));
+                                        
+                                    });
+
+                                }
+                                else {
+                                    //console.log("No Change");
+                                }
+                            })
+                            .catch(e => console.error(e));
+
+                            if (i == 10) {
+                                clearInterval(trendsInterval);
+                            }
+                            // Checks every 3 seconds
+                        }, 3000);
+
                     })
                     .catch(e => console.error(e));
-
-                    
 
                 })
                 

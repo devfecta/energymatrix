@@ -223,10 +223,14 @@ class Trends extends Services {
                             let confirmation = confirm("This will also delete dependent trends. Delete?");
 
                             if (confirmation) {
-                                let deleted = this.deleteConfiguredTrend(trendDeleteButton.value);
-                                if (deleted) {
-                                    document.querySelector("#trend" + trendDeleteButton.value).remove();
-                                }
+                                this.deleteConfiguredTrend(trendDeleteButton.value)
+                                .then(result => {
+                                    if (result) {
+                                        document.querySelector("#trend" + trendDeleteButton.value).remove();
+                                    }
+                                })
+                                .catch(e => console.error(e));
+                                
                             }
                             
                         });
@@ -582,7 +586,7 @@ class Trends extends Services {
      */
     createUserTrendRow = (trend) => {
         let trendsTableBodyRow = document.createElement("tr");
-        trendsTableBodyRow.addEventListener("click", event => console.log(trend.id));
+        //trendsTableBodyRow.addEventListener("click", event => console.log(trend.id));
 
         // Dashboard Visibility
         let trendsTableBodyColumnVisibility = document.createElement("td");
@@ -596,7 +600,7 @@ class Trends extends Services {
             formData.append("isVisible", event.target.checked);
             
             this.setTrendVisibility(formData);
-            console.log(trend.id, event.target.checked);
+            //console.log(trend.id, event.target.checked);
         });
 
         trendsTableBodyColumnVisibility.append(visibleTrendCheckbox);
@@ -627,10 +631,38 @@ class Trends extends Services {
         trendsTableBodyRow.append(trendsTableBodyColumnDuration);
 
         let trendsTableBodyColumnButtons = document.createElement("td");
-        //trendsTableBodyColumnButtons.innerHTML = trend.operationalDuration;
+        trendsTableBodyColumnButtons.innerHTML = '<span class="fas fa-trash"></span>';
+
+        trendsTableBodyColumnButtons.addEventListener("click", event => {
+
+            let formData = new FormData();
+            formData.append("class", "Trends");
+            formData.append("method", "deleteUserConfiguredTrend");
+            formData.append("trendId", trend.id);
+            
+            
+            this.deleteUserConfiguredTrend(formData).then(result => {
+
+                if (result) {
+                    trendsTableBodyColumnButtons.parentNode.remove();
+                }
+                else {
+                    alert("Trend was NOT removed.");
+                }
+            })
+            .catch(e => console.error(e));
+            
+        }, false);
         trendsTableBodyRow.append(trendsTableBodyColumnButtons);
 
         return trendsTableBodyRow;
+    }
+
+    deleteUserConfiguredTrend = (trend) => {
+        console.log(trend.get("trendId"));
+        return this.postApi(trend)
+        .then(response => response)
+        .catch(e => console.error(e));
     }
     /*
     updateSensor = async (sensorForm) => {

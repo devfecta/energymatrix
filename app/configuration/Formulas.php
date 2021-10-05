@@ -138,7 +138,7 @@
          * c = Power Factor (%) (input value)
         */
         public function power($current, $voltage, $phaseNumber, $powerFactor) {
-            error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("current" => $current, "voltage" => $voltage, "phaseNumber" => $phaseNumber, "powerFactor" => $powerFactor), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("current" => $current, "voltage" => $voltage, "phaseNumber" => $phaseNumber, "powerFactor" => $powerFactor), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
             $kw = $current * $voltage * sqrt($phaseNumber) * $powerFactor / 1000;
             return $kw;
         }

@@ -507,8 +507,8 @@ class DataPoints extends DataPoint {
     }
 
     public function checkDataPointCount($sensorInfo) {
-        $changed = false;
 
+        $changed = false;
         // Array of Raw Data Points
         $dataPointsArray = $this->getSensorDataPoints($sensorInfo['userId'], $sensorInfo['sensorId'], "null", "null");
 
@@ -516,6 +516,8 @@ class DataPoints extends DataPoint {
             $_SESSION["sensorDataPoints"] = $dataPointsArray;
             $changed = true;
         }
+
+        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . "test" . "\n", 3, "/var/www/html/app/php-errors.log");
 
         return boolval($changed) ? 'true' : 'false';
     }

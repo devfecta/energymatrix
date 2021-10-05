@@ -322,7 +322,7 @@ class Charting extends Services {
         let totalRange = lowestRangeValue + normalRangeValue + highestRangeValue;
         
         const bulletChart = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-        bulletChart.setAttribute("id", "bulletChart");
+        bulletChart.setAttribute("id", "bulletSvgChart" + trend.id);
         bulletChart.setAttribute("width", "100%");
         bulletChart.setAttribute("height", "100px");
         bulletChart.setAttribute("viewBox", `0 0 ${chartOverallWidth} 100`);

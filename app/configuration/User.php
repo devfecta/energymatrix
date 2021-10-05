@@ -160,7 +160,7 @@
                 Configuration::closeConnection();
             }
 
-            error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . encode_json($userInfo, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . encode_json($userInfo, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
     
             return json_encode($userInfo, JSON_PRETTY_PRINT);
         }

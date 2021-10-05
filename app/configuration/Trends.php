@@ -751,10 +751,10 @@
                 
             }
             catch(PDOException $pdo) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
             }
             catch (Exception $e) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
             }
             finally {
                 Configuration::closeConnection();
@@ -763,6 +763,36 @@
             return $result;
 
         }
+        /**
+         * Deletes a user configured trend from the database.
+         *
+         * @param int $trendId
+         * @return bool
+         */
+        public function deleteUserConfiguredTrend($trendId) {
+            $result = false;
+           
+            try {
+                $connection = Configuration::openConnection();
+
+                $statement = $connection->prepare("DELETE FROM `trendsUserConfigurations` WHERE `id`=:trendId");
+                $statement->bindParam(":trendId", $trendId, PDO::PARAM_INT);
+                $result = $statement->execute() ? true : false;
+                
+            }
+            catch(PDOException $pdo) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            catch (Exception $e) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+            }
+            finally {
+                Configuration::closeConnection();
+            }
+            
+            return $result;
+        }
+
         /**
          * Sets the visibility of a configured trend on the customer side of the app.
          *

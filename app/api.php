@@ -186,6 +186,9 @@ switch ($_SERVER['REQUEST_METHOD']) {
                         case "setTrendVisibility":
                             echo $trends->setTrendVisibility($_POST);
                             break;
+                        case "deleteUserConfiguredTrend":
+                            echo $trends->deleteUserConfiguredTrend($_POST['trendId']);
+                            break;
                         default:
                             error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . 'POST METHOD ERROR: The '.$_POST['method'].' method does not exist.' . "\n", 3, "/var/www/html/app/php-errors.log");
                             break;
