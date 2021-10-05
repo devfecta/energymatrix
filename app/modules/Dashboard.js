@@ -1,12 +1,20 @@
+import Services from "./Services.js";
 import Charting from "../modules/Charting.js";
 import Trends from "../modules/Trends.js";
 
-class Dashboard {
+class Dashboard extends Services {
 
     constructor() {
-        //super();
-        
+        super();
     }
+
+    getConfiguredTrends = () => {
+        return this.configuredTrends;
+    }
+    setConfiguredTrends = (t) => {
+        this.configuredTrends = t;
+    }
+
 
     buildDashboard = (dashboard) => {
 
@@ -19,13 +27,18 @@ class Dashboard {
             userType = document.cookie.split('; ').find(c => c.startsWith('userType')).split('=')[1];
             
         }
-
+        /*
+        setInterval(() => {
+            this.checkDataPoints(1,1);
+        }, 3000);
+        */
         if (userType < 1) {
             const charting = new Charting();
             const trends = new Trends();
 
+            let visibleTrends = [];
             
-            trends.getConfiguredTrends (null, userId)
+            let userTrend = trends.getConfiguredTrends (null, userId)
             .then(userTrends => {
                 // Array of only visible trends.
                 const visibleTrends = userTrends.filter(userTrend => parseInt(userTrend.isVisible));
@@ -55,6 +68,30 @@ class Dashboard {
 
                             //console.log("visibleTrend.id", visibleTrend.id, "Start Date", durationStartDateTime, "End Date", durationEndDateTime);
                             trend.operationalEndTime = durationStartDateTime;
+
+                            let i = 0;
+                            let trendsInterval = setInterval(() => {
+                                i++;
+                                //console.log(trend.id);
+                                //console.log("userId", visibleTrend.userId);
+                                //console.log("sensorId", visibleTrend.sensorId);
+
+                                this.checkDataPointCount(visibleTrend.userId, visibleTrend.sensorId)
+                                .then(result => {
+                                    if (result) {
+                                        console.log("Change");
+                                    }
+                                    else {
+                                        console.log("No Change");
+                                    }
+                                })
+                                .catch(e => console.error(e));
+
+                                if (i == 3) {
+                                    clearInterval(trendsInterval);
+                                }
+
+                            }, 10000);
 
                             trends.getUserConfiguredTrendAverages(trend)
                             .then(response => {
@@ -101,20 +138,24 @@ class Dashboard {
                     })
                     .catch(e => console.error(e));
 
-                });
+                    
 
-                
-
-
+                })
                 
             })
-            .catch(e => console.error(e));
+            .catch(e => console.error(e))
             
         }
-
-        
         
     }
+
+    checkDataPointCount = async (userId, sensorId) => {
+        console.log("check");
+        return await this.getApi("DataPoints", "checkDataPointCount", "userId=" + userId + "&sensorId=" + sensorId)
+        .then(response => response)
+        .catch(e => console.error(e));
+    }
+    
 }
 
 export default Dashboard;

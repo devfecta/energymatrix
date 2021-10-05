@@ -321,6 +321,8 @@
                             // Array of Raw Data Points
                             $dataPointsArray = $DataPoints->getSensorDataPoints($sensor['userId'], $trendSensorId, "null", "null");
 
+                            $_SESSION["sensorDataPoints"] = $dataPointsArray;
+
                             $sensorArray = Sensor::getSensor($trendSensorId);
 
                             $trendArray = array(

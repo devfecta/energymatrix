@@ -506,5 +506,19 @@ class DataPoints extends DataPoint {
         }
     }
 
+    public function checkDataPointCount($sensorInfo) {
+        $changed = false;
+
+        // Array of Raw Data Points
+        $dataPointsArray = $this->getSensorDataPoints($sensorInfo['userId'], $sensorInfo['sensorId'], "null", "null");
+
+        if (sizeof($dataPointsArray) != sizeof($_SESSION["sensorDataPoints"])) {
+            $_SESSION["sensorDataPoints"] = $dataPointsArray;
+            $changed = true;
+        }
+
+        return boolval($changed) ? 'true' : 'false';
+    }
+
 }
 ?>
