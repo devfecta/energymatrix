@@ -1,7 +1,15 @@
-					</section>
-				</main>
-			</div>
-		</div>
+				</section>
+
+				<div id="helpMenu" class="d-flex align-item-start vh-100">
+					<div id="openHelpMenu" style="margin-left: 0; padding-top: 50px; white-space: nowrap; ">
+						<div style="margin: 0; transform: rotate(-90deg);">Help Menu</div>
+					</div>
+					<div id="closeHelpMenu">Close</div>
+					
+				</div>
+			</main>
+
+
 		<footer></footer>
 		<script>
 			(function() {

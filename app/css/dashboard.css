@@ -102,3 +102,40 @@ th {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+#helpMenu {
+  position: relative;
+  background-color: #aaa;
+  right: calc(0vw);
+  width: calc(1.5vw);
+}
+
+.showHelpMenu {
+  position: relative !important;
+  right: calc(0vw) !important;
+  width: calc(25vw) !important;
+  transition: all 2s;
+}
+
+.hideHelpMenu {
+  position: relative !important;
+  right: calc(0vw) !important;
+  width: calc(1.5vw) !important;
+  transition: all 2s;
+}
+
+#dashboardContent {
+  width: 100vw;
+  width: 90vw;
+}
+
+.contractDashboard {
+  width: calc(90vw) !important;
+  height: calc(90vh) !important;
+  transition: all 2s;
+}
+.expandDashboard {
+  width: calc(100vw) !important;
+  height: calc(100vh) !important;
+  transition: all 2s;
+}

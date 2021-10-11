@@ -102,7 +102,7 @@ class Charting extends Services {
 
         const charts = document.querySelector('#charts');
         const chart = document.createElement('canvas');
-        chart.setAttribute("class", "col-lg-6 col-md");
+        chart.setAttribute("class", "");
 
         chart.id = chartId;
         charts.appendChild(chart);

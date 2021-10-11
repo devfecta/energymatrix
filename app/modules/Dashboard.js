@@ -19,16 +19,23 @@ class Dashboard extends Services {
     buildDashboard = (dashboard) => {
         // Refresh Page after 5 minutes
         setTimeout(() => {
-            confirm("Refresh");
-        }, 50000);
+            alert("Reloading Page");
+            location.reload();
+        }, 300000);
 
-        const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
+        
+        let userId = "";
+
+        if (document.cookie.split('; ').find(c => c.startsWith('userId'))) {
+            userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
+        }
 
         let userType = 0;
         if (document.cookie.includes('; ') && document.cookie.includes('userType')) {
             userType = document.cookie.split('; ').find(c => c.startsWith('userType')).split('=')[1];
             
         }
+
         /*
         setInterval(() => {
             this.checkDataPoints(1,1);
@@ -98,9 +105,9 @@ class Dashboard extends Services {
                         });
 
 
-                        let i = 0; // REMOVE in Productions
+                        //let i = 0; // REMOVE in Productions
                         let trendsInterval = setInterval(() => {
-                            i++; 
+                            //i++; 
                             
                             // Check to see if there was a change to the sensors data point count.
                             this.checkDataPointCount(visibleTrend.userId, visibleTrend.sensorId)
@@ -151,10 +158,11 @@ class Dashboard extends Services {
                                 }
                             })
                             .catch(e => console.error(e));
-
+                            /*
                             if (i == 10) {
                                 clearInterval(trendsInterval);
                             }
+                            */
                             // Checks every 3 seconds
                         }, 3000);
 

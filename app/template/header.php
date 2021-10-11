@@ -24,6 +24,8 @@
 
         <script type="module" src="javascript/api.js"></script>
 
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js"></script>
+
     </head>
     <body>
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
@@ -39,13 +41,10 @@
         </header>
 
         
-        <div class="container-fluid">
-            <div class="row">
-
-            <?php
-                include("./template/sidebar.php");
-            ?>
+        <?php
+            include("./template/sidebar.php");
+        ?>
 
 
-                <main class="col-md-9 ms-sm-auto col-lg-9">
-                    <section class="py-3 h-100">
+            <main class="col-md-9 d-flex ms-sm-auto col-lg-9" style="overflow-x: hidden">
+                <section id="dashboardContent" class="py-3"> 
