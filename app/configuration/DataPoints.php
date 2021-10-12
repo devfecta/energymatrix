@@ -274,10 +274,44 @@ class DataPoints extends DataPoint {
             
             $statement->execute();
 
-            $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+            $resultsTemp = $statement->fetchAll(PDO::FETCH_ASSOC);
 
-            $columns = array_column($results, 'date_time');
-            array_multisort($columns, SORT_ASC, $results);
+            $columns = array_column($resultsTemp, 'date_time');
+            array_multisort($columns, SORT_ASC, $resultsTemp);
+
+            $results = array();
+
+            if (sizeof($resultsTemp) > 1) {
+
+                $previousDate = null;
+
+                foreach ($resultsTemp as $result) {
+
+                    $currentDate = $result["date_time"];
+
+                    if ($previousDate) {
+                        
+                        $currentDate = new DateTime($currentDate);
+                        $previousDate = new DateTime($previousDate);
+
+                        if ($currentDate->diff($previousDate)->d > 0) {
+                            unset($results);
+                            $results = array();
+                            array_push($results, $result);
+                        }
+                        else {
+                            array_push($results, $result);
+                        }
+
+                    }
+
+                    $previousDate = $result["date_time"];
+                    
+                }
+
+            }
+
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " After: " . sizeof($results) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             foreach ($results as $result) {
 

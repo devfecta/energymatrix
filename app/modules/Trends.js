@@ -200,7 +200,7 @@ class Trends extends Services {
 
                         trendColumn.append(visibleTrendCheckbox);
 
-
+                        /*
                         const trendEditButton = document.createElement("button");
                         trendEditButton.setAttribute("type", "button");
                         trendEditButton.setAttribute("class", "btn btn-primary col-md-5");
@@ -212,10 +212,11 @@ class Trends extends Services {
                         });
 
                         trendColumn.append(trendEditButton);
+                        */
 
                         const trendDeleteButton = document.createElement("button");
                         trendDeleteButton.setAttribute("type", "button");
-                        trendDeleteButton.setAttribute("class", "btn btn-danger col-md-5");
+                        trendDeleteButton.setAttribute("class", "btn btn-danger col-md-10");
                         trendDeleteButton.setAttribute("value", trend.id);
                         trendDeleteButton.innerHTML = `Delete ${trend.trendName}`;
                         trendDeleteButton.addEventListener("click", (event) => {
@@ -318,13 +319,13 @@ class Trends extends Services {
     }
 
     viewTrend = (trendId, startDate, endDate) => {
-        console.log(startDate, endDate);
-        console.log(trendId);
-
+        //console.log(startDate, endDate);
+        //console.log(trendId);
+        /*
         this.getConfiguredTrend(trendId, startDate, endDate)
         .then(response => console.log(response))
         .catch(e => console.error(e));
-
+        */
         this.getConfiguredTrend(trendId, startDate, endDate)
         .then(dataPoints => {
             //console.log(dataPoints);

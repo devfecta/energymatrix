@@ -1,5 +1,6 @@
 body {
   font-size: .875rem;
+  border-collapse: collapse;
 }
 
 .feather {
@@ -103,30 +104,33 @@ th {
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
 
+
 #helpMenu {
-  position: relative;
-  background-color: #aaa;
-  right: calc(0vw);
-  width: calc(1.5vw);
+  position: absolute;
+  background-color: rgb(255, 225, 125);
+  border: #ccc 1px solid;
+  right: -250px;
+  width: 300px;
+  z-index: 1;
+}
+
+#openHelpMenu, #closeHelpMenu {
+  cursor: pointer;
 }
 
 .showHelpMenu {
-  position: relative !important;
-  right: calc(0vw) !important;
-  width: calc(25vw) !important;
-  transition: all 2s;
+  right: 0px !important;
+  transition: all 1s;
 }
 
 .hideHelpMenu {
-  position: relative !important;
-  right: calc(0vw) !important;
-  width: calc(1.5vw) !important;
-  transition: all 2s;
+  right: -250px !important;
+  transition: all 1s;
 }
 
 #dashboardContent {
-  width: 100vw;
   width: 90vw;
+  height: 90hw;
 }
 
 .contractDashboard {
@@ -135,7 +139,7 @@ th {
   transition: all 2s;
 }
 .expandDashboard {
-  width: calc(100vw) !important;
-  height: calc(100vh) !important;
+  width: calc(90vw) !important;
+  height: calc(90vh) !important;
   transition: all 2s;
 }

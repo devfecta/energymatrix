@@ -27,7 +27,7 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js"></script>
 
     </head>
-    <body>
+    <body style="overflow-x: hidden">
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
             <a class="navbar-brand col-md-3 col-lg-3 me-0 px-3" href="#">
                 <?php echo $_SESSION['company']; ?>
@@ -46,5 +46,5 @@
         ?>
 
 
-            <main class="col-md-9 d-flex ms-sm-auto col-lg-9" style="overflow-x: hidden">
+            <main class="col-md-9 d-flex ms-sm-auto col-lg-9">
                 <section id="dashboardContent" class="py-3"> 

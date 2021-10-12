@@ -389,7 +389,7 @@ class Charting extends Services {
         average.setAttribute("id", "average");
         average.setAttribute("width", "5");
         average.setAttribute("height", "30");
-        average.setAttribute("style", "fill:#888;fill-rule:evenodd;");
+        average.setAttribute("style", "fill:#0000ff;fill-rule:evenodd;");
         average.setAttribute("x", chartOverallWidth * (((trend.averageValue - lowestValue) * pixelRatio) / chartOverallWidth));
         average.setAttribute("y", "15");
 
@@ -435,9 +435,9 @@ class Charting extends Services {
 
         const currentAverageValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         currentAverageValueLabel.setAttribute("id", "averageValue");
-        currentAverageValueLabel.setAttribute("style", `font-size:1.25vh; fill:#000; dominant-baseline:${currentAverageValueLabelPosition}; text-anchor:${currentAverageValueLabelPosition}`);
+        currentAverageValueLabel.setAttribute("style", `font-size:2vh; fill:#000; dominant-baseline:${currentAverageValueLabelPosition}; text-anchor:${currentAverageValueLabelPosition}`);
         currentAverageValueLabel.setAttribute("x", currentAverageValueLabelPositionX);
-        currentAverageValueLabel.setAttribute("y", "10");
+        currentAverageValueLabel.setAttribute("y", "6");
         currentAverageValueLabel.innerHTML = trend.currentAverageValue + `${trend.unit} (Current Avg)`;
 
         const averageValueLabelPositionX = chartOverallWidth * (((trend.averageValue - lowestValue) * pixelRatio) / chartOverallWidth);
@@ -447,7 +447,7 @@ class Charting extends Services {
 
         const averageValueLabel = document.createElementNS("http://www.w3.org/2000/svg", "text");
         averageValueLabel.setAttribute("id", "averageValue");
-        averageValueLabel.setAttribute("style", `font-size:1.25vh; fill:#888; dominant-baseline:${averageValueLabelPosition}; text-anchor:${averageValueLabelPosition}`);
+        averageValueLabel.setAttribute("style", `font-size:2vh; fill:#0000ff; dominant-baseline:${averageValueLabelPosition}; text-anchor:${averageValueLabelPosition}`);
         averageValueLabel.setAttribute("x", averageValueLabelPositionX);
         averageValueLabel.setAttribute("y", "55");
         averageValueLabel.innerHTML = trend.averageValue + `${trend.unit} (Last ${trend.operationalDuration} Hr Avg)`;

@@ -52,11 +52,18 @@
 
             $data = array();
             // Creates an array data points that are greater than the constraint.
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " NEW SET" . "\n", 3, "/var/www/html/app/php-errors.log");
             foreach ($dataPoints as $dataPoint) {
+
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $dataPoint->getDataValue() . " = " . $dataPoint->getDate() . "\n", 3, "/var/www/html/app/php-errors.log");
+                
+
                 if ($dataPoint->getDataValue() > $constraint) {
                     array_push($data, $dataPoint->getDataValue());
                 }
             }
+
+            
 
             // Number of numbers within the range.
             $count = count($data);

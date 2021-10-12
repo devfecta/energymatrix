@@ -85,7 +85,7 @@ class Dashboard extends Services {
                                     
                                     const bulletChartDiv = document.createElement("div");
                                     bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
-                                    bulletChartDiv.setAttribute("class", "col-md-6 p-1");
+                                    bulletChartDiv.setAttribute("class", "col-md-6 m-2 p-1");
                                     bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + visibleTrend.unit
                                                             + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${durationStartDateTime} - ${durationEndDateTime}</span></p>`;
             
@@ -179,7 +179,7 @@ class Dashboard extends Services {
     }
 
     checkDataPointCount = async (userId, sensorId) => {
-        console.log("check");
+        //console.log("check");
         return await this.getApi("DataPoints", "checkDataPointCount", "userId=" + userId + "&sensorId=" + sensorId)
         .then(response => response)
         .catch(e => console.error(e));
