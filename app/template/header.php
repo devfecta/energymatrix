@@ -24,8 +24,6 @@
 
         <script type="module" src="javascript/api.js"></script>
 
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.min.js"></script>
-
     </head>
     <body style="overflow-x: hidden">
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">

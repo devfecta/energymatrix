@@ -330,7 +330,7 @@ class Charting extends Services {
         bulletChart.setAttribute("id", "bulletSvgChart" + trend.id);
         bulletChart.setAttribute("width", "100%");
         bulletChart.setAttribute("height", "100px");
-        bulletChart.setAttribute("viewBox", `0 0 ${chartOverallWidth} 100`);
+        bulletChart.setAttribute("viewBox", `0 -10 ${chartOverallWidth} 100`);
         bulletChart.setAttribute("version", "1.1");
         bulletChart.setAttribute("preserveAspectRatio", "none");
 
