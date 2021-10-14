@@ -19,7 +19,7 @@ class Charting extends Services {
      */
     getSensorChart = (startDateTime, endDateTime) => {
         // Sets the date picker values.
-        this.getMinMaxDates();
+        const minMaxDates = this.getMinMaxDates();
 
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
@@ -45,45 +45,70 @@ class Charting extends Services {
 
             })
             .then(sensor => {
-                //console.log(sensor);
-                startDateTime = (startDateTime === null) ? "null" : startDateTime + ":00";
-                endDateTime = (endDateTime === null) ? "null" : endDateTime + ":59";
-
                 // console.log(sensor);
+
+                startDateTime = (startDateTime === null) ? minMaxDates.startDate + " " + minMaxDates.startTime : startDateTime + ":00";
+                endDateTime = (endDateTime === null) ? minMaxDates.endDate + " " + minMaxDates.endTime : endDateTime + ":59";
+                //startDateTime = minMaxDates.startDate + " " + minMaxDates.startTime;
+                //endDateTime = minMaxDates.endDate + " " + minMaxDates.endTime;
+
+                //console.log("startDateTime", startDateTime, "endDateTime", endDateTime);
                 
                 return this.getApi("DataPoints", "getSensorDataPoints", "userId=" + userId + "&sensorId=" + urlParams.get("sensorId") + "&startDateTime=" + startDateTime + "&endDateTime=" + endDateTime)
                 .then(dataPoints => {
 
-                    // console.log(dataPoints);
+                    //console.log(sensor);
 
-                    sensor.dataTypes.forEach(dataType => {
+                    if (sensor.dataTypes.length) {
+
+                        sensor.dataTypes.forEach(dataType => {
                         
-                        let chart = null;
-
-                        let points = dataPoints.filter(function(dataPoint) {
-
-                            if (dataType.data_type == "mA") {
-                                // Need to change the labeling on the chart
+                            let chart = null;
+    
+                            let points = dataPoints.filter(function(dataPoint) {
+    
+                                //console.log(dataPoint);
+    
+                                if (dataType.data_type == "mA") {
+                                    // Need to change the labeling on the chart
+                                }
+                                else {
+                                    
+                                }
+                                return dataPoint.data_type == dataType.data_type;
+                                
+                            });
+                            // console.log(points);
+                            // Check for data points.
+                            if (points.length) {
+                                // Create charts here
+                                let chartId = sensor.id + "-" + dataType.data_type.replace(" ", "_");
+                                chart = this.createChart(chartId);
+                                // Title the Chart and Label the Chart's Axes
+                                chart = this.chartData(chart, sensor.sensor_name + " Data", dataType.data_type);
+    
+                                this.plotDataPoints(chart, points);
+    
+                                this.buildChart(chart);
                             }
                             else {
-                                
+                                const chartsDiv = document.querySelector("#charts");
+                                chartsDiv.classList.add("alert");
+                                chartsDiv.classList.add("alert-warning");
+                                //chartsDiv.setAttribute("class", "alert alert-warning");
+                                chartsDiv.innerHTML = `No Data Points Found`;
                             }
-                            return dataPoint.data_type == dataType.data_type;
-                            
-                            
+    
                         });
-                        // Create charts here
-                        //console.log(points);
-                        let chartId = sensor.id + "-" + dataType.data_type.replace(" ", "_");
-                        chart = this.createChart(chartId);
-                        // Title the Chart and Label the Chart's Axes
-                        chart = this.chartData(chart, sensor.sensor_name + " Data", dataType.data_type);
                         
-                        this.plotDataPoints(chart, points);
-                        
-                        this.buildChart(chart);
-
-                    });
+                    }
+                    else {
+                        const chartsDiv = document.querySelector("#charts");
+                        chartsDiv.classList.add("alert");
+                        chartsDiv.classList.add("alert-warning");
+                        //chartsDiv.setAttribute("class", "alert alert-warning");
+                        chartsDiv.innerHTML = `No Data Points Found`;
+                    }
                     
                 })
                 .catch(error => console.log(error));
@@ -106,6 +131,10 @@ class Charting extends Services {
         (document.getElementById(chartId)) ? document.getElementById(chartId).remove() : '';
 
         const charts = document.querySelector('#charts');
+        charts.classList.remove("alert");
+        charts.classList.remove("alert-warning");
+        charts.innerHTML = "";
+        
         const chart = document.createElement('canvas');
         chart.setAttribute("class", "");
 
@@ -257,6 +286,13 @@ class Charting extends Services {
     */
     getMinMaxDates = () => {
 
+        var minMaxDates = {
+            startDate : ""
+            , startTime : ""
+            , endDate : ""
+            , endTime : ""
+        };
+
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
 
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
@@ -273,26 +309,31 @@ class Charting extends Services {
                 
                 const endDate = document.querySelector("#endDate");
                 const endTime = document.querySelector("#endTime");
-                
-                let minimumDate = new Date(data.minimum);
+                // Defaults to current date and time.
+                let minimumDate = (data.minimum) ? new Date(data.minimum) : new Date();
                 startDate.value = minimumDate.toLocaleDateString("fr-CA");
+                minMaxDates.startDate = startDate.value;
 
                 minimumDate.setFullYear(minimumDate.getFullYear() - 5);
                 startDate.min = minimumDate.toLocaleDateString("fr-CA");
                 startTime.value = ("0" + minimumDate.getHours()).slice(-2) + ":" + ("0" + minimumDate.getMinutes()).slice(-2);
-
-                let maximumDate = new Date(data.maximum);
+                minMaxDates.startTime = startTime.value;
+                // Defaults to current date and time.
+                let maximumDate = (data.maximum) ? new Date(data.maximum) : new Date();
                 endDate.value = maximumDate.toLocaleDateString("fr-CA");
+                minMaxDates.endDate = endDate.value;
 
                 maximumDate.setFullYear(maximumDate.getFullYear() - 5);
                 endDate.min = maximumDate.toLocaleDateString("fr-CA");
                 endTime.value = ("0" + maximumDate.getHours()).slice(-2) + ":" + ("0" + maximumDate.getMinutes()).slice(-2);
-            
+                minMaxDates.endTime = endTime.value;
+
             })
             .catch(error => console.log(error));
 
         }
 
+        return minMaxDates;
     }
 
     getRandomColor = () => {

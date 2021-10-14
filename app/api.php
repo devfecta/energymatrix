@@ -70,13 +70,28 @@ switch ($_SERVER['REQUEST_METHOD']) {
                                 $_SESSION['type'] = $result->type;
 
                                 if ($result->type > 0) {
-                                    setcookie("adminId", $result->id, time()+3600);
+                                    setcookie("adminId", $result->id, [
+                                        'expires' => time() + 3600,
+                                        'path' => '/app',
+                                        'secure' => true,
+                                        'samesite' => 'Lax',
+                                    ]);
                                 }
                                 else {
-                                    setcookie("userId", $result->id, time()+3600);
+                                    setcookie("userId", $result->id, [
+                                        'expires' => time() + 3600,
+                                        'path' => '/app',
+                                        'secure' => true,
+                                        'samesite' => 'Lax',
+                                    ]);
                                 }
 
-                                setcookie("userType", $result->type, time()+3600);
+                                setcookie("userType", $result->type, [
+                                    'expires' => time() + 3600,
+                                    'path' => '/app',
+                                    'secure' => true,
+                                    'samesite' => 'Lax',
+                                ]);
 
                                 header("Location: index.php");
 

@@ -28,14 +28,13 @@ class Sidebar extends Services {
         sidebarMenu.append(menuButton);
 
         
-        
         if (userType > 0) {
             this.getAdminSidebar(sidebarMenu);
         }
         else {
             this.getUserSidebar(sidebarMenu, userType);
         }
-
+        
         // Logout Button
         menuButton = document.createElement("div");
         menuButton.setAttribute("class", "accordion-item");
@@ -377,12 +376,13 @@ class Sidebar extends Services {
                     , "buttonValue" : companyId
                     , "buttonClick" : function (event) {
                         //console.log(event.target);
-                        document.cookie = "userId=" + event.target.value;
+                        document.cookie = "userId=" + event.target.value + ";path=/app;SameSite=Lax";
                         window.location.href = "sensor.php?sensorId=" + sensor.id + "&userId=" + companyId;
                     }
                 };
                 // Hidden if not an admin
-                (userType > 0) ? sensorSubMenu.append(this.getMenuItem(subMenuItem)) : null;
+                //(userType > 0) ? sensorSubMenu.append(this.getMenuItem(subMenuItem)) : null;
+                sensorSubMenu.append(this.getMenuItem(subMenuItem));
                 // Creates the Edit Sensor button and adds it to the specific sensor sub menu.
                 subMenuItem = {
                     "parentId" : "sensor" + sensor.id
@@ -459,7 +459,7 @@ class Sidebar extends Services {
                 menuLink.setAttribute("style", "text-align: left");
                 menuLink.setAttribute("value", companyId)
                 menuLink.addEventListener("click", (e) => {
-                    document.cookie = "userId=" + e.target.value;
+                    document.cookie = "userId=" + e.target.value + ";path=/app;SameSite=Lax";
                     window.location.href = "trends.php?trendId=" + sensor.sensorId
                 }, false);
                 menuLink.innerHTML = sensor.sensor_name;
@@ -508,8 +508,8 @@ class Sidebar extends Services {
             let menuItem = {
                 "parentId" : "trends" + userId
                 , "subMenuId" : "trendsSub" + userId
-                , "buttonTitle" : "View Trends"
-                , "buttonText" : '<span class="fas fa-bars pe-1"></span> View Trends'
+                , "buttonTitle" : "View All Trends"
+                , "buttonText" : '<span class="fas fa-bars pe-1"></span> View All Trends'
                 , "buttonClasses" : ["d-flex"]
                 , "buttonValue" : ""
                 , "buttonClick" : function (event) {
@@ -519,6 +519,8 @@ class Sidebar extends Services {
             };
 
             sidebarMenu.append(this.getMenuItem(menuItem));
+            
+            sidebarMenu.append(this.getSensorMenu(userId, userType));
         }
         else {
             alert("logging out");

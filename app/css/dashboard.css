@@ -120,12 +120,12 @@ th {
 
 .showHelpMenu {
   right: 0px !important;
-  transition: all 1s;
+  transition: all 300ms;
 }
 
 .hideHelpMenu {
   right: -250px !important;
-  transition: all 1s;
+  transition: all 300ms;
 }
 
 #dashboardContent {
@@ -136,10 +136,10 @@ th {
 .contractDashboard {
   width: calc(90vw) !important;
   height: calc(90vh) !important;
-  transition: all 2s;
+  transition: all 300s;
 }
 .expandDashboard {
   width: calc(90vw) !important;
   height: calc(90vh) !important;
-  transition: all 2s;
+  transition: all 300s;
 }
