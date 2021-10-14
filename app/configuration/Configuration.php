@@ -1,4 +1,9 @@
 <?php
+/**
+ * Company: DevFecta, LLC
+ * Author: Kevin Kelm
+ * Project Start Date: 2020-04-07
+ */
 require("config.php");
 
 class Configuration extends PDO {

@@ -1,4 +1,9 @@
 <?php
+/**
+ * Company: DevFecta, LLC
+ * Author: Kevin Kelm
+ * Project Start Date: 2020-04-07
+ */
     // Needed to make the connection to the database.
     require_once('Configuration.php');
     

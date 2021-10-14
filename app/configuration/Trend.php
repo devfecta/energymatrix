@@ -1,5 +1,10 @@
 <?php
 /**
+ * Company: DevFecta, LLC
+ * Author: Kevin Kelm
+ * Project Start Date: 2020-04-07
+ */
+/**
  * A Trend is created by kinergetics or kinergetics' customer.
  */
     class Trend {

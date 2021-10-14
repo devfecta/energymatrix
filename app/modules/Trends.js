@@ -1,3 +1,8 @@
+/**
+ * Company: DevFecta, LLC
+ * Author: Kevin Kelm
+ * Project Start Date: 2020-04-07
+ */
 import Services from "./Services.js";
 import Sensor from "./Sensor.js";
 import Charting from "./Charting.js";

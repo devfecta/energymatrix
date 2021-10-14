@@ -1,5 +1,9 @@
+/**
+ * Company: DevFecta, LLC
+ * Author: Kevin Kelm
+ * Project Start Date: 2020-04-07
+ */
 import Services from "./Services.js";
-
 
 class Users extends Services {
     constructor() {

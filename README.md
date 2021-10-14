@@ -1,4 +1,18 @@
 # Kinergetics Energy Matrix
+## Developed By DevFecta, LLC
+
+**Phone**: (608) 334-7200
+
+**e-Mail**: devfecta@gmail.com
+
+**Website**: https://devfecta.com/
+
+**LinkedIn**: https://www.linkedin.com/company/devfecta
+
+**GitHub**: https://github.com/devfecta
+
+<img src="https://github.com/devfecta/devfecta.github.io/blob/master/public/images/Devfecta-Logo.png" alt="DevFecta" width="auto" height="50px" />
+
 ## Environment Configuration
 *The configuration is limited to what Hostway currently allows.*
 - PHP 7.2.24
