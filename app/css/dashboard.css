@@ -13,28 +13,14 @@ body {
  * Sidebar
  */
 
-.sidebar {
-  position: fixed;
-  top: 0;
-  /* rtl:raw:
-  right: 0;
-  */
-  bottom: 0;
-  /* rtl:remove */
-  left: 0;
-  z-index: 100; /* Behind the navbar */
-  padding: 48px 0 0; /* Height of navbar */
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-}
+.sidebar {}
 
 th {
 	font-size: .7rem;
 }
 
 @media (max-width: 767.98px) {
-  .sidebar {
-    top: 3rem;
-  }
+  
 }
 
 .sidebar-sticky {
@@ -45,7 +31,7 @@ th {
   overflow-x: hidden;
   overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
 }
-
+/*
 .sidebar .nav-link {
   font-weight: 500;
   color: #333;
@@ -64,7 +50,7 @@ th {
 .sidebar .nav-link.active .feather {
   color: inherit;
 }
-
+*/
 .sidebar-heading {
   font-size: .75rem;
   text-transform: uppercase;
@@ -102,44 +88,4 @@ th {
 .form-control-dark:focus {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
-}
-
-
-#helpMenu {
-  position: absolute;
-  background-color: rgb(255, 225, 125);
-  border: #ccc 1px solid;
-  right: -250px;
-  width: 300px;
-  z-index: 1;
-}
-
-#openHelpMenu, #closeHelpMenu {
-  cursor: pointer;
-}
-
-.showHelpMenu {
-  right: 0px !important;
-  transition: all 300ms;
-}
-
-.hideHelpMenu {
-  right: -250px !important;
-  transition: all 300ms;
-}
-
-#dashboardContent {
-  width: 90vw;
-  height: 90hw;
-}
-
-.contractDashboard {
-  width: calc(90vw) !important;
-  height: calc(90vh) !important;
-  transition: all 300s;
-}
-.expandDashboard {
-  width: calc(90vw) !important;
-  height: calc(90vh) !important;
-  transition: all 300s;
 }

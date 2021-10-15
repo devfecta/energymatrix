@@ -109,9 +109,9 @@ class Dashboard extends Services {
                         });
 
 
-                        let i = 0; // REMOVE in Production
+                        //let i = 0; // REMOVE in Production
                         let trendsInterval = setInterval(() => {
-                            i++; // REMOVE in Production
+                            //i++; // REMOVE in Production
                             
                             // Check to see if there was a change to the sensors data point count.
                             this.checkDataPointCount(visibleTrend.userId, visibleTrend.sensorId)
@@ -165,9 +165,9 @@ class Dashboard extends Services {
                     
 
                             // REMOVE in Production
-                            if (i == 10) {
-                                clearInterval(trendsInterval);
-                            }
+                            //if (i == 10) {
+                            //    clearInterval(trendsInterval);
+                            //}
                             
                             // Checks every 3 seconds
                         }, 3000);

@@ -18,27 +18,6 @@ const init = () => {
 
 window.onload = init;
 
-const helpMenu = document.querySelector("#helpMenu");
-const dashboardContent = document.querySelector("#dashboardContent");
-
-
-const openHelpMenu = document.querySelector("#openHelpMenu");
-const closeHelpMenu = document.querySelector("#closeHelpMenu");
-
-openHelpMenu.addEventListener("click", event => {
-    helpMenu.classList.add("showHelpMenu");
-    dashboardContent.classList.add("contractDashboard");
-    helpMenu.classList.remove("hideHelpMenu");
-    dashboardContent.classList.remove("expandDashboard");
-});
-
-closeHelpMenu.addEventListener("click", event => {
-    helpMenu.classList.add("hideHelpMenu");
-    dashboardContent.classList.add("expandDashboard");
-    helpMenu.classList.remove("showHelpMenu");
-    dashboardContent.classList.remove("contractDashboard");
-});
-
 /** REMOVE IF NOT NEEDED
 const getFormFields = () => {
     // For creating the report

@@ -19,7 +19,7 @@
 </style>
 
 <!-- User Section -->
-<section id="userSectionSearch" class="row">
+<section id="userSectionSearch">
 
     <form id="searchForm" class="form-inline d-flex justify-content-center w-100 p-2" method="post">
         
@@ -59,8 +59,8 @@
 
 
 </section>
-<section id="userSectionResults" class="container-fluid row">
-    <div id="charts" class="d-flex justify-content-around row"></div>
+<section id="userSectionResults" class="container-fluid">
+    <div id="charts" class="d-flex justify-content-around"></div>
 </section>
 
 

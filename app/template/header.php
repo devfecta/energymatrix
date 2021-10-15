@@ -6,6 +6,7 @@
         header("Location: login.php");
     }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -13,7 +14,6 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Energy Matrix</title>
 
-        <!-- CSS only -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" />
 
         <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" />
@@ -22,10 +22,10 @@
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.js"></script>
 
-        <script type="module" src="javascript/api.js"></script>
+        <script type="module" src="./javascript/api.js"></script>
 
     </head>
-    <body style="overflow-x: hidden">
+    <body>
         <header class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0 shadow">
             <a class="navbar-brand col-md-3 col-lg-3 me-0 px-3" href="#">
                 <?php echo $_SESSION['company']; ?>
@@ -43,6 +43,5 @@
             include("./template/sidebar.php");
         ?>
 
-
-            <main class="col-md-9 d-flex ms-sm-auto col-lg-9">
-                <section id="dashboardContent" class="py-3"> 
+        <main class="container-fluid d-flex justify-content-end">
+            <section id="dashboardContent" class="col-md-11 col-lg-11 py-3">

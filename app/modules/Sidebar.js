@@ -11,8 +11,10 @@ class Sidebar extends Services {
     constructor(sidebarMenu, userType) {
         // Brings in the extended Service class.
         super();
+        
         // Dashboard Button
         let menuButton = document.createElement("div");
+        
         menuButton.setAttribute("class", "accordion-item");
         menuButton.setAttribute("id","dashboardButton");
 
@@ -26,7 +28,7 @@ class Sidebar extends Services {
 
         menuButton.append(dashboardButton);
         sidebarMenu.append(menuButton);
-
+        
         
         if (userType > 0) {
             this.getAdminSidebar(sidebarMenu);
@@ -34,7 +36,7 @@ class Sidebar extends Services {
         else {
             this.getUserSidebar(sidebarMenu, userType);
         }
-        
+        /*
         // Logout Button
         menuButton = document.createElement("div");
         menuButton.setAttribute("class", "accordion-item");
@@ -50,6 +52,7 @@ class Sidebar extends Services {
 
         menuButton.append(logoutButton);
         sidebarMenu.append(menuButton);
+        */
     }
     /**
      * Creates the Add Company button.

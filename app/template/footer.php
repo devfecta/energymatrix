@@ -1,22 +1,5 @@
-				</section>
-
-				<div id="helpMenu" class="row">
-					<div id="openHelpMenu" class="col-2 vh-100">
-						<div class="m-0" style="position: relative; top: 35px; width: 100px; left: -40px; transform: rotate(-90deg);">Help Menu</div>
-					</div>
-
-					<div id="" class="col-10 p-0">
-						<div id="closeHelpMenu" class="col m-0 bg-dark text-light" style="padding: 1em 2em; text-align: right;">Close X</div>
-
-						<div id="helpContent" class="row m-0" style="background-color: #fff;">Content</div>
-					</div>
-					<!--
-					<div id="closeHelpMenu" class="row m-0 offset" style="padding-right: 1em; text-align: right; width: 270px">Close X</div>
-					
-					<div id="helpContent" class="row m-0 p-0" style="background-color: #fff; padding-right: 1em; width: 270px">Content</div>
-					-->
-				</div>
-			</main>
+			</section>
+        </main>
 
 
 		<footer></footer>
