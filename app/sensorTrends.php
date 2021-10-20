@@ -6,11 +6,11 @@
 
 <script type="module" src="./javascript/sensorTrends.js?v=<?php echo rand(1, 10); ?>"></script>
 
-<section id="userSectionResults" class="container-fluid row">
-    <div id="charts" class="d-flex justify-content-around row"></div>
+<section id="userSectionResults" class="container-fluid d-flex justify-content-around">
+    <div id="charts" class="d-flex justify-content-around"></div>
 </section>
 
-<section id="trends" class="container-fluid row">
+<section id="trends" class="container-fluid">
 
 <div class="row justify-content-center align-items-center">
     <div class="col-md-5 mx-2 d-flex">

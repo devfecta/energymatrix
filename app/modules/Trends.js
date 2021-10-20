@@ -7,6 +7,9 @@ import Services from "./Services.js";
 import Sensor from "./Sensor.js";
 import Charting from "./Charting.js";
 
+import ChartBullet from "./ChartBullet.js";
+import ChartLineGraph from "./ChartLineGraph.js";
+
 class Trends extends Services {
     constructor() {
         super();
@@ -339,14 +342,22 @@ class Trends extends Services {
             // Create charts here
             //console.log(dataPoints.points[0]);
             if (dataPoints.points.length) {
-                let chartId = dataPoints.sensorId + "-" + dataPoints.points[0].data_type.replace(" ", "_");
-                chart = charting.createChart(chartId);
-                // Title the Chart and Label the Chart's Axes
-                chart = charting.chartData(chart, dataPoints.sensor_name + " Data", dataPoints.points[0].data_type);
-                
-                charting.plotDataPoints(chart, dataPoints.points);
-                
-                charting.buildChart(chart);
+                const charts = document.querySelector('#charts');
+                charts.setAttribute("class", "col-md-6");
+                charts.classList.remove("alert");
+                charts.classList.remove("alert-warning");
+                charts.innerHTML = "";
+
+                const chartLineGraph = new ChartLineGraph();
+                let chartCanvas = HTMLElement;
+                let chart = {
+                    "id" : dataPoints.sensorId + "-" + dataPoints.points[0].data_type.replace(" ", "_")
+                    , "sensorName" : dataPoints.sensor_name
+                    , "verticalLabel" : dataPoints.points[0].data_type
+                }
+                chartCanvas = chartLineGraph.createChart(chart, dataPoints.points);
+
+                charts.append(chartCanvas.canvas);
             }
             else {
                 alert("No Data Points Found\rTry adjusting the date range.");

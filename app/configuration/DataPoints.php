@@ -236,7 +236,13 @@ class DataPoints extends DataPoint {
     public function getSensorDataPoints($userId, $sensorId, $startDateTime, $endDateTime) {
 
         $dataPoints = array();
-
+        /*
+        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') 
+        . " userId=" . $userId
+        . " sensorId=" . $sensorId
+        . " startDateTime=" . $startDateTime
+        . " endDateTime=" . $endDateTime . "\n", 3, "/var/www/html/app/php-errors.log");
+        */
         try {
             
             $connection = Configuration::openConnection();
@@ -280,10 +286,14 @@ class DataPoints extends DataPoint {
 
             $resultsTemp = $statement->fetchAll(PDO::FETCH_ASSOC);
 
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($resultsTemp, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+
             $columns = array_column($resultsTemp, 'date_time');
             array_multisort($columns, SORT_ASC, $resultsTemp);
 
             $results = array();
+
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Before: " . sizeof($resultsTemp) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             if (sizeof($resultsTemp) > 1) {
 
@@ -299,8 +309,16 @@ class DataPoints extends DataPoint {
                         $previousDate = new DateTime($previousDate);
 
                         if ($currentDate->diff($previousDate)->d > 0) {
+
+                            if (sizeof($results) > 1) {
+                                $resultsLastItem = $results[sizeof($results) - 1];
+                            }
                             unset($results);
                             $results = array();
+                            if (sizeof($results) == 0) {
+                                array_push($results, $resultsLastItem);
+                            }
+                            
                             array_push($results, $result);
                         }
                         else {

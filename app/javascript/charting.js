@@ -6,4 +6,4 @@ const charting = new Charting();
 
 charting.getMinMaxDates();
 
-charting.getSensorChart(null, null);
+charting.getSensorChartByDate(null, null);

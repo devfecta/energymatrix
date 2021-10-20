@@ -13,7 +13,9 @@ body {
  * Sidebar
  */
 
-.sidebar {}
+.sidebar {
+  z-index: 10;
+}
 
 th {
 	font-size: .7rem;

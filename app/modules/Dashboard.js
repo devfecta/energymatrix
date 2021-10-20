@@ -87,16 +87,39 @@ class Dashboard extends Services {
                                     trend.averageValue = response.average;
                                     
                                     trend.unit = visibleTrend.unit;
-                                    
+                                    trend.trendName = visibleTrend.trendName;
+                                    trend.durationStartDateTime = durationStartDateTime;
+                                    trend.durationEndDateTime = durationEndDateTime;
+
                                     const bulletChartDiv = document.createElement("div");
                                     bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
                                     bulletChartDiv.setAttribute("class", "col-md-6 m-2 p-1");
-                                    bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + visibleTrend.unit
+                                    bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + trend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + trend.unit
+                                                            + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${trend.durationStartDateTime} - ${trend.durationEndDateTime}</span></p>`;
+                                    // Need to append to dashboard to get the clientWidth.                        
+                                    dashboard.append(bulletChartDiv);
+
+                                    let bulletChart = charting.getBulletChart(bulletChartDiv, trend);
+                                    dashboard.append(bulletChart);
+                                    /*
+                                    const bulletChartDiv = document.createElement("div");
+                                    bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
+                                    bulletChartDiv.setAttribute("class", "col-md-6 m-2 p-1");
+                                    bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + trend.unit
                                                             + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${durationStartDateTime} - ${durationEndDateTime}</span></p>`;
             
                                     dashboard.append(bulletChartDiv);
+
+                                    console.log(trend);
             
                                     charting.getBulletChart(bulletChartDiv, trend);
+                                    */
+                                    //console.log(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+                                                
+                                    const sesnorChart = charting.getSensorChart(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+                                    sesnorChart.setAttribute("class", "col-md-5");
+                                    dashboard.append(sesnorChart);
+                                                
 
                                 }
                                 else {
@@ -108,10 +131,10 @@ class Dashboard extends Services {
 
                         });
 
-
-                        //let i = 0; // REMOVE in Production
+                        // Redraw
+                        let i = 0; // REMOVE in Production
                         let trendsInterval = setInterval(() => {
-                            //i++; // REMOVE in Production
+                            i++; console.log("check");// REMOVE in Production
                             
                             // Check to see if there was a change to the sensors data point count.
                             this.checkDataPointCount(visibleTrend.userId, visibleTrend.sensorId)
@@ -148,6 +171,7 @@ class Dashboard extends Services {
                         
                                                 charting.getBulletChart(bulletChartDiv, trend);
 
+                                                
                                             }
                                             else { alert("invalid date"); }
                                             
@@ -165,9 +189,9 @@ class Dashboard extends Services {
                     
 
                             // REMOVE in Production
-                            //if (i == 10) {
-                            //    clearInterval(trendsInterval);
-                            //}
+                            if (i == 10) {
+                                clearInterval(trendsInterval);
+                            }
                             
                             // Checks every 3 seconds
                         }, 3000);

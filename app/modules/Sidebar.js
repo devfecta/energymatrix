@@ -24,7 +24,7 @@ class Sidebar extends Services {
         dashboardButton.addEventListener("click", (event) => {
             window.location.href = "index.php"
         }, false);
-        dashboardButton.innerHTML = '<span class="fas fa-home"></span> Dashboard';
+        dashboardButton.innerHTML = '<span class="fas fa-tachometer-alt"></span> Dashboard';
 
         menuButton.append(dashboardButton);
         sidebarMenu.append(menuButton);

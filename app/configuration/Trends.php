@@ -126,14 +126,18 @@
                 $currentAverage = 0;
                 $operationalEndTime = strtotime($trend->operationalEndTime);
                 $operationalStartTime = strtotime($trend->operationalStartTime);
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " operationalEndTime=" . $trend->operationalEndTime . " operationalStartTime=" . $trend->operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
 
-                //$trendSearchData = array("trendId" => $trend->trendId, "startDate" => $trend->operationalEndTime, "endDate" => $trend->operationalStartTime);
-                $trendSearchData = array("trendId" => $trend->trendId, "startDate" => "2000-01-01 00:00:00", "endDate" => date("Y-m-d h:m:s"));
+                $trendSearchData = array("trendId" => $trend->trendId, "startDate" => $trend->operationalEndTime, "endDate" => $trend->operationalStartTime);
+                //$trendSearchData = array("trendId" => $trend->trendId, "startDate" => "2000-01-01 00:00:00", "endDate" => date("Y-m-d h:m:s"));
 
                 $data = $this->getConfiguredTrend($trendSearchData);
 
                 $allDataPoints = array();
                 $durationDataPoints = array();
+
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " data=" . json_encode($data["points"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                
 
                 foreach ($data["points"] as $point) {
                     /*
@@ -165,6 +169,7 @@
                         
                         // Duration Data Points
                         $dataPointDateTime = strtotime($dataPoint->getDate());
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " dataPointDateTime=" . $dataPointDateTime . " operationalEndTime=" . $operationalEndTime . " operationalStartTime=" . $operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
                         if ($dataPointDateTime >= $operationalEndTime && $dataPointDateTime <= $operationalStartTime) {
                             $dataPoint = new DataPoint();
                             $dataPoint->setDataPointId($point["id"]);
@@ -185,7 +190,7 @@
                 $average = (sizeof($durationDataPoints) > 0) ? $this->Formulas->currentAverage($durationDataPoints, 0) : 0;
                 $currentAverage =  (sizeof($allDataPoints) > 0) ? $this->Formulas->currentAverage($allDataPoints, 0) : 0;
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " average=" . $average . " currentAverage=" . $currentAverage . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " average=" . $average . " currentAverage=" . $currentAverage . "\n", 3, "/var/www/html/app/php-errors.log");
                 //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $allDataPoints[count($allDataPoints)-1]->getDataValue() . "\n", 3, "/var/www/html/app/php-errors.log");
                 
             }

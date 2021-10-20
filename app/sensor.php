@@ -59,7 +59,7 @@
 
 
 </section>
-<section id="userSectionResults" class="container-fluid">
+<section id="userSectionResults" class="container-fluid d-flex justify-content-around">
     <div id="charts" class="d-flex justify-content-around"></div>
 </section>
 
