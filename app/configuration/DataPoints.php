@@ -236,6 +236,7 @@ class DataPoints extends DataPoint {
     public function getSensorDataPoints($userId, $sensorId, $startDateTime, $endDateTime) {
 
         $dataPoints = array();
+
         /*
         error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') 
         . " userId=" . $userId
@@ -297,11 +298,12 @@ class DataPoints extends DataPoint {
 
             if (sizeof($resultsTemp) > 1) {
 
-                $previousDate = null;
+                $previousDate = $resultsTemp[0]["date_time"];
 
                 foreach ($resultsTemp as $result) {
 
                     $currentDate = $result["date_time"];
+                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " currentDate: " . $currentDate . " previousDate: " . $previousDate . "\n", 3, "/var/www/html/app/php-errors.log");
 
                     if ($previousDate) {
                         
@@ -309,16 +311,8 @@ class DataPoints extends DataPoint {
                         $previousDate = new DateTime($previousDate);
 
                         if ($currentDate->diff($previousDate)->d > 0) {
-
-                            if (sizeof($results) > 1) {
-                                $resultsLastItem = $results[sizeof($results) - 1];
-                            }
                             unset($results);
                             $results = array();
-                            if (sizeof($results) == 0) {
-                                array_push($results, $resultsLastItem);
-                            }
-                            
                             array_push($results, $result);
                         }
                         else {
@@ -368,9 +362,12 @@ class DataPoints extends DataPoint {
 
                 $dataPoint->setCustomValue($result['custom_value']);
 
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorId ." Datapoints: " . json_encode((array)$dataPoints, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+
                 array_push($dataPoints, $dataPoint);
             }
 
+            
             //error_log(var_dump($dataPoints), 0);
         }
         catch(PDOException $pdo) {
@@ -382,6 +379,8 @@ class DataPoints extends DataPoint {
         finally {
             $connection = Configuration::closeConnection();
         }
+
+        
 
         return $dataPoints;
 
@@ -398,9 +397,9 @@ class DataPoints extends DataPoint {
             if (isset($sensorId)) {
                 $sensorId = Sensor::getSensor($sensorId)->getSensorId();
 
-                $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`user_id`=:user_id AND `dataPoints`.`sensor_id`=:sensorId ORDER BY `date_time`");
-                $statement->bindParam(":user_id", $userId, PDO::PARAM_INT);
-                $statement->bindParam(":sensor_id", $sensorId, PDO::PARAM_INT);
+                $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`user_id`=:userId AND `dataPoints`.`sensor_id`=:sensorId ORDER BY `date_time`");
+                $statement->bindParam(":userId", $userId, PDO::PARAM_INT);
+                $statement->bindParam(":sensorId", $sensorId, PDO::PARAM_INT);
             }
             else {
                 $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`user_id`=:user_id ORDER BY `date_time`");
@@ -409,6 +408,8 @@ class DataPoints extends DataPoint {
             
             
             $statement->execute();
+
+            
 
             $results = $statement->fetchAll(PDO::FETCH_ASSOC);
 
@@ -566,9 +567,12 @@ class DataPoints extends DataPoint {
 
         $changed = false;
         // Array of Raw Data Points
-        $dataPointsArray = $this->getSensorDataPoints($sensorInfo['userId'], $sensorInfo['sensorId'], "null", "null");
+        $dataPointsArray = $this->getUserSensorDataPoints($sensorInfo['userId'], $sensorInfo['sensorId']);
+
+        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . sizeof($dataPointsArray) . "=" . sizeof($_SESSION["sensorDataPoints"]) . "\n", 3, "/var/www/html/app/php-errors.log");
 
         if (sizeof($dataPointsArray) != sizeof($_SESSION["sensorDataPoints"])) {
+            unset($_SESSION["sensorDataPoints"]);
             $_SESSION["sensorDataPoints"] = $dataPointsArray;
             $changed = true;
         }

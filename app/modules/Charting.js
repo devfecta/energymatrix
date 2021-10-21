@@ -24,6 +24,7 @@ class Charting extends Services {
         //const minMaxDates = this.getMinMaxDates();
 
         let chartDiv = document.createElement("div");
+        chartDiv.setAttribute("id", "lineChart" + sensorId);
         chartDiv.setAttribute("class", "col");
 
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
@@ -60,6 +61,7 @@ class Charting extends Services {
                 .then(dataPoints => {
 
                     //console.log(sensor);
+                    console.log(dataPoints);
 
                     if (sensor.dataTypes.length) {
 

@@ -82,7 +82,7 @@ final class DataPointsTest extends TestCase
     public function testGetSensorDataPoints()
     {
         $dataPoints = new DataPoints();
-        $this->assertIsArray($dataPoints->getSensorDataPoints(2, 1, "2021-07-01", "null"));
+        $this->assertIsArray($dataPoints->getSensorDataPoints(3, 6, "2021-07-01 08:00:00", "2021-07-01 16:00:00"));
 
         //var_dump($dataPoints->getSensorDataPoints(2, 1, "null", "null"));
 

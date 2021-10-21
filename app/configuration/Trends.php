@@ -190,7 +190,7 @@
                 $average = (sizeof($durationDataPoints) > 0) ? $this->Formulas->currentAverage($durationDataPoints, 0) : 0;
                 $currentAverage =  (sizeof($allDataPoints) > 0) ? $this->Formulas->currentAverage($allDataPoints, 0) : 0;
 
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " average=" . $average . " currentAverage=" . $currentAverage . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " average=" . $average . " currentAverage=" . $currentAverage . "\n", 3, "/var/www/html/app/php-errors.log");
                 //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $allDataPoints[count($allDataPoints)-1]->getDataValue() . "\n", 3, "/var/www/html/app/php-errors.log");
                 
             }

@@ -13,15 +13,18 @@ class ChartLineGraph extends Services {
 
     createChart = (chart, points) => {
         // Remove the old chart
-        (document.getElementById(chart.id)) ? document.getElementById(chart.id).remove() : '';
+        //(document.getElementById(chart.id)) ? document.getElementById(chart.id).remove() : '';
+        (document.getElementById("lineChartCanvas" + chart.id)) ? document.getElementById("lineChartCanvas" + chart.id).remove() : '';
 
         //const chart = document.createElement("div");
         //chart.setAttribute("class", "col-md-4");
         
         let chartCanvas = document.createElement('canvas');
+        
         chartCanvas.setAttribute("class", "");
 
         if (points.length) {
+            //chartCanvas.setAttribute("id", "lineChartCanvas" + chart.id);
             chartCanvas.id = chart.id;
 
             chartCanvas = this.chartData(chartCanvas, chart.sensorName + " Data", chart.verticalLabel);

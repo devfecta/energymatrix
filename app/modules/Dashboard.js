@@ -98,7 +98,7 @@ class Dashboard extends Services {
                                                             + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${trend.durationStartDateTime} - ${trend.durationEndDateTime}</span></p>`;
                                     // Need to append to dashboard to get the clientWidth.                        
                                     dashboard.append(bulletChartDiv);
-
+                                    // Creates Bullet Chart
                                     let bulletChart = charting.getBulletChart(bulletChartDiv, trend);
                                     dashboard.append(bulletChart);
                                     /*
@@ -115,7 +115,7 @@ class Dashboard extends Services {
                                     charting.getBulletChart(bulletChartDiv, trend);
                                     */
                                     //console.log(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
-                                                
+                                    // Creates Line Chart
                                     const sesnorChart = charting.getSensorChart(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
                                     sesnorChart.setAttribute("class", "col-md-5");
                                     dashboard.append(sesnorChart);
@@ -134,12 +134,15 @@ class Dashboard extends Services {
                         // Redraw
                         let i = 0; // REMOVE in Production
                         let trendsInterval = setInterval(() => {
-                            i++; console.log("check");// REMOVE in Production
+                            i++; console.log("check", visibleUserTrends);// REMOVE in Production
+
+                            //document.querySelector("#bulletChart" + trend.id)
                             
                             // Check to see if there was a change to the sensors data point count.
                             this.checkDataPointCount(visibleTrend.userId, visibleTrend.sensorId)
                             .then(result => {
                                 // There's a change in the data point count, re-draw bullet charts.
+                                console.log("result", result);
                                 if (result) {
 
                                     //console.log("Change");
@@ -168,8 +171,14 @@ class Dashboard extends Services {
                                                 trend.averageValue = response.average;
                                                 trend.unit = visibleTrend.unit;
                                                 const bulletChartDiv = document.querySelector("#bulletChart" + trend.id);
-                        
+                                                // Recreates Bullet Chart
                                                 charting.getBulletChart(bulletChartDiv, trend);
+
+                                                // Recreates Line Chart
+                                                console.log(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+                                                const sesnorChart = charting.getSensorChart(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+                                                sesnorChart.setAttribute("class", "col-md-5");
+                                                dashboard.append(sesnorChart);
 
                                                 
                                             }
