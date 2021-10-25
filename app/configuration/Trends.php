@@ -185,14 +185,23 @@
                     }
                 }
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " durationDataPoints=" . json_encode(json_decode($durationDataPoints), JSON_PRETTY_PRINT) . " allDataPoints=" . json_encode(json_decode($allDataPoints), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                /*
+                foreach($durationDataPoints as $dataPoint) {
+                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " durationDataPoints=" . $dataPoint->getDataValue() . "\n", 3, "/var/www/html/app/php-errors.log");
+                
+                }
+                foreach($allDataPoints as $dataPoint) {
+                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " allDataPoints=" . $dataPoint->getDataValue() . "\n", 3, "/var/www/html/app/php-errors.log");
+                
+                }
+                */
+                
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " durationDataPoints=" . json_encode($durationDataPoints, JSON_PRETTY_PRINT) . " allDataPoints=" . json_encode($allDataPoints, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                 
                 $average = (sizeof($durationDataPoints) > 0) ? $this->Formulas->currentAverage($durationDataPoints, 0) : 0;
                 $currentAverage =  (sizeof($allDataPoints) > 0) ? $this->Formulas->currentAverage($allDataPoints, 0) : 0;
 
                 //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " average=" . $average . " currentAverage=" . $currentAverage . "\n", 3, "/var/www/html/app/php-errors.log");
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $allDataPoints[count($allDataPoints)-1]->getDataValue() . "\n", 3, "/var/www/html/app/php-errors.log");
-                
             }
             catch (Exception $e) {
                 error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
@@ -486,8 +495,11 @@
                     , "user_id" => $sensor->getUserId()
                     , "points" => array()
                 );
-
-                
+                /*
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
+                    "rawDataPoints sizeof: " . sizeof($rawDataPoints)
+                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                */
                 $tempTrendSearchData['startDate'] = $trendSearchData['startDate'];
                 $tempTrendSearchData['endDate'] = $trendSearchData['endDate'];
 

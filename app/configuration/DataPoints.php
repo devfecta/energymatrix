@@ -286,7 +286,10 @@ class DataPoints extends DataPoint {
             $statement->execute();
 
             $resultsTemp = $statement->fetchAll(PDO::FETCH_ASSOC);
-
+            
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') 
+            //. " resultsTemp sizeof " . sizeof($resultsTemp) . "\n", 3, "/var/www/html/app/php-errors.log");
+            
             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($resultsTemp, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             $columns = array_column($resultsTemp, 'date_time');
@@ -305,11 +308,11 @@ class DataPoints extends DataPoint {
                     $currentDate = $result["date_time"];
                     //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " currentDate: " . $currentDate . " previousDate: " . $previousDate . "\n", 3, "/var/www/html/app/php-errors.log");
 
-                    if ($previousDate) {
+                    if ($currentDate >= $previousDate) {
                         
                         $currentDate = new DateTime($currentDate);
                         $previousDate = new DateTime($previousDate);
-
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . $currentDate->diff($previousDate)->d . "\n", 3, "/var/www/html/app/php-errors.log");
                         if ($currentDate->diff($previousDate)->d > 0) {
                             unset($results);
                             $results = array();
@@ -327,7 +330,8 @@ class DataPoints extends DataPoint {
 
             }
 
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " After: " . sizeof($results) . "\n", 3, "/var/www/html/app/php-errors.log");
+
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " results: " . sizeof($results) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             foreach ($results as $result) {
 

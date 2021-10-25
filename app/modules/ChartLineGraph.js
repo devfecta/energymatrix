@@ -14,18 +14,18 @@ class ChartLineGraph extends Services {
     createChart = (chart, points) => {
         // Remove the old chart
         //(document.getElementById(chart.id)) ? document.getElementById(chart.id).remove() : '';
-        (document.getElementById("lineChartCanvas" + chart.id)) ? document.getElementById("lineChartCanvas" + chart.id).remove() : '';
+        // Remove canvas if it exists.
+        //(document.getElementById("lineChartCanvas" + chart.sensorId)) ? document.getElementById("lineChartCanvas" + chart.sensorId).remove() : '';
 
-        //const chart = document.createElement("div");
-        //chart.setAttribute("class", "col-md-4");
+        // Create div tag or select the existing one.
+        //let chartDiv = HTMLElement;
         
         let chartCanvas = document.createElement('canvas');
-        
         chartCanvas.setAttribute("class", "");
 
         if (points.length) {
             //chartCanvas.setAttribute("id", "lineChartCanvas" + chart.id);
-            chartCanvas.id = chart.id;
+            chartCanvas.id = "lineChartCanvas" + chart.sensorId;
 
             chartCanvas = this.chartData(chartCanvas, chart.sensorName + " Data", chart.verticalLabel);
                                     
@@ -39,8 +39,11 @@ class ChartLineGraph extends Services {
             chartCanvas.classList.add("alert-warning");
             chartCanvas.innerHTML = `No Data Points Found`;
         }
+        //console.log(chartCanvas);
+        //chartDiv.append(chartCanvas.canvas);
+        //console.log(chartDiv);
 
-        return chartCanvas;
+        return chartCanvas.canvas;
     }
 
     /**

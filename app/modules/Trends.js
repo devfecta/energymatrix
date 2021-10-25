@@ -355,9 +355,10 @@ class Trends extends Services {
                     , "sensorName" : dataPoints.sensor_name
                     , "verticalLabel" : dataPoints.points[0].data_type
                 }
+                //console.log(dataPoints.points);
                 chartCanvas = chartLineGraph.createChart(chart, dataPoints.points);
 
-                charts.append(chartCanvas.canvas);
+                charts.append(chartCanvas);
             }
             else {
                 alert("No Data Points Found\rTry adjusting the date range.");

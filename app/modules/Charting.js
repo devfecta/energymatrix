@@ -19,13 +19,19 @@ class Charting extends Services {
      * @param   {string}  startDateTime  Start date and time
      * @param   {string}  endDateTime  End date and time
      */
-     getSensorChart = (sensorId, startDateTime, endDateTime) => {
+     getSensorChart = (chartDiv, sensorId, startDateTime, endDateTime) => {
         // Sets the date picker values.
         //const minMaxDates = this.getMinMaxDates();
 
-        let chartDiv = document.createElement("div");
-        chartDiv.setAttribute("id", "lineChart" + sensorId);
-        chartDiv.setAttribute("class", "col");
+        //let chartDiv = document.createElement("div");
+        //chartDiv.setAttribute("id", "lineChart" + sensorId);
+        //chartDiv.setAttribute("class", "col");
+
+        //let chartDiv = (document.querySelector("#lineChartSensor" + sensorId)) ? document.querySelector("#lineChartSensor" + sensorId) : document.createElement("div");
+        //chartDiv.setAttribute("id", "lineChartSensor" + sensorId);
+        //chartDiv.setAttribute("class", "col");
+
+        chartDiv.innerHTML = "";
 
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
@@ -61,7 +67,7 @@ class Charting extends Services {
                 .then(dataPoints => {
 
                     //console.log(sensor);
-                    console.log(dataPoints);
+                    //console.log(dataPoints);
 
                     if (sensor.dataTypes.length) {
 
@@ -88,11 +94,12 @@ class Charting extends Services {
                             let chartCanvas = HTMLElement;
                             let chart = {
                                 "id" : sensor.id + "-" + dataType.data_type.replace(" ", "_")
+                                , "sensorId" : sensor.id
                                 , "sensorName" : sensor.sensor_name
                                 , "verticalLabel" : dataType.data_type
                             }
                             chartCanvas = chartLineGraph.createChart(chart, points);
-                            chartDiv.append(chartCanvas.canvas);
+                            chartDiv.append(chartCanvas);
 
                             /*
                             // Check for data points.
@@ -142,6 +149,8 @@ class Charting extends Services {
             .catch(error => console.log(error));
 
         }
+
+        console.log(chartDiv);
 
         return chartDiv;
 
@@ -222,7 +231,7 @@ class Charting extends Services {
                             charts.classList.remove("alert");
                             charts.classList.remove("alert-warning");
                             charts.innerHTML = "";
-
+                            /*
                             const chartLineGraph = new ChartLineGraph();
                             let chartCanvas = HTMLElement;
                             let chart = {
@@ -231,9 +240,25 @@ class Charting extends Services {
                                 , "verticalLabel" : dataType.data_type
                             }
 
-                            console.log(points);
+                            //console.log(points);
                             chartCanvas = chartLineGraph.createChart(chart, points);
-                            charts.append(chartCanvas.canvas);
+                            */
+
+
+                            const chartLineGraph = new ChartLineGraph();
+                            let chartCanvas = HTMLElement;
+                            let chart = {
+                                "id" : sensor.id + "-" + dataType.data_type.replace(" ", "_")
+                                , "sensorId" : sensor.id
+                                , "sensorName" : sensor.sensor_name
+                                , "verticalLabel" : dataType.data_type
+                            }
+                            chartCanvas = chartLineGraph.createChart(chart, points);
+                            //chartDiv.append(chartCanvas);
+
+
+
+                            charts.append(chartCanvas);
                             /*
                             // Check for data points.
                             if (points.length) {
