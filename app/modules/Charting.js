@@ -33,6 +33,9 @@ class Charting extends Services {
 
         chartDiv.innerHTML = "";
 
+
+
+
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
             const urlParams = new URLSearchParams(window.location.search);
@@ -150,7 +153,7 @@ class Charting extends Services {
 
         }
 
-        console.log(chartDiv);
+        //console.log(chartDiv);
 
         return chartDiv;
 

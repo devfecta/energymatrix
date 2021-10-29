@@ -605,40 +605,46 @@
                         json_encode($trend["inputs"], JSON_PRETTY_PRINT)
                         . "\n", 3, "/var/www/html/app/php-errors.log");
                     */
-                    switch ($trend["trendFormula"]) {
-                        case "maConversion":
-                        case "mAConversion":
-                            $dataPointValue = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
-                            break;
-                        case "current":
-                            $dataPointValue = $this->Formulas->current($rawDataPoint->getDataValue(), $trend["inputs"]["averagingFactor"]);
-                            break;
-                        case "power":
-                            $dataPointValue = $this->Formulas->power($firstValue, $trend["inputs"]["voltage"], $trend["inputs"]["phaseNumber"], $trend["inputs"]["powerFactor"]);
-                            break;
-                        case "addition":
-                            $dataPointValue = $this->Formulas->addition($firstValue, $secondValue);
-                            break;
-                        case "subtraction":
-                            $dataPointValue = $this->Formulas->subtraction($firstValue, $secondValue);
-                            break;
-                        case "multiplication":
-                            $dataPointValue = $this->Formulas->multiplication($firstValue, $secondValue);
-                            break;
-                        case "division":
-                            $dataPointValue = $this->Formulas->division($firstValue, $secondValue);
-                            break;
-                        case "exponentiation":
-                            $dataPointValue = $this->Formulas->exponentiation($firstValue, $secondValue);
-                            break;
-                        case "massFlow":
-                            // WIP massFlow($volumetricFlow, $density);
-                        case "chillerEfficiency":
-                            // WIP chillerEfficiency($massFlow, $heatCapacity, $chilledMediaReturn, $chilledMediaSupply, $power);
-                        default:
-                            error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $trend["trendFormula"] . " Formula Not Found" . "\n", 3, "/var/www/html/app/php-errors.log");
-                            break;
+                    if ($rawDataPoint->getDataPointId() > 0) {
+                        switch ($trend["trendFormula"]) {
+                            case "maConversion":
+                            case "mAConversion":
+                                $dataPointValue = $this->Formulas->maConversion($rawDataPoint->getDataValue(), $trend["inputs"]["mAMin"], $trend["inputs"]["mAMax"], $trend["inputs"]["processMin"], $trend["inputs"]["processMax"]);
+                                break;
+                            case "current":
+                                $dataPointValue = $this->Formulas->current($rawDataPoint->getDataValue(), $trend["inputs"]["averagingFactor"]);
+                                break;
+                            case "power":
+                                $dataPointValue = $this->Formulas->power($firstValue, $trend["inputs"]["voltage"], $trend["inputs"]["phaseNumber"], $trend["inputs"]["powerFactor"]);
+                                break;
+                            case "addition":
+                                $dataPointValue = $this->Formulas->addition($firstValue, $secondValue);
+                                break;
+                            case "subtraction":
+                                $dataPointValue = $this->Formulas->subtraction($firstValue, $secondValue);
+                                break;
+                            case "multiplication":
+                                $dataPointValue = $this->Formulas->multiplication($firstValue, $secondValue);
+                                break;
+                            case "division":
+                                $dataPointValue = $this->Formulas->division($firstValue, $secondValue);
+                                break;
+                            case "exponentiation":
+                                $dataPointValue = $this->Formulas->exponentiation($firstValue, $secondValue);
+                                break;
+                            case "massFlow":
+                                // WIP massFlow($volumetricFlow, $density);
+                            case "chillerEfficiency":
+                                // WIP chillerEfficiency($massFlow, $heatCapacity, $chilledMediaReturn, $chilledMediaSupply, $power);
+                            default:
+                                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $trend["trendFormula"] . " Formula Not Found" . "\n", 3, "/var/www/html/app/php-errors.log");
+                                break;
+                        }
                     }
+                    else {
+                        $dataPointValue = $rawDataPoint->getDataValue();
+                    }
+                    
                     /*
                     error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                                 "DataPointValue: " . json_encode($trendDataPoints["points"], JSON_PRETTY_PRINT)

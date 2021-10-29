@@ -182,12 +182,12 @@ class Dashboard extends Services {
 
                                                 // Recreates Line Chart
                                                 //console.log(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
-                                                trendRawDataChart = document.querySelector("#lineChartTrend" + trend.id);
+                                                let trendRawDataChart = document.querySelector("#lineChartTrend" + trend.id);
                                                 //console.log(trendRawDataChart);
                                                 let sesnorChart = charting.getSensorChart(trendRawDataChart, visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
                                                 //trendRawDataChart.append(sesnorChart);
-                                                dashboard.append(trendRawDataChart);
-
+                                                
+                                                //dashboard.append(trendRawDataChart);
                                                 
                                             }
                                             else { alert("invalid date"); }

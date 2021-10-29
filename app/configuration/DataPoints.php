@@ -309,13 +309,35 @@ class DataPoints extends DataPoint {
                     //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " currentDate: " . $currentDate . " previousDate: " . $previousDate . "\n", 3, "/var/www/html/app/php-errors.log");
 
                     if ($currentDate >= $previousDate) {
+
+                        $currentDateTemp = new DateTime($currentDate);
+                        $previousDateTemp = new DateTime($previousDate);
+                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . json_encode($result, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . $previousDate . "\n", 3, "/var/www/html/app/php-errors.log");
                         
-                        $currentDate = new DateTime($currentDate);
-                        $previousDate = new DateTime($previousDate);
                         //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . $currentDate->diff($previousDate)->d . "\n", 3, "/var/www/html/app/php-errors.log");
-                        if ($currentDate->diff($previousDate)->d > 0) {
+                        if ($currentDateTemp->diff($previousDateTemp)->d > 0) {
+                            // Adds empty data points for a 24 gap.
+
+                            ;  
+                            $emptyDataPoint["id"] = "0";
+                            $emptyDataPoint["user_id"] = $result["user_id"];
+                            $emptyDataPoint["sensor_id"] = $result["sensor_id"];
+                            $emptyDataPoint["date_time"] = date("Y-m-d 00:00:00", strtotime($currentDate));
+                            $emptyDataPoint["data_type"] = $result["data_type"];
+                            $emptyDataPoint["data_value"] = "0.000";
+                            $emptyDataPoint["custom_value"] = "0.000";
+                            
+                            for ($d = 1; $d <= 24; $d++) {
+
+                                array_push($results, $emptyDataPoint);
+
+                            }
+                            
+                            /* Removed to add 24 empty data points.
                             unset($results);
                             $results = array();
+                            */
                             array_push($results, $result);
                         }
                         else {
