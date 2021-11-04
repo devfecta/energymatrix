@@ -188,6 +188,7 @@ class Dashboard extends Services {
                                                 //trendRawDataChart.append(sesnorChart);
                                                 
                                                 //dashboard.append(trendRawDataChart);
+
                                                 
                                             }
                                             else { alert("invalid date"); }

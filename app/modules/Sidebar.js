@@ -433,6 +433,80 @@ class Sidebar extends Services {
         return sensorsMenu;
 
     }
+
+
+    getTrendsMenu = (companyId, userType) => {
+        // Creates the Trends button
+        let menuItem = {
+            "parentId" : "trendsButton"
+            , "subMenuId" : "trends"
+            , "buttonTitle" : ""
+            , "buttonText" : '<span class="fas fa-bars pe-1"></span> Trends'
+            , "buttonClasses" : []
+            , "buttonValue" : ""
+            , "buttonClick" : function (event) {}
+        };
+        let trendsMenu = this.getMenuItem(menuItem);
+        // Creates the sub menu area under the Trends button.
+        let trendsSubMenu = this.getSubMenuItem(menuItem);
+
+        this.getApi("Trends", "getConfiguredTrends", "userId=" + companyId)
+        .then(trends => {
+
+            console.log(trends);
+
+            trends.forEach(trend => {
+                // Creates the button for a specific sensor.
+
+                //console.log(sensor);
+                /*
+                menuItem = {
+                    "parentId" : "trend" + trend.id
+                    , "subMenuId" : "trendOptions" + trend.id
+                    , "buttonTitle" : ""
+                    , "buttonText" : '<span class="fas fa-bars pe-1"></span> ' + trend.trendName + ` <em class="mx-1" style="font-size: 0.75em"> (ID: ${trend.id})</em>`
+                    , "buttonClasses" : []
+                    , "buttonValue" : ""
+                    , "buttonClick" : function (event) {}
+                };
+                let trendMenu = this.getMenuItem(menuItem);
+                // Creates the sub menu area for a specific sensor under the button.
+                let trendSubMenu = this.getSubMenuItem(menuItem);
+                */
+                // Creates the View Sensor button and adds it to the specific sensor sub menu.
+                let subMenuItem = {
+                    "parentId" : "trend" + trend.id
+                    , "subMenuId" : "trendView" + trend.id
+                    , "buttonTitle" : "View Sensor Data Points"
+                    , "buttonText" : '<span class="fas fa-chart-line pe-1"></span> ' + trend.trendName
+                    , "buttonClasses" : ["d-flex"]
+                    , "buttonValue" : companyId
+                    , "buttonClick" : function (event) {
+                        //console.log(event.target);
+                        document.cookie = "userId=" + event.target.value + ";path=/app;SameSite=Lax";
+                        window.location.href = "trend.php?trendId=" + trend.id + "&sensorId=" + trend.sensorId + "&userId=" + trend.userId;
+                    }
+                };
+                // Hidden if not an admin
+                (trend.isVisible > 0) ? trendsSubMenu.append(this.getMenuItem(subMenuItem)) : null;
+                //trendsSubMenu.append(this.getMenuItem(subMenuItem));
+            
+            });
+
+        })
+        .catch(error => console.error(error));
+        
+        trendsMenu.append(trendsSubMenu);
+
+        return trendsMenu;
+    }
+
+
+
+
+
+
+
     /**
      * Creates a list of trends for a specific company's menu item.
      *
@@ -520,10 +594,37 @@ class Sidebar extends Services {
                     
                 }
             };
-
+            // Adds View All Trend to the menu.
             sidebarMenu.append(this.getMenuItem(menuItem));
+
+
+            // Hidden if not an admin
+            //(userType > 0) ? sensorSubMenu.append(this.getMenuItem(subMenuItem)) : null;
+            // Creates the View Sensor Trends button and adds it to the specific sensor sub menu.
+            /*
+            subMenuItem = {
+                "parentId" : "sensor" + trend.id
+                , "subMenuId" : "sensorEdit" + trend.id
+                , "buttonTitle" : "View Trends"
+                , "buttonText" : '<span class="fas fa-bars pe-1"></span> Trends'
+                , "buttonClasses" : ["d-flex"]
+                , "buttonValue" : ""
+                , "buttonClick" : function (event) {
+                    window.location.href = "trends.php?trendId=" + trend.id + "&sensorId=" + sensor.id + "&userId=" + companyId;
+                    
+                }
+            };
+            sensorSubMenu.append(this.getMenuItem(subMenuItem));
+            */
+
             
-            sidebarMenu.append(this.getSensorMenu(userId, userType));
+            sidebarMenu.append(this.getTrendsMenu(userId, userType));
+
+
+
+
+            
+            //sidebarMenu.append(this.getSensorMenu(userId, userType));
         }
         else {
             alert("logging out");
