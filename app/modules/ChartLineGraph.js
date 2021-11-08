@@ -84,7 +84,7 @@ class ChartLineGraph extends Services {
             const date = new Date(point.date_time);
             xAxislabels = [...xAxislabels, (date.getMonth() + 1) + "/" + date.getDate() + "/" + date.getFullYear() + " " + date.getHours() +":"+ ("0" + date.getMinutes()).slice(-2)];
 //console.log(parseFloat(point.data_value).toFixed(3));
-            pointData = [...pointData, parseFloat(point.data_value).toFixed(1)];
+            pointData = [...pointData, parseFloat(point.data_value).toFixed(2)];
 
             lineShadingColor = [...lineShadingColor, 'rgba(' + pointColor + ', 0.2)'];
             lineColor = [...lineColor, 'rgba(' + pointColor + ', 0.7)'];

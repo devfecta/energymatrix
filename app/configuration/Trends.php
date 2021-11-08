@@ -120,13 +120,13 @@
 
                 $trend = json_decode($trend["trend"], false);
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " durationDataPoints=" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " trend=" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                 
                 $average = 0;
                 $currentAverage = 0;
                 $operationalEndTime = strtotime($trend->operationalEndTime);
                 $operationalStartTime = strtotime($trend->operationalStartTime);
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " operationalEndTime=" . $trend->operationalEndTime . " operationalStartTime=" . $trend->operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " trendId=" . $trend->trendId . " operationalEndTime=" . $trend->operationalEndTime . " operationalStartTime=" . $trend->operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
 
                 $trendSearchData = array("trendId" => $trend->trendId, "startDate" => $trend->operationalEndTime, "endDate" => $trend->operationalStartTime);
                 //$trendSearchData = array("trendId" => $trend->trendId, "startDate" => "2000-01-01 00:00:00", "endDate" => date("Y-m-d h:m:s"));
@@ -154,7 +154,7 @@
                     $operationalMaximum = floatval($trend->operationalMaximum);
                     $dataPointDataValue = floatval($point["data_value"]);
 
-                    // All Data Points
+                    // All Data Points within operational range.
                     if ($dataPointDataValue >= $operationalMinimum && $dataPointDataValue <= $operationalMaximum) {
                         $dataPoint = new DataPoint();
                         $dataPoint->setDataPointId($point["id"]);
@@ -166,9 +166,9 @@
                         $dataPoint->setCustomValue($point["custom_value"]);
         
                         array_push($allDataPoints, $dataPoint);
-                        
+
                         // Duration Data Points
-                        $dataPointDateTime = strtotime($dataPoint->getDate());
+                        $dataPointDateTime = strtotime($point["date_time"]);
                         //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " dataPointDateTime=" . $dataPointDateTime . " operationalEndTime=" . $operationalEndTime . " operationalStartTime=" . $operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
                         if ($dataPointDateTime >= $operationalEndTime && $dataPointDateTime <= $operationalStartTime) {
                             $dataPoint = new DataPoint();
@@ -182,7 +182,9 @@
             
                             array_push($durationDataPoints, $dataPoint);
                         }
+                        
                     }
+
                 }
 
                 /*
@@ -486,7 +488,16 @@
 
                 // Array of Raw Data Points
                 $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], $trendSearchData['startDate'], $trendSearchData['endDate']);
-
+                /*
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
+                    "userId=" . $trend["userId"] . " sensorId=" . $trend["sensorId"] . " startDate=" . $trendSearchData['startDate'] . " endDate=" . $trendSearchData['endDate']
+                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                */
+                /*
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
+                "rawDataPoints sizeof: " . sizeof($rawDataPoints)
+                . "\n", 3, "/var/www/html/app/php-errors.log");
+                */
                 $trendDataPoints = array(
                     "trend" => $trend
                     , "id" => $sensor->getId()
@@ -545,7 +556,6 @@
 */
                     $associatedTrendsArray2 = ($tempTrendSearchData['trendId']) ? $this->getConfiguredTrend($tempTrendSearchData) : array();
                 }
-
 
                 // Sensor Data Points
                 foreach ($rawDataPoints as $index => $rawDataPoint) {

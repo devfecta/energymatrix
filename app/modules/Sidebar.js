@@ -439,7 +439,7 @@ class Sidebar extends Services {
         // Creates the Trends button
         let menuItem = {
             "parentId" : "trendsButton"
-            , "subMenuId" : "trends"
+            , "subMenuId" : "trendsMenu"
             , "buttonTitle" : ""
             , "buttonText" : '<span class="fas fa-bars pe-1"></span> Trends'
             , "buttonClasses" : []
@@ -453,11 +453,10 @@ class Sidebar extends Services {
         this.getApi("Trends", "getConfiguredTrends", "userId=" + companyId)
         .then(trends => {
 
-            console.log(trends);
+            //console.log(trends);
 
             trends.forEach(trend => {
                 // Creates the button for a specific sensor.
-
                 //console.log(sensor);
                 /*
                 menuItem = {
@@ -580,7 +579,7 @@ class Sidebar extends Services {
         // Logs out after idle for 1 hour.
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
-
+            /*
             // Displays just the View Trend button.
             let menuItem = {
                 "parentId" : "trends" + userId
@@ -596,7 +595,7 @@ class Sidebar extends Services {
             };
             // Adds View All Trend to the menu.
             sidebarMenu.append(this.getMenuItem(menuItem));
-
+            */
 
             // Hidden if not an admin
             //(userType > 0) ? sensorSubMenu.append(this.getMenuItem(subMenuItem)) : null;

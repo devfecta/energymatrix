@@ -299,7 +299,7 @@ class DataPoints extends DataPoint {
 
             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Before: " . sizeof($resultsTemp) . "\n", 3, "/var/www/html/app/php-errors.log");
 
-            if (sizeof($resultsTemp) > 1) {
+            if (sizeof($resultsTemp) > 0) {
 
                 $previousDate = $resultsTemp[0]["date_time"];
 
@@ -312,8 +312,8 @@ class DataPoints extends DataPoint {
 
                         $currentDateTemp = new DateTime($currentDate);
                         $previousDateTemp = new DateTime($previousDate);
-                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . json_encode($result, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-                        error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . $previousDate . "\n", 3, "/var/www/html/app/php-errors.log");
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . json_encode($result, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . $previousDate . "\n", 3, "/var/www/html/app/php-errors.log");
                         
                         //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " compare: " . $currentDate->diff($previousDate)->d . "\n", 3, "/var/www/html/app/php-errors.log");
                         if ($currentDateTemp->diff($previousDateTemp)->d > 0) {

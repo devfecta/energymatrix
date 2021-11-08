@@ -67,8 +67,6 @@
                 }
             }
 
-            
-
             // Number of numbers within the range.
             $count = count($data);
             // Adds up the numbers in the range.

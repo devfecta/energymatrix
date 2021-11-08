@@ -120,7 +120,10 @@ class Dashboard extends Services {
                                     trendRawDataChart.setAttribute("id", "lineChartTrend" + trend.id);
                                     trendRawDataChart.setAttribute("class", "col-md-5");
                                     
-                                    let sesnorChart = charting.getSensorChart(trendRawDataChart, visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+                                    ////let sesnorChart = charting.getSensorChart(trendRawDataChart, visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+
+                                    let sesnorChart = charting.getTrendLineChart(trendRawDataChart, trend.trendId, trend.operationalStartTime, trend.operationalEndTime);
+
                                     //console.log(sesnorChart);
                                     //trendRawDataChart.append(sesnorChart);
                                     dashboard.append(trendRawDataChart);
@@ -184,8 +187,9 @@ class Dashboard extends Services {
                                                 //console.log(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
                                                 let trendRawDataChart = document.querySelector("#lineChartTrend" + trend.id);
                                                 //console.log(trendRawDataChart);
-                                                let sesnorChart = charting.getSensorChart(trendRawDataChart, visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+                                                //let sesnorChart = charting.getSensorChart(trendRawDataChart, visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
                                                 //trendRawDataChart.append(sesnorChart);
+                                                let sesnorChart = charting.getTrendLineChart(trendRawDataChart, trend.trendId, trend.operationalStartTime, trend.operationalEndTime);
                                                 
                                                 //dashboard.append(trendRawDataChart);
 
@@ -207,12 +211,13 @@ class Dashboard extends Services {
                     
 
                             // REMOVE in Production
+                            /*
                             if (i == 10) {
                                 clearInterval(trendsInterval);
                             }
-                            
+                            */
                             // Checks every 3 seconds
-                        }, 3000);
+                        }, 10000);
 
                     })
                     .catch(e => console.error(e));
@@ -220,7 +225,7 @@ class Dashboard extends Services {
                 })
                 
             })
-            .catch(e => console.error(e))
+            .catch(e => console.error(e));
             
         }
         

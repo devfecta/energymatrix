@@ -63,268 +63,268 @@ class Trends extends Services {
     }
 
     listConfiguredTrends = (sensorId, userId) => {
-
-        let userType = document.cookie.match(new RegExp('userType=([^=;]+)'));
-
-        //console.log(userType[1]);
         
         this.getConfiguredTrends(sensorId, userId)
         .then(response => {
 
-            const trendsList = document.querySelector("#trends");
+            let trendsList = document.querySelector("#trends");
 
-            const trendsListMessage = document.createElement("div");
-            trendsListMessage.setAttribute("class", "alert alert-warning");
-            trendsListMessage.innerHTML = `No Trends Found`;
-
-            const trendsListGroup = document.createElement("div");
-            trendsListGroup.setAttribute("class", "row list-group");
-            // Configured Trend Row
             response.forEach(trend => {
 
-                if ((/1/i).test(trend.isVisible) || userType[1] > 0) {
-
-                    const trendRow = document.createElement("div");
-                    trendRow.setAttribute("class", " list-group-item list-group-item-action");
-                    trendRow.setAttribute("id", "trend" + trend.id);
-
-                    const trendButton = document.createElement("button");
-                    trendButton.setAttribute("type", "button");
-                    trendButton.setAttribute("class", "d-flex flex-wrap bg-transparent border-0 mt-3");
-                    trendButton.setAttribute("value", trend.id);
-                    trendButton.addEventListener("click", (event) => {
-
-                        const startDate = document.querySelector("#startDate").value + " " + document.querySelector("#startTime").value;
-                        const endDate = document.querySelector("#endDate").value + " " + document.querySelector("#endTime").value;
-                        
-                        this.viewTrend(trendButton.value, startDate, endDate)
-                    });
-                    
-                    let trendColumn = document.createElement("div");
-                    trendColumn.setAttribute("class", "col-md-4 h5");
-                    trendColumn.innerHTML = trend.trendName;
-
-                    trendButton.append(trendColumn);
-
-                    trendColumn = document.createElement("div");
-                    trendColumn.setAttribute("class", "col-md-4 h5");
-                    trendColumn.innerHTML = trend.trendFormula;
-
-                    trendButton.append(trendColumn);
-
-                    trendColumn = document.createElement("div");
-                    trendColumn.setAttribute("class", "col-md-4 h6");
-                    trendColumn.innerHTML = `Unit Type: ${trend.unit}`;
-
-                    trendButton.append(trendColumn);
-
-                    // Inputs Row
-                    trendColumn = document.createElement("div");
-                    trendColumn.setAttribute("class", "col-md-12 d-flex flex-wrap");
-
-                    let trendDetailRow = document.createElement("div");
-                    trendDetailRow.setAttribute("class", "col-md-1");
-                    trendDetailRow.innerHTML = `<strong>Inputs: </strong>`;
-                    trendColumn.append(trendDetailRow);
-
-                    let columnCount = Math.round((Object.entries(trend.inputs).length/12)) > 3 ? Math.round((Object.entries(trend.inputs).length/12)) : 3;
-
-                    Object.entries(trend.inputs).forEach(input => {
-                        trendDetailRow = document.createElement("div");
-                        trendDetailRow.setAttribute("class", "px-1 col-md-" + columnCount);
-                        //trendDetailRow.innerHTML += input[0] + " : " + input[1];
-                        if (input[1]['firstTrendParameter']) {
-                            trendDetailRow.innerHTML += "First Trend Parameter: Trend ID " + input[1]["firstTrendParameter"];
-                        }
-                        else if (input[1]['firstSensorParameter']) {
-                            trendDetailRow.innerHTML += "First Sensor Parameter: Sensor ID " + input[1]["firstSensorParameter"];
-                        }
-                        else if (input[1]['firstParameter']) {
-                            trendDetailRow.innerHTML += "First Parameter: " + input[1]["firstParameter"];
-                        }
-                        else {
-                            trendDetailRow.innerHTML += input[0] + " : " + input[1];
-                        }
-
-                        if (input[1]['secondTrendParameter']) {
-                            trendDetailRow.innerHTML += "<br/>Second Trend Parameter: Trend ID " + input[1]["secondTrendParameter"];
-                        }
-                        else if (input[1]['secondSensorParameter']) {
-                            trendDetailRow.innerHTML += "<br/>Second Sensor Parameter: Sensor ID " + input[1]["secondSensorParameter"];
-                        }
-                        else if (input[1]['secondParameter']) {
-                            trendDetailRow.innerHTML += "<br/>Second Parameter: " + input[1]["secondParameter"];
-                        }
-                        else {}
-                        //input[1].forEach(inputValue => {trendDetailRow.innerHTML += input[1].secondParameter});
-                        trendColumn.append(trendDetailRow);
-                    });
-
-                    trendButton.append(trendColumn);
-
-                    //console.log(trend);
-
-                    // Associated Trends Row
-                    trendColumn = document.createElement("div");
-                    trendColumn.setAttribute("class", "col-md-12 d-flex");
-
-                    trendDetailRow = document.createElement("div");
-                    trendDetailRow.setAttribute("class", "col-md-2");
-                    trendDetailRow.innerHTML = `<strong>Associated Trend(s): </strong>`;
-                    trendColumn.append(trendDetailRow);
-
-                    trend.associatedTrends.forEach(trend => {
-                        trendDetailRow = document.createElement("div");
-                        trendDetailRow.setAttribute("class", "col-md-2");
-
-                        trendDetailRow.innerHTML += (trend.trendName) ? trend.trendName : `Sensor: ` + trend.sensor.sensor_name;
-                        trendColumn.append(trendDetailRow);
-                    });
-
-                    trendButton.append(trendColumn);
-
-                    //trendsListGroup.append(trendButton);
-                    /**
-                     * This code displays buttons for the admin and user on the View Trends page.
-                     */
-                    if (userType[1] > 0) {
-                        // Admin Area Trend Buttons
-                        // Modify Buttons
-                        trendColumn = document.createElement("div");
-                        trendColumn.setAttribute("class", "d-flex justify-content-around align-items-center");
-                        // Trend Visibility
-                        const visibleTrendCheckbox = this.createSwitchCheckbox("visibleTrend" + trend.id, "visibleTrend" + trend.id, "Visible Trend", (/1/i).test(trend.isVisible));
-                        visibleTrendCheckbox.addEventListener("change", event => {
-
-                            let formData = new FormData();
-                            formData.append("class", "Trends");
-                            formData.append("method", "setTrendVisibility");
-                            formData.append("trendId", trend.id);
-                            formData.append("isVisible", event.target.checked);
-                            
-                            this.setTrendVisibility(formData);
-                            console.log(trend.id, event.target.checked);
-                        });
-
-                        trendColumn.append(visibleTrendCheckbox);
-
-                        /*
-                        const trendEditButton = document.createElement("button");
-                        trendEditButton.setAttribute("type", "button");
-                        trendEditButton.setAttribute("class", "btn btn-primary col-md-5");
-                        trendEditButton.setAttribute("value", trend.id);
-                        trendEditButton.setAttribute("disabled", true);
-                        trendEditButton.innerHTML = `Edit ${trend.trendName}`;
-                        trendEditButton.addEventListener("click", (event) => {
-                            this.editConfiguredTrend(trendEditButton.value);
-                        });
-
-                        trendColumn.append(trendEditButton);
-                        */
-
-                        const trendDeleteButton = document.createElement("button");
-                        trendDeleteButton.setAttribute("type", "button");
-                        trendDeleteButton.setAttribute("class", "btn btn-danger col-md-10");
-                        trendDeleteButton.setAttribute("value", trend.id);
-                        trendDeleteButton.innerHTML = `Delete ${trend.trendName}`;
-                        trendDeleteButton.addEventListener("click", (event) => {
-
-                            let confirmation = confirm("This will also delete dependent trends. Delete?");
-
-                            if (confirmation) {
-                                this.deleteConfiguredTrend(trendDeleteButton.value)
-                                .then(result => {
-                                    if (result) {
-                                        document.querySelector("#trend" + trendDeleteButton.value).remove();
-                                    }
-                                })
-                                .catch(e => console.error(e));
-                                
-                            }
-                            
-                        });
-
-                        trendColumn.append(trendDeleteButton);
-
-                        trendRow.append(trendButton, trendColumn);
-                        
-                    }
-                    else {
-                        trendRow.append(trendButton);
-                        // User Area Trend Buttons
-                        const trendAccordionRow = document.createElement("div");
-                        trendAccordionRow.setAttribute("class", "accordion accordion-flush bg-light shadow-sm");
-                        trendAccordionRow.setAttribute("id", "trendAccordion" + trend.id);
-
-                        const trendAccordionItems = document.createElement("div");
-                        trendAccordionItems.setAttribute("class", "accordion-item");
-
-                        const trendAccordionItemButton = document.createElement("button");
-                        trendAccordionItemButton.setAttribute("type", "button");
-                        trendAccordionItemButton.setAttribute("id", "trendButton" + trend.id);
-                        trendAccordionItemButton.setAttribute("class", "accordion-button collapsed");
-                        trendAccordionItemButton.setAttribute("data-bs-toggle", "collapse");
-                        trendAccordionItemButton.setAttribute("data-bs-target", "#trends" + trend.id);
-                        trendAccordionItemButton.setAttribute("aria-expanded", "false");
-                        trendAccordionItemButton.setAttribute("aria-controls", "trends" + trend.id);
-                        trendAccordionItemButton.innerHTML = `${trend.trendName} Configure Trends`;
-
-
-                        const trendAccordionItem = document.createElement("div");
-                        trendAccordionItem.setAttribute("id", "trends" + trend.id);
-                        trendAccordionItem.setAttribute("class", "accordion-collapse collapse");
-                        trendAccordionItem.setAttribute("aria-labelledby", "trendButton" + trend.id);
-                        trendAccordionItem.setAttribute("data-bs-parent", "#trendAccordion" + trend.id);
-
-                        const trendAccordionItemBody = document.createElement("div");
-                        trendAccordionItemBody.setAttribute("class", "accordion-body");
-/*
-                        // Dashboard Visibility
-                        const visibleTrendCheckbox = this.createSwitchCheckbox("visibleTrend" + trend.id, "visibleTrend" + trend.id, "Show In Dashboard", (/1/i).test(trend.isVisible));
-                        visibleTrendCheckbox.addEventListener("change", event => {
-
-                            let formData = new FormData();
-                            formData.append("class", "Trends");
-                            formData.append("method", "setDashboardVisibility");
-                            formData.append("trendId", trend.id);
-                            formData.append("isVisible", event.target.checked);
-                            
-                            this.setTrendVisibility(formData);
-                            console.log(trend.id, event.target.checked);
-                        });
-
-                        trendAccordionItemBody.append(visibleTrendCheckbox);
-*/
-
-                        trendAccordionItemBody.append(this.listUserConfiguredTrends(trend.id));
-
-                        trendAccordionItem.append(trendAccordionItemBody);
-
-                        trendAccordionItems.append(trendAccordionItemButton, trendAccordionItem);
-
-                        trendAccordionRow.append(trendAccordionItems);
-
-                        trendRow.append(trendAccordionRow);
-                        
-                    }
-
-
-                    trendsListGroup.append(trendRow);
-                    
-                }
+                trendsList.append(this.listItemConfigureTrend(trend));
                 
             });
-
-            if (trendsListGroup.innerHTML) {
-                trendsList.append(trendsListGroup);
-            }
-            else {
-                trendsList.append(trendsListMessage);
-            }
-            //console.log(response);
+            
         })
         .catch(e => console.error(e));
     }
+
+
+
+
+
+    listConfiguredTrend = (trendId, sensorId, userId) => {
+
+        this.getConfiguredTrend(trendId, "null", "null")
+        .then(response => {
+            //console.log(response);
+
+            let trendsList = document.querySelector("#trends");
+
+            trendsList.append(this.listItemConfigureTrend(response.trend));
+
+        })
+        .catch(e => console.error(e));
+
+    }
+    /**
+     * Creates a list item for a configured trend.
+     * @param {*} trend Specific trend data from the database.
+     * @returns HTMLElement
+     */
+    listItemConfigureTrend = (trend) => {
+
+        let userType = document.cookie.match(new RegExp('userType=([^=;]+)'));
+
+        //console.log(userType);
+
+        const trendsListMessage = document.createElement("div");
+        trendsListMessage.setAttribute("class", "alert alert-warning");
+        trendsListMessage.innerHTML = `No Trends Found`;
+
+        const trendsListGroup = document.createElement("div");
+        trendsListGroup.setAttribute("class", "row list-group");
+        // Configured Trend Row
+        if ((/1/i).test(trend.isVisible) || userType[1] > 0) {
+
+            const trendRow = document.createElement("div");
+            trendRow.setAttribute("class", " list-group-item list-group-item-action");
+            trendRow.setAttribute("id", "trend" + trend.id);
+
+            const trendButton = document.createElement("button");
+            trendButton.setAttribute("type", "button");
+            trendButton.setAttribute("class", "d-flex flex-wrap bg-transparent border-0 mt-3");
+            trendButton.setAttribute("value", trend.id);
+            trendButton.addEventListener("click", (event) => {
+
+                const startDate = document.querySelector("#startDate").value + " " + document.querySelector("#startTime").value;
+                const endDate = document.querySelector("#endDate").value + " " + document.querySelector("#endTime").value;
+                
+                this.viewTrend(trendButton.value, startDate, endDate)
+            });
+            
+            let trendColumn = document.createElement("div");
+            trendColumn.setAttribute("class", "col-md-4 h5");
+            trendColumn.innerHTML = trend.trendName;
+
+            trendButton.append(trendColumn);
+
+            trendColumn = document.createElement("div");
+            trendColumn.setAttribute("class", "col-md-4 h5");
+            trendColumn.innerHTML = trend.trendFormula;
+
+            trendButton.append(trendColumn);
+
+            trendColumn = document.createElement("div");
+            trendColumn.setAttribute("class", "col-md-4 h6");
+            trendColumn.innerHTML = `Unit Type: ${trend.unit}`;
+
+            trendButton.append(trendColumn);
+
+            // Inputs Row
+            trendColumn = document.createElement("div");
+            trendColumn.setAttribute("class", "col-md-12 d-flex flex-wrap");
+
+            let trendDetailRow = document.createElement("div");
+            trendDetailRow.setAttribute("class", "col-md-1");
+            trendDetailRow.innerHTML = `<strong>Inputs: </strong>`;
+            trendColumn.append(trendDetailRow);
+
+            let columnCount = Math.round((Object.entries(trend.inputs).length/12)) > 3 ? Math.round((Object.entries(trend.inputs).length/12)) : 3;
+
+            Object.entries(trend.inputs).forEach(input => {
+                trendDetailRow = document.createElement("div");
+                trendDetailRow.setAttribute("class", "px-1 col-md-" + columnCount);
+                //trendDetailRow.innerHTML += input[0] + " : " + input[1];
+                if (input[1]['firstTrendParameter']) {
+                    trendDetailRow.innerHTML += "First Trend Parameter: Trend ID " + input[1]["firstTrendParameter"];
+                }
+                else if (input[1]['firstSensorParameter']) {
+                    trendDetailRow.innerHTML += "First Sensor Parameter: Sensor ID " + input[1]["firstSensorParameter"];
+                }
+                else if (input[1]['firstParameter']) {
+                    trendDetailRow.innerHTML += "First Parameter: " + input[1]["firstParameter"];
+                }
+                else {
+                    trendDetailRow.innerHTML += input[0] + " : " + input[1];
+                }
+
+                if (input[1]['secondTrendParameter']) {
+                    trendDetailRow.innerHTML += "<br/>Second Trend Parameter: Trend ID " + input[1]["secondTrendParameter"];
+                }
+                else if (input[1]['secondSensorParameter']) {
+                    trendDetailRow.innerHTML += "<br/>Second Sensor Parameter: Sensor ID " + input[1]["secondSensorParameter"];
+                }
+                else if (input[1]['secondParameter']) {
+                    trendDetailRow.innerHTML += "<br/>Second Parameter: " + input[1]["secondParameter"];
+                }
+                else {}
+                //input[1].forEach(inputValue => {trendDetailRow.innerHTML += input[1].secondParameter});
+                trendColumn.append(trendDetailRow);
+            });
+
+            trendButton.append(trendColumn);
+
+            //console.log(trend);
+
+            // Associated Trends Row
+            trendColumn = document.createElement("div");
+            trendColumn.setAttribute("class", "col-md-12 d-flex");
+
+            trendDetailRow = document.createElement("div");
+            trendDetailRow.setAttribute("class", "col-md-2");
+            trendDetailRow.innerHTML = `<strong>Associated Trend(s): </strong>`;
+            trendColumn.append(trendDetailRow);
+
+            trend.associatedTrends.forEach(trend => {
+                trendDetailRow = document.createElement("div");
+                trendDetailRow.setAttribute("class", "col-md-2");
+
+                trendDetailRow.innerHTML += (trend.trendName) ? trend.trendName : `Sensor: ` + trend.sensor.sensor_name;
+                trendColumn.append(trendDetailRow);
+            });
+
+            trendButton.append(trendColumn);
+
+            //trendsListGroup.append(trendButton);
+            /**
+             * This code displays buttons for the admin and user on the View Trends page.
+             */
+            if (userType[1] > 0) {
+                // Admin Area Trend Buttons
+                // Modify Buttons
+                trendColumn = document.createElement("div");
+                trendColumn.setAttribute("class", "d-flex justify-content-around align-items-center");
+                // Trend Visibility
+                const visibleTrendCheckbox = this.createSwitchCheckbox("visibleTrend" + trend.id, "visibleTrend" + trend.id, "Visible Trend", (/1/i).test(trend.isVisible));
+                visibleTrendCheckbox.addEventListener("change", event => {
+
+                    let formData = new FormData();
+                    formData.append("class", "Trends");
+                    formData.append("method", "setTrendVisibility");
+                    formData.append("trendId", trend.id);
+                    formData.append("isVisible", event.target.checked);
+                    
+                    this.setTrendVisibility(formData);
+                    console.log(trend.id, event.target.checked);
+                });
+
+                trendColumn.append(visibleTrendCheckbox);
+
+                const trendDeleteButton = document.createElement("button");
+                trendDeleteButton.setAttribute("type", "button");
+                trendDeleteButton.setAttribute("class", "btn btn-danger col-md-10");
+                trendDeleteButton.setAttribute("value", trend.id);
+                trendDeleteButton.innerHTML = `Delete ${trend.trendName}`;
+                trendDeleteButton.addEventListener("click", (event) => {
+
+                    let confirmation = confirm("This will also delete dependent trends. Delete?");
+
+                    if (confirmation) {
+                        this.deleteConfiguredTrend(trendDeleteButton.value)
+                        .then(result => {
+                            if (result) {
+                                document.querySelector("#trend" + trendDeleteButton.value).remove();
+                            }
+                        })
+                        .catch(e => console.error(e));
+                        
+                    }
+                    
+                });
+
+                trendColumn.append(trendDeleteButton);
+
+                trendRow.append(trendButton, trendColumn);
+                
+            }
+            else {
+                trendRow.append(trendButton);
+                // User Area Trend Buttons
+                const trendAccordionRow = document.createElement("div");
+                trendAccordionRow.setAttribute("class", "accordion accordion-flush bg-light shadow-sm");
+                trendAccordionRow.setAttribute("id", "trendAccordion" + trend.id);
+
+                const trendAccordionItems = document.createElement("div");
+                trendAccordionItems.setAttribute("class", "accordion-item");
+
+                const trendAccordionItemButton = document.createElement("button");
+                trendAccordionItemButton.setAttribute("type", "button");
+                trendAccordionItemButton.setAttribute("id", "trendButton" + trend.id);
+                trendAccordionItemButton.setAttribute("class", "accordion-button collapsed");
+                trendAccordionItemButton.setAttribute("data-bs-toggle", "collapse");
+                trendAccordionItemButton.setAttribute("data-bs-target", "#trends" + trend.id);
+                trendAccordionItemButton.setAttribute("aria-expanded", "false");
+                trendAccordionItemButton.setAttribute("aria-controls", "trends" + trend.id);
+                trendAccordionItemButton.innerHTML = `${trend.trendName} Configure Trends`;
+
+
+                const trendAccordionItem = document.createElement("div");
+                trendAccordionItem.setAttribute("id", "trends" + trend.id);
+                trendAccordionItem.setAttribute("class", "accordion-collapse collapse");
+                trendAccordionItem.setAttribute("aria-labelledby", "trendButton" + trend.id);
+                trendAccordionItem.setAttribute("data-bs-parent", "#trendAccordion" + trend.id);
+
+                const trendAccordionItemBody = document.createElement("div");
+                trendAccordionItemBody.setAttribute("class", "accordion-body");
+
+                trendAccordionItemBody.append(this.listUserConfiguredTrends(trend.id));
+
+                trendAccordionItem.append(trendAccordionItemBody);
+
+                trendAccordionItems.append(trendAccordionItemButton, trendAccordionItem);
+
+                trendAccordionRow.append(trendAccordionItems);
+
+                trendRow.append(trendAccordionRow);
+                
+            }
+
+            trendsListGroup.append(trendRow);
+            
+        }
+
+        if (trendsListGroup.innerHTML) {
+            return trendsListGroup;
+        }
+        else {
+            return trendsListMessage;
+        }
+            
+    }
+
+
+
 
     viewTrend = (trendId, startDate, endDate) => {
         //console.log(startDate, endDate);
