@@ -139,6 +139,8 @@ class Dashboard extends Services {
 
                         });
 
+                        
+
                         // Redraw
                         let i = 0; // REMOVE in Production
                         let trendsInterval = setInterval(() => {
@@ -151,7 +153,7 @@ class Dashboard extends Services {
                             this.checkDataPointCount(visibleTrend.userId, visibleTrend.sensorId)
                             .then(result => {
                                 // There's a change in the data point count, re-draw bullet charts.
-                                //console.log("result", result);
+                                console.log("result", result);
                                 if (result) {
 
                                     //console.log("Change");

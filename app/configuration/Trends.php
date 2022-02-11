@@ -310,17 +310,31 @@
                     $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `userId`=:userId AND `sensorId`=:sensorId ORDER BY `id` DESC");
                     $statement->bindValue(":userId", $sensor['userId'], PDO::PARAM_INT);
                     $statement->bindValue(":sensorId", $sensor['sensorId'], PDO::PARAM_INT);
+
+                    $statementDates = $connection->prepare("SELECT MIN(date_time) AS startDate, MAX(date_time) AS endDate FROM `dataPoints` INNER JOIN `sensors` ON `dataPoints`.`sensor_id`=`sensors`.`sensorId` WHERE `sensors`.`userId`=:userId AND `sensors`.`id`=:sensorId;");
+                    $statementDates->bindValue(":userId", $sensor['userId'], PDO::PARAM_INT);
+                    $statementDates->bindValue(":sensorId", $sensor['sensorId'], PDO::PARAM_INT);
+                    
                 }
                 else {
                     $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `userId`=:userId ORDER BY `id` DESC");
                     $statement->bindValue(":userId", $sensor['userId'], PDO::PARAM_INT);
+
+                    $statementDates = $connection->prepare("SELECT MIN(date_time) AS startDate, MAX(date_time) AS endDate FROM `dataPoints` INNER JOIN `sensors` ON `dataPoints`.`sensor_id`=`sensors`.`sensorId` WHERE `sensors`.`userId`=:userId;");
+                    $statementDates->bindValue(":userId", $sensor['userId'], PDO::PARAM_INT);
                 }
 
                 $statement->execute();
-
                 $trends = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
+                $statementDates->execute();
+                $trendDates = $statementDates->rowCount() > 0 ? $statementDates->fetch(PDO::FETCH_ASSOC) : array();
+
                 foreach ($trends as $trendIndex => $trend) {
+
+                    $trends[$trendIndex]['startDate'] = $trendDates['startDate'];
+                    $trends[$trendIndex]['endDate'] = $trendDates['endDate'];
+
                     // Associated Trends
                     $associatedTrends = json_decode($trend['associatedTrends'], true);
 
@@ -417,6 +431,7 @@
 
             //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trendSearchData['trendId'], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
             $trend = array();
+            $currentTrend = array();
 
             try {
 
@@ -428,6 +443,9 @@
                 $statement->execute();
 
                 $trend = $statement->rowCount() > 0 ? $statement->fetch(PDO::FETCH_ASSOC) : array();
+
+                $currentTrend['userId'] = $trend['userId'];
+                $currentTrend['sensorId'] = $trend['sensorId'];
 
                 //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
@@ -676,6 +694,18 @@
                 }
                 
                 $trend = $trendDataPoints;
+
+
+
+                $statementDates = $connection->prepare("SELECT MIN(date_time) AS startDate, MAX(date_time) AS endDate FROM `dataPoints` INNER JOIN `sensors` ON `dataPoints`.`sensor_id`=`sensors`.`sensorId` WHERE `sensors`.`userId`=:userId AND `sensors`.`id`=:sensorId;");
+                $statementDates->bindValue(":userId", $currentTrend['userId'], PDO::PARAM_INT);
+                $statementDates->bindValue(":sensorId", $currentTrend['sensorId'], PDO::PARAM_INT);
+
+                $statementDates->execute();
+                $trendDates = $statementDates->rowCount() > 0 ? $statementDates->fetch(PDO::FETCH_ASSOC) : array();
+                $trend['startDate'] = $trendDates['startDate'];
+                $trend['endDate'] = $trendDates['endDate'];
+
                 //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend) . "\n", 3, "/var/www/html/app/php-errors.log");
             }
             catch(PDOException $pdo) {
@@ -687,7 +717,7 @@
             finally {
                 $connection = Configuration::closeConnection();
             }
-
+            
             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
             return $trend;

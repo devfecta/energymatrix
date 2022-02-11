@@ -591,19 +591,28 @@ class DataPoints extends DataPoint {
 
     public function checkDataPointCount($sensorInfo) {
 
+// NEED TO ADD ANOTHER PROPERTY TO MAKE SURE ITS CHECKING THE SAME SENSOR DATA POINTS
+
         $changed = false;
         // Array of Raw Data Points
-        $dataPointsArray = $this->getUserSensorDataPoints($sensorInfo['userId'], $sensorInfo['sensorId']);
+        $dataPointsArray[$sensorInfo['sensorId']] = $this->getUserSensorDataPoints($sensorInfo['userId'], $sensorInfo['sensorId']);
+        $sizeOfDataPointsArray = sizeof($dataPointsArray[$sensorInfo['sensorId']]);
+        
+        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorInfo['sensorId'] . " = " . $sizeOfDataPointsArray . " -- " . $_SESSION["sensorDataPoints"][$sensorInfo['sensorId']] . "\n", 3, "/var/www/html/app/php-errors.log");
 
-        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . sizeof($dataPointsArray) . "=" . sizeof($_SESSION["sensorDataPoints"]) . "\n", 3, "/var/www/html/app/php-errors.log");
-
-        if (sizeof($dataPointsArray) != sizeof($_SESSION["sensorDataPoints"])) {
-            unset($_SESSION["sensorDataPoints"]);
-            $_SESSION["sensorDataPoints"] = $dataPointsArray;
+        if (isset($_SESSION["sensorDataPoints"][$sensorInfo['sensorId']]) && $sizeOfDataPointsArray != $_SESSION["sensorDataPoints"][$sensorInfo['sensorId']]) {
+            //unset($_SESSION["sensorDataPoints"]);
+            //$_SESSION["sensorDataPoints"] = $dataPointsArray;
+            $_SESSION["sensorDataPoints"][$sensorInfo['sensorId']] = $sizeOfDataPointsArray;
             $changed = true;
         }
+        else {
+            $_SESSION["sensorDataPoints"][$sensorInfo['sensorId']] = $sizeOfDataPointsArray;
+            $changed = false;
+        }
 
-        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . "test" . "\n", 3, "/var/www/html/app/php-errors.log");
+
+        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorInfo['sensorId'] . " = " . $changed . "\n", 3, "/var/www/html/app/php-errors.log");
 
         return boolval($changed) ? 'true' : 'false';
     }

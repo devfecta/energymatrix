@@ -3,7 +3,7 @@
 /**
  * May be able to remove this in production
  */
-//header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Origin: *");
 //header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 ob_start();
 session_start();
@@ -70,7 +70,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                                 $_SESSION['type'] = $result->type;
 
                                 if ($result->type > 0) {
-                                    setcookie("adminId", $result->id, time() + 3600);
+                                    setcookie("adminId", $result->id, 0);
                                     /*
                                     setcookie("adminId", $result->id, [
                                         'expires' => time() + 3600,
@@ -81,7 +81,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                                     */
                                 }
                                 else {
-                                    setcookie("userId", $result->id, time() + 3600);
+                                    setcookie("userId", $result->id, 0);
                                     /*
                                     setcookie("userId", $result->id, [
                                         'expires' => time() + 3600,
@@ -91,7 +91,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                                     ]);
                                     */
                                 }
-                                setcookie("userType", $result->type, time() + 3600);
+                                setcookie("userType", $result->type, 0);
                                 /*
                                 setcookie("userType", $result->type, [
                                     'expires' => time() + 3600,
@@ -329,7 +329,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                                 );
                                 
                             }
-
+//error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($dataPointArray) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            
                             echo json_encode($dataPointArray);
                             break;
                         case "getSensorDataTypes":

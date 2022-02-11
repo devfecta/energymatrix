@@ -69,6 +69,20 @@ class Trends extends Services {
 
             let trendsList = document.querySelector("#trends");
 
+            // Sets the date and time textboxes to the min and max dates and times of the sensor's data points.
+            let trendsStartDate = document.querySelector("#startDate");
+            let trendsStartTime = document.querySelector("#startTime");
+            let startDateTime = new Date(response[0].startDate);
+            trendsStartDate.value = startDateTime.toLocaleDateString('en-CA');
+            trendsStartTime.value = startDateTime.toLocaleTimeString('en-US', { hour12: false });
+
+            let trendsEndDate = document.querySelector("#endDate");
+            let trendsEndTime = document.querySelector("#endTime");
+            let endDateTime = new Date(response[0].endDate);
+            trendsEndDate.value = endDateTime.toLocaleDateString('en-CA');
+            trendsEndTime.value = endDateTime.toLocaleTimeString('en-US', { hour12: false });
+
+
             response.forEach(trend => {
 
                 trendsList.append(this.listItemConfigureTrend(trend));
@@ -88,6 +102,19 @@ class Trends extends Services {
         this.getConfiguredTrend(trendId, "null", "null")
         .then(response => {
             //console.log(response);
+
+            // Sets the date and time textboxes to the min and max dates and times of the sensor's data points.
+            let trendsStartDate = document.querySelector("#startDate");
+            let trendsStartTime = document.querySelector("#startTime");
+            let startDateTime = new Date(response.startDate);
+            trendsStartDate.value = startDateTime.toLocaleDateString('en-CA');
+            trendsStartTime.value = startDateTime.toLocaleTimeString('en-US', { hour12: false });
+
+            let trendsEndDate = document.querySelector("#endDate");
+            let trendsEndTime = document.querySelector("#endTime");
+            let endDateTime = new Date(response.endDate);
+            trendsEndDate.value = endDateTime.toLocaleDateString('en-CA');
+            trendsEndTime.value = endDateTime.toLocaleTimeString('en-US', { hour12: false });
 
             let trendsList = document.querySelector("#trends");
 
