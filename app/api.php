@@ -304,7 +304,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
                     $dataPoints = new DataPoints();
                     switch ($_GET['method']) {
                         case "checkDataPointCount":
-                            echo $dataPoints->checkDataPointCount($_GET);
+                            echo json_encode($dataPoints->checkDataPointCount($_GET));
                             break;
                         case "getMinMaxDates":
                             echo $dataPoints->getMinMaxDates($_GET['userId'], $_GET['sensorId']);

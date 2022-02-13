@@ -4,6 +4,7 @@
  * Author: Kevin Kelm
  * Project Start Date: 2020-04-07
  */
+
 require_once('Configuration.php');
 require_once('Sensor.php');
 require_once('DataPoint.php');
@@ -251,6 +252,7 @@ class DataPoints extends DataPoint {
             $sensorId = Sensor::getSensor($sensorId)->getSensorId();
 
             if ($endDateTime != "null") {
+                
                 $statement = $connection->prepare("SELECT * FROM `dataPoints` WHERE `dataPoints`.`sensor_id`=:sensor_id AND `dataPoints`.`user_id`=:user_id AND `dataPoints`.`date_time`>=:startDateTime AND `dataPoints`.`date_time`<=:endDateTime ORDER BY `date_time` DESC");
                 /* REVISIT
                 $statement = $connection->prepare("
@@ -286,6 +288,9 @@ class DataPoints extends DataPoint {
             $statement->execute();
 
             $resultsTemp = $statement->fetchAll(PDO::FETCH_ASSOC);
+
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') 
+            //. " datapoints=" . json_encode($resultsTemp) . "\n", 3, "/var/www/html/app/php-errors.log");
             
             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') 
             //. " resultsTemp sizeof " . sizeof($resultsTemp) . "\n", 3, "/var/www/html/app/php-errors.log");
@@ -591,30 +596,39 @@ class DataPoints extends DataPoint {
 
     public function checkDataPointCount($sensorInfo) {
 
-// NEED TO ADD ANOTHER PROPERTY TO MAKE SURE ITS CHECKING THE SAME SENSOR DATA POINTS
-
         $changed = false;
-        // Array of Raw Data Points
-        $dataPointsArray[$sensorInfo['sensorId']] = $this->getUserSensorDataPoints($sensorInfo['userId'], $sensorInfo['sensorId']);
-        $sizeOfDataPointsArray = sizeof($dataPointsArray[$sensorInfo['sensorId']]);
-        
-        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorInfo['sensorId'] . " = " . $sizeOfDataPointsArray . " -- " . $_SESSION["sensorDataPoints"][$sensorInfo['sensorId']] . "\n", 3, "/var/www/html/app/php-errors.log");
+        $result = array();
 
-        if (isset($_SESSION["sensorDataPoints"][$sensorInfo['sensorId']]) && $sizeOfDataPointsArray != $_SESSION["sensorDataPoints"][$sensorInfo['sensorId']]) {
-            //unset($_SESSION["sensorDataPoints"]);
-            //$_SESSION["sensorDataPoints"] = $dataPointsArray;
-            $_SESSION["sensorDataPoints"][$sensorInfo['sensorId']] = $sizeOfDataPointsArray;
+        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($_SESSION["sensorDataPoints"]) . "\n", 3, "/var/www/html/app/php-errors.log");
+
+        // Array of Raw Data Points
+        $dataPointsArray[$sensorInfo['trendId']][$sensorInfo['sensorId']] = $this->getUserSensorDataPoints($sensorInfo['userId'], $sensorInfo['sensorId']);
+        $sizeOfDataPointsArray = sizeof($dataPointsArray[$sensorInfo['trendId']][$sensorInfo['sensorId']]);
+        
+        if (isset($_SESSION["sensorDataPoints"]['trendId'.$sensorInfo['trendId']]['sensorId'.$sensorInfo['sensorId']]) && $sizeOfDataPointsArray != $_SESSION["sensorDataPoints"]['trendId'.$sensorInfo['trendId']]['sensorId'.$sensorInfo['sensorId']]) {
+            $_SESSION["sensorDataPoints"]['trendId'.$sensorInfo['trendId']]['sensorId'.$sensorInfo['sensorId']] = $sizeOfDataPointsArray;
             $changed = true;
         }
         else {
-            $_SESSION["sensorDataPoints"][$sensorInfo['sensorId']] = $sizeOfDataPointsArray;
+            $_SESSION["sensorDataPoints"]['trendId'.$sensorInfo['trendId']]['sensorId'.$sensorInfo['sensorId']] = $sizeOfDataPointsArray;
             $changed = false;
         }
 
+          
+        
+        $dates = $this->getMinMaxDates($sensorInfo['userId'], $sensorInfo['sensorId']);
+
+        $dates = json_decode($dates);
+
+        $result["maximum"] = $dates->maximum;
+
+        $result["changed"] = boolval($changed) ? 'true' : 'false';
 
         //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorInfo['sensorId'] . " = " . $changed . "\n", 3, "/var/www/html/app/php-errors.log");
+        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($result, JSON_PRETTY_PRINT). "\n", 3, "/var/www/html/app/php-errors.log");
 
-        return boolval($changed) ? 'true' : 'false';
+        //return boolval($changed) ? 'true' : 'false';
+        return $result;
     }
 
 }

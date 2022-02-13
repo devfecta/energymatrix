@@ -167,11 +167,10 @@ class Charting extends Services {
         if (document.cookie.includes('; ') && document.cookie.includes('userId')) {
             const userId = document.cookie.split('; ').find(c => c.startsWith('userId')).split('=')[1];
             const urlParams = new URLSearchParams(window.location.search);
-
+//console.log(trendId, endDateTime, startDateTime);
             const trends = new Trends();
             trends.getConfiguredTrend(trendId, endDateTime, startDateTime)
             .then(dataPoints => {
-
                 const charting = new Charting();
                 let chart = null;
                 // Create charts here

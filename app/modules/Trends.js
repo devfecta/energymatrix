@@ -237,7 +237,8 @@ class Trends extends Services {
                 trendDetailRow = document.createElement("div");
                 trendDetailRow.setAttribute("class", "col-md-2");
 
-                trendDetailRow.innerHTML += (trend.trendName) ? trend.trendName : `Sensor: ` + trend.sensor.sensor_name;
+                //(trend.sensor) ? trend.sensor.sensor_name : trend.sensor_name
+                trendDetailRow.innerHTML += (trend.trendName) ? trend.trendName : `Sensor: ` + trend.sensor_name;
                 trendColumn.append(trendDetailRow);
             });
 
