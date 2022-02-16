@@ -169,8 +169,12 @@ class Charting extends Services {
             const urlParams = new URLSearchParams(window.location.search);
 //console.log(trendId, endDateTime, startDateTime);
             const trends = new Trends();
-            trends.getConfiguredTrend(trendId, endDateTime, startDateTime)
+
+            //console.log(chartDiv, trendId, startDateTime, endDateTime);
+
+            trends.getConfiguredTrend(trendId, startDateTime, endDateTime)
             .then(dataPoints => {
+                //console.log(dataPoints);
                 const charting = new Charting();
                 let chart = null;
                 // Create charts here

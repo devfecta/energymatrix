@@ -124,11 +124,11 @@
                 
                 $average = 0;
                 $currentAverage = 0;
-                $operationalEndTime = strtotime($trend->operationalEndTime);
                 $operationalStartTime = strtotime($trend->operationalStartTime);
+                $operationalEndTime = strtotime($trend->operationalEndTime);
             //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " trendId=" . $trend->trendId . " operationalEndTime=" . $trend->operationalEndTime . " operationalStartTime=" . $trend->operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
 
-                $trendSearchData = array("trendId" => $trend->trendId, "startDate" => $trend->operationalEndTime, "endDate" => $trend->operationalStartTime);
+                $trendSearchData = array("trendId" => $trend->trendId, "startDate" => $trend->operationalStartTime, "endDate" => $trend->operationalEndTime);
                 //$trendSearchData = array("trendId" => $trend->trendId, "startDate" => "2000-01-01 00:00:00", "endDate" => date("Y-m-d h:m:s"));
 
                 $data = $this->getConfiguredTrend($trendSearchData);
@@ -155,6 +155,8 @@
                     $dataPointDataValue = floatval($point["data_value"]);
 
                     // All Data Points within operational range.
+                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " operationalMinimum=" . $operationalMinimum . " operationalMaximum=" . $operationalMaximum . " dataPointDataValue=" . $dataPointDataValue . "\n", 3, "/var/www/html/app/php-errors.log");
+                        
                     if ($dataPointDataValue >= $operationalMinimum && $dataPointDataValue <= $operationalMaximum) {
                         $dataPoint = new DataPoint();
                         $dataPoint->setDataPointId($point["id"]);
@@ -170,7 +172,7 @@
                         // Duration Data Points
                         $dataPointDateTime = strtotime($point["date_time"]);
                         //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " dataPointDateTime=" . $dataPointDateTime . " operationalEndTime=" . $operationalEndTime . " operationalStartTime=" . $operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
-                        if ($dataPointDateTime >= $operationalEndTime && $dataPointDateTime <= $operationalStartTime) {
+                        if ($dataPointDateTime >= $operationalStartTime && $dataPointDateTime <= $operationalEndTime) {
                             $dataPoint = new DataPoint();
                             $dataPoint->setDataPointId($point["id"]);
                             $dataPoint->setUserId($point["user_id"]);
@@ -429,7 +431,7 @@
 
         public function getConfiguredTrend($trendSearchData) {
 
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trendSearchData['trendId'], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            // error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
             $trend = array();
             $currentTrend = array();
 
@@ -447,7 +449,7 @@
                 $currentTrend['userId'] = $trend['userId'];
                 $currentTrend['sensorId'] = $trend['sensorId'];
 
-                //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                // error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
                 // Associated Trends
                 $associatedTrends = json_decode($trend['associatedTrends'], true);
@@ -455,8 +457,6 @@
                 $associatedTrendsArray = array();
 
                 foreach ($associatedTrends as $associatedTrend) {
-
-                    
 
                     $statement = $connection->prepare("SELECT * FROM `trendsConfigurations` WHERE `id`=:id");
                     $statement->bindValue(":id", $associatedTrend["trendId"], PDO::PARAM_INT);
@@ -476,8 +476,8 @@
                     }
                     
                 }
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($associatedTrendsArray, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($associatedTrendsArray) . "\n", 3, "/var/www/html/app/php-errors.log");
                 $trend["associatedTrends"] = $associatedTrendsArray;
                 //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                             
@@ -503,9 +503,11 @@
                     . "\n", 3, "/var/www/html/app/php-errors.log");
                 */
                 $DataPoints = new DataPoints();
-
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . "userId=" . $trend["userId"] . " sensorId=" .  $trend["sensorId"] . " startDate=" .  $trendSearchData['startDate'] . " endDate=" .  $trendSearchData['endDate'] . "\n", 3, "/var/www/html/app/php-errors.log");
                 // Array of Raw Data Points
                 $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], $trendSearchData['startDate'], $trendSearchData['endDate']);
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($rawDataPoints, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                 /*
                 error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                     "userId=" . $trend["userId"] . " sensorId=" . $trend["sensorId"] . " startDate=" . $trendSearchData['startDate'] . " endDate=" . $trendSearchData['endDate']

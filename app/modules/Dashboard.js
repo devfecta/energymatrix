@@ -59,102 +59,122 @@ class Dashboard extends Services {
 
                 visibleTrends.forEach(visibleTrend => {
 
+                    //console.log(visibleTrend);
+
                     trends.getUserConfiguredTrends(visibleTrend.id)
                     .then(userConfiguredTrend => {
 
                         const visibleUserTrends = userConfiguredTrend.filter(userTrend => parseInt(userTrend.isVisible));
-                        
-        
+                    
                         if (visibleUserTrends.length) {
                             visibleUserTrends.forEach(trend => {
 
-                                let durationEndDateTime = "2022-02-01 16:00:00";
-
-// NEED to work on the bullet chart so the duration matches.
-
-                                let durationStartDateTime = new Date(durationEndDateTime);
-                                durationStartDateTime = durationStartDateTime.setHours(durationStartDateTime.getHours() - trend.operationalDuration);
-                                durationStartDateTime = new Date(durationStartDateTime);
-                                durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + ("0" +durationStartDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
-                                
-                                
-                                trend.operationalEndTime = durationStartDateTime;
-
-                                trend.operationalStartTime = durationEndDateTime;
-
-
-                                /*
-                                let durationEndDateTime = new Date(trend.operationalStartTime);
-                                durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + ("0" + durationEndDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationEndDateTime.getSeconds()).slice(-2);
-
-                                let durationStartDateTime = new Date(trend.operationalStartTime);
-                                durationStartDateTime = durationStartDateTime.setHours(durationStartDateTime.getHours() - trend.operationalDuration);
-                                durationStartDateTime = new Date(durationStartDateTime);
-                                durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + ("0" +durationStartDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
-
-                                trend.operationalEndTime = durationStartDateTime;
-                                */
-                                // Draws Bullet Charts Once
-                                trends.getUserConfiguredTrendAverages(trend)
-                                .then(response => {
-                                    
-                                    if (response) {
-
-                                        trend.latestDataPointValue = response.latestDataPoint;
-                                        trend.currentAverageValue = response.currentAverage;
-                                        trend.averageValue = response.average;
-                                        
-                                        trend.unit = visibleTrend.unit;
-                                        trend.trendName = visibleTrend.trendName;
-                                        trend.durationStartDateTime = durationStartDateTime;
-                                        trend.durationEndDateTime = durationEndDateTime;
-
-                                        const bulletChartDiv = document.createElement("div");
-                                        bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
-                                        bulletChartDiv.setAttribute("class", "col-md-6 m-2 p-1");
-                                        bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + trend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + trend.unit
-                                                                + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${trend.durationStartDateTime} - ${trend.durationEndDateTime}</span></p>`;
-                                        // Need to append to dashboard to get the clientWidth.                        
-                                        dashboard.append(bulletChartDiv);
-
-                                        // Creates Bullet Chart
-                                        let bulletChart = charting.getBulletChart(bulletChartDiv, trend);
-                                        dashboard.append(bulletChart);
-                                        /*
-                                        const bulletChartDiv = document.createElement("div");
-                                        bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
-                                        bulletChartDiv.setAttribute("class", "col-md-6 m-2 p-1");
-                                        bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + trend.unit
-                                                                + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${durationStartDateTime} - ${durationEndDateTime}</span></p>`;
-                
-                                        dashboard.append(bulletChartDiv);
-
-                                        console.log(trend);
-                
-                                        charting.getBulletChart(bulletChartDiv, trend);
-                                        */
-                                        //console.log(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
-                                        // Creates Line Chart
-                                        let trendRawDataChart = document.createElement("div");
-                                        trendRawDataChart.setAttribute("id", "lineChartTrend" + trend.id);
-                                        trendRawDataChart.setAttribute("class", "col-md-5");
-                                        
-                                        ////let sesnorChart = charting.getSensorChart(trendRawDataChart, visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
-
-                                        let sesnorChart = charting.getTrendLineChart(trendRawDataChart, trend.trendId, trend.operationalStartTime, trend.operationalEndTime);
-
-                                        //console.log(sesnorChart);
-                                        //trendRawDataChart.append(sesnorChart);
-                                        dashboard.append(trendRawDataChart);
-                                                    
-
+                                let sensorId = 0;
+                                visibleTrends.forEach( t => {
+                                    if (t.id == trend.trendId) {
+                                        sensorId = t.sensorId;
                                     }
-                                    else {
-                                        alert("invalid date");
-                                    }
+                                });
+
+                                // Get the last data point's date for the initial load of the dashboard.
+                                this.getMinMaxDates(userId, sensorId)
+                                .then( dates => {
+                                    // Date/Time Info START
+                                    let durationEndDateTime = dates.maximum;
+                                    // Gets Current Date and Time
+                                    ////let durationEndDateTime = new Date();
+                                    ////durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + ("0" +durationEndDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationEndDateTime.getSeconds()).slice(-2);
+                                    //let durationEndDateTime = "2022-02-02 16:00:00";
                                     
+                                    let durationStartDateTime = durationEndDateTime;
+                                    durationStartDateTime = new Date(durationEndDateTime);
+                                    
+                                    // Subtracts from the current time the duration to get the start time of the date/time range.
+                                    durationStartDateTime = durationStartDateTime.setHours(durationStartDateTime.getHours() - trend.operationalDuration);
+                                    // Converts the start date/time to a Date object for formatting.
+                                    durationStartDateTime = new Date(durationStartDateTime);
+                                    // Formats the start date/time
+                                    durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + ("0" +durationStartDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
+                                    
+                                    trend.operationalEndTime = durationEndDateTime;
+
+                                    trend.operationalStartTime = durationStartDateTime;
+                                    // Date/Time Info END
+                                    /* OLD
+                                    let durationEndDateTime = new Date(trend.operationalStartTime);
+                                    durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + ("0" + durationEndDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationEndDateTime.getSeconds()).slice(-2);
+
+                                    let durationStartDateTime = new Date(trend.operationalStartTime);
+                                    durationStartDateTime = durationStartDateTime.setHours(durationStartDateTime.getHours() - trend.operationalDuration);
+                                    durationStartDateTime = new Date(durationStartDateTime);
+                                    durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + ("0" +durationStartDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
+
+                                    trend.operationalEndTime = durationStartDateTime;
+                                    */
+                                    // Draws Bullet Charts Once
+                                    trends.getUserConfiguredTrendAverages(trend)
+                                    .then(response => {
+                                        
+                                        if (response) {
+
+                                            trend.latestDataPointValue = response.latestDataPoint;
+                                            trend.currentAverageValue = response.currentAverage;
+                                            trend.averageValue = response.average;
+                                            
+                                            trend.unit = visibleTrend.unit;
+                                            trend.trendName = visibleTrend.trendName;
+                                            trend.durationStartDateTime = durationStartDateTime;
+                                            trend.durationEndDateTime = durationEndDateTime;
+
+                                            const bulletChartDiv = document.createElement("div");
+                                            bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
+                                            bulletChartDiv.setAttribute("class", "col-md-6 m-2 p-1");
+                                            bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + trend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + trend.unit
+                                                                    + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${trend.durationStartDateTime} - ${trend.durationEndDateTime}</span></p>`;
+                                            // Need to append to dashboard to get the clientWidth.                        
+                                            dashboard.append(bulletChartDiv);
+
+                                            // Creates Bullet Chart
+                                            let bulletChart = charting.getBulletChart(bulletChartDiv, trend);
+                                            dashboard.append(bulletChart);
+                                            /*
+                                            const bulletChartDiv = document.createElement("div");
+                                            bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
+                                            bulletChartDiv.setAttribute("class", "col-md-6 m-2 p-1");
+                                            bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + visibleTrend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + trend.unit
+                                                                    + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${durationStartDateTime} - ${durationEndDateTime}</span></p>`;
+                    
+                                            dashboard.append(bulletChartDiv);
+
+                                            console.log(trend);
+                    
+                                            charting.getBulletChart(bulletChartDiv, trend);
+                                            */
+                                            //console.log(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+                                            // Creates Line Chart
+                                            let trendRawDataChart = document.createElement("div");
+                                            trendRawDataChart.setAttribute("id", "lineChartTrend" + trend.id);
+                                            trendRawDataChart.setAttribute("class", "col-md-5");
+                                            
+                                            ////let sesnorChart = charting.getSensorChart(trendRawDataChart, visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
+                                            let sesnorChart = charting.getTrendLineChart(trendRawDataChart, trend.trendId, trend.operationalStartTime, trend.operationalEndTime);
+
+                                            //console.log(sesnorChart);
+                                            //trendRawDataChart.append(sesnorChart);
+                                            dashboard.append(trendRawDataChart);
+                                                        
+
+                                        }
+                                        else {
+                                            alert("invalid date");
+                                        }
+                                        
+                                    })
+                                    .catch(e => console.error(e));
                                 })
                                 .catch(e => console.error(e));
+                                
+                                
 
                             });
                         }
@@ -176,7 +196,7 @@ class Dashboard extends Services {
                                 this.checkDataPointCount(visibleTrend.id, visibleTrend.userId, visibleTrend.sensorId)
                                 .then(result => {
                                     //console.log("check", visibleTrend.id);
-                                    console.log("result", result.changed);
+                                    //console.log("result", result.changed);
                                     // There's a change in the data point count, re-draw bullet charts.
                                     //console.log(result.changed);
                                     if (result.changed == 'true') {
@@ -184,22 +204,30 @@ class Dashboard extends Services {
                                         //console.log("Change");
                                         // Gets new trend bullet charts.
                                         visibleUserTrends.forEach(trend => {
-                                            console.log("trend.length", trend);
+                                            //console.log("trend.length", trend);
                                             //if (trend.length) {
-                                                result.maximum = "2022-02-01 16:00:00";
-
-                                                let durationStartDateTime = new Date(result.maximum);
+                                                // Date/Time Info START
+                                                // Gets Current Date and Time
+                                                let durationEndDateTime = result.maximum;
+                                                //let durationEndDateTime = "2022-02-02 16:00:00";
+                                                
+                                                let durationStartDateTime = durationEndDateTime;
+                                                durationStartDateTime = new Date(durationEndDateTime);
+                                                
+                                                // Subtracts from the current time the duration to get the start time of the date/time range.
                                                 durationStartDateTime = durationStartDateTime.setHours(durationStartDateTime.getHours() - trend.operationalDuration);
+                                                // Converts the start date/time to a Date object for formatting.
                                                 durationStartDateTime = new Date(durationStartDateTime);
+                                                // Formats the start date/time
                                                 durationStartDateTime = durationStartDateTime.toLocaleDateString("fr-CA") + " " + durationStartDateTime.getHours() + ":" + ("0" +durationStartDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationStartDateTime.getSeconds()).slice(-2);
                                                 
-                                                
-                                                trend.operationalEndTime = durationStartDateTime;
+                                                trend.operationalEndTime = durationEndDateTime;
 
-                                                trend.operationalStartTime = result.maximum;
+                                                trend.operationalStartTime = durationStartDateTime;
+                                                // Date/Time Info END
 
 
-                                                /*
+                                                /* OLDER
                                                 let durationEndDateTime = new Date(trend.operationalStartTime);
                                             //    durationEndDateTime.setSeconds(durationEndDateTime.getSeconds() + 10);
                                                 durationEndDateTime = durationEndDateTime.toLocaleDateString("fr-CA") + " " + durationEndDateTime.getHours() + ":" + ("0" + durationEndDateTime.getMinutes()).slice(-2) + ":" + ("0" + durationEndDateTime.getSeconds()).slice(-2);
@@ -225,7 +253,7 @@ class Dashboard extends Services {
                                                 trends.getUserConfiguredTrendAverages(trend)
                                                 .then(response => {
 
-                                                    console.log(trend.operationalStartTime, trend.operationalEndTime);
+                                                    //console.log(trend.operationalStartTime, trend.operationalEndTime);
                                                     
                                                     if (response) {
 
@@ -293,6 +321,12 @@ class Dashboard extends Services {
         return await this.getApi("DataPoints", "checkDataPointCount", "trendId=" + trendId + "&userId=" + userId + "&sensorId=" + sensorId)
         .then(response => response)
         .catch(e => console.error(e));
+    }
+
+    getMinMaxDates = async (userId, sensorId) => {
+        return await this.getApi("DataPoints", "getMinMaxDates", "userId=" + userId + "&sensorId=" + sensorId)
+            .then( data => data)
+            .catch(error => console.log(error));
     }
     
 }
