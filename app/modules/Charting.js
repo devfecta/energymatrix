@@ -174,15 +174,14 @@ class Charting extends Services {
 
             trends.getConfiguredTrend(trendId, startDateTime, endDateTime)
             .then(dataPoints => {
-                //console.log(dataPoints);
-                const charting = new Charting();
-                let chart = null;
-                // Create charts here
+                
                 if (dataPoints.points.length) {
-                    
+                    const charting = new Charting();
+                    let chart = null;
+                    // Create charts here
                     const chartLineGraph = new ChartLineGraph();
                     let chartCanvas = HTMLElement;
-                    let chart = {
+                    chart = {
                         "id" : dataPoints.trend.id
                         , "sensorName" : dataPoints.trend.trendName
                         , "verticalLabel" : dataPoints.trend.unit
@@ -194,7 +193,9 @@ class Charting extends Services {
                     
                 }
                 else {
-                    //alert("No Data Points Found\rTry adjusting the date range.");
+                    chartDiv.classList.add("d-flex", "justify-content-center", "align-items-center");
+                    chartDiv.innerHTML = "<div class='row text-center'><b>No data points available in the specified time frame.</b><br/><p>" + startDateTime + " -- " + endDateTime + "</p></div>";
+                    
                 }
                 
             })

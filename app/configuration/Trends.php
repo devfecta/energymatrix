@@ -107,7 +107,9 @@
             finally {
                 $connection = Configuration::closeConnection();
             }
-            
+
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends, JSON_PRETTY_PRINT). "\n", 3, "/var/www/html/app/php-errors.log");
+
             return $trends;
 
 
@@ -122,41 +124,32 @@
 
                 //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " trend=" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
                 
-                $average = 0;
+                $lastAverage = 0;
                 $currentAverage = 0;
+
+                // Current Trend START
                 $operationalStartTime = strtotime($trend->operationalStartTime);
                 $operationalEndTime = strtotime($trend->operationalEndTime);
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " trendId=" . $trend->trendId . " operationalEndTime=" . $trend->operationalEndTime . " operationalStartTime=" . $trend->operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
-
+                /*
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . 
+                " operationalStartTime=" . $trend->operationalStartTime . 
+                " operationalEndTime=" . $trend->operationalEndTime . 
+                "\n", 3, "/var/www/html/app/php-errors.log");
+                */
                 $trendSearchData = array("trendId" => $trend->trendId, "startDate" => $trend->operationalStartTime, "endDate" => $trend->operationalEndTime);
-                //$trendSearchData = array("trendId" => $trend->trendId, "startDate" => "2000-01-01 00:00:00", "endDate" => date("Y-m-d h:m:s"));
 
                 $data = $this->getConfiguredTrend($trendSearchData);
 
                 $allDataPoints = array();
                 $durationDataPoints = array();
-
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " data=" . json_encode($data["points"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-                
-
+                // All Data Points within operational range.
                 foreach ($data["points"] as $point) {
-                    /*
-                    "id": "4040",
-                    "user_id": "2",
-                    "sensor_id": "528911",
-                    "date_time": "2021-07-01 17:05:54",
-                    "data_type": "kW",
-                    "data_value": 1.0911920087683924,
-                    "custom_value": "0.000"
-                    */ 
                     
                     $operationalMinimum = floatval($trend->operationalMinimum);
                     $operationalMaximum = floatval($trend->operationalMaximum);
                     $dataPointDataValue = floatval($point["data_value"]);
 
-                    // All Data Points within operational range.
-                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " operationalMinimum=" . $operationalMinimum . " operationalMaximum=" . $operationalMaximum . " dataPointDataValue=" . $dataPointDataValue . "\n", 3, "/var/www/html/app/php-errors.log");
-                        
+                    // Gets all data points that only fall within the Operational Min and Max
                     if ($dataPointDataValue >= $operationalMinimum && $dataPointDataValue <= $operationalMaximum) {
                         $dataPoint = new DataPoint();
                         $dataPoint->setDataPointId($point["id"]);
@@ -169,10 +162,13 @@
         
                         array_push($allDataPoints, $dataPoint);
 
-                        // Duration Data Points
+                        // Gets all of the Min and Max data points that fall within the Operational Duration
                         $dataPointDateTime = strtotime($point["date_time"]);
                         //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " dataPointDateTime=" . $dataPointDateTime . " operationalEndTime=" . $operationalEndTime . " operationalStartTime=" . $operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
                         if ($dataPointDateTime >= $operationalStartTime && $dataPointDateTime <= $operationalEndTime) {
+
+                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " point=" . json_encode($point, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                    
                             $dataPoint = new DataPoint();
                             $dataPoint->setDataPointId($point["id"]);
                             $dataPoint->setUserId($point["user_id"]);
@@ -184,48 +180,80 @@
             
                             array_push($durationDataPoints, $dataPoint);
                         }
-                        
+
                     }
 
                 }
+                // Current Trend END
 
+                // Last Average Trend START
+                $lastOperationalStartTime = date('Y-m-d H:i:s', strtotime("-".$trend->operationalDuration."hours", $operationalStartTime));
+                $lastOperationalEndTime = date('Y-m-d H:i:s', $operationalStartTime);
                 /*
-                foreach($durationDataPoints as $dataPoint) {
-                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " durationDataPoints=" . $dataPoint->getDataValue() . "\n", 3, "/var/www/html/app/php-errors.log");
-                
-                }
-                foreach($allDataPoints as $dataPoint) {
-                    error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " allDataPoints=" . $dataPoint->getDataValue() . "\n", 3, "/var/www/html/app/php-errors.log");
-                
-                }
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . 
+                " lastOperationalStartTime=" . $lastOperationalStartTime . 
+                " lastOperationalEndTime=" . $lastOperationalEndTime . 
+                "\n", 3, "/var/www/html/app/php-errors.log");
                 */
-                
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " durationDataPoints=" . json_encode($durationDataPoints, JSON_PRETTY_PRINT) . " allDataPoints=" . json_encode($allDataPoints, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-                
-                $average = (sizeof($durationDataPoints) > 0) ? $this->Formulas->currentAverage($durationDataPoints, 0) : 0;
-                $currentAverage =  (sizeof($allDataPoints) > 0) ? $this->Formulas->currentAverage($allDataPoints, 0) : 0;
+                $trendSearchData = array("trendId" => $trend->trendId, "startDate" => $lastOperationalStartTime, "endDate" => $lastOperationalEndTime);
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " average=" . $average . " currentAverage=" . $currentAverage . "\n", 3, "/var/www/html/app/php-errors.log");
+                $lastOperationalStartTime = strtotime($lastOperationalStartTime);
+                $lastOperationalEndTime = strtotime($lastOperationalEndTime);
+
+                $data = $this->getConfiguredTrend($trendSearchData);
+
+                $lastDurationDataPoints = array();
+                // All Data Points within operational range.
+                foreach ($data["points"] as $point) {
+
+                    $operationalMinimum = floatval($trend->operationalMinimum);
+                    $operationalMaximum = floatval($trend->operationalMaximum);
+                    $dataPointDataValue = floatval($point["data_value"]);
+                    
+                    // Gets all data points that only fall within the Operational Min and Max
+                    if ($dataPointDataValue >= $operationalMinimum && $dataPointDataValue <= $operationalMaximum) {
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " test " ."\n", 3, "/var/www/html/app/php-errors.log");
+                        $dataPointDateTime = strtotime($point["date_time"]);
+
+                        if ($dataPointDateTime >= $lastOperationalStartTime && $dataPointDateTime <= $lastOperationalEndTime) {
+                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " point=" . json_encode($point, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            $dataPoint = new DataPoint();
+                            $dataPoint->setDataPointId($point["id"]);
+                            $dataPoint->setUserId($point["user_id"]);
+                            $dataPoint->setSensorId($point["sensor_id"]);
+                            $dataPoint->setDate($point["date_time"]);
+                            $dataPoint->setDataType($point["data_type"]);
+                            $dataPoint->setDataValue($point["data_value"]);
+                            $dataPoint->setCustomValue($point["custom_value"]);
+            
+                            array_push($lastDurationDataPoints, $dataPoint);
+                        }
+
+                    }
+
+                }
+                // Last Average Trend END
+                
+                // Average of all the Min and Max data points that fall within the Operational Duration
+                $currentAverage = (sizeof($durationDataPoints) > 0) ? $this->Formulas->currentAverage($durationDataPoints, 0) : 0;
+                
+                // Average of all data points that only fall within the last Operational Min and Max
+                $lastAverage = (sizeof($lastDurationDataPoints) > 0) ? $this->Formulas->currentAverage($lastDurationDataPoints, 0) : 0;
+
             }
             catch (Exception $e) {
                 error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
             }
 
-            
-            
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($currentAverage, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode(count($dataPoints), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode(["latestDataPoint" => $allDataPoints[count($allDataPoints)-1]->getDataValue(), "currentAverage" => $currentAverage, "average" => $average], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-
+            // Gets the last data point inserted from the web hook for the trend
             if (sizeof($allDataPoints) > 0) {
                 $latestDataPoint = $allDataPoints[count($allDataPoints)-1]->getDataValue();
-                
             }
             else {
                 $latestDataPoint = 0;
             }
 
-            return array("latestDataPoint" => $latestDataPoint, "currentAverage" => $currentAverage, "average" => $average);
+            return array("latestDataPoint" => $latestDataPoint, "lastAverage" => $lastAverage, "currentAverage" => $currentAverage);
         }
 
         /**

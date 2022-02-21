@@ -134,6 +134,64 @@ class Services {
 
         return formElement;
     }
+    /**
+     * Returns start and end date/time information for a trend.
+     * @param {Date} currentDateTime 
+     * @param {string} startDateTime 
+     * @param {string} duration 
+     * @returns {JSON}
+     */
+    getOperationalDuration(currentDateTime, startDateTime, duration) {
+
+        const operationalDateTime = {
+            currentDateTime: ""
+            ,operationalStartDate: ""
+            , operationalStartTime: ""
+            , operationalStartDateTime: ""
+            , operationalEndDate: ""
+            , operationalEndTime: ""
+            , operationalEndDateTime: ""
+            , inRange: false
+        };
+
+        let durationStartDateTime = new Date(startDateTime);
+        durationStartDateTime.setFullYear(currentDateTime.getFullYear());
+        durationStartDateTime.setMonth(currentDateTime.getMonth());
+        durationStartDateTime.setDate(currentDateTime.getDate());
+
+        // Looks to see if the current time is within a shift.
+        let startRange = 0;
+        while (startRange < 24) {
+
+            let endRange = startRange + parseInt(duration)
+
+            if (currentDateTime.getHours() >= startRange && currentDateTime.getHours() < endRange) {
+                durationStartDateTime.setHours(startRange);
+                break;
+            }
+
+            startRange += parseInt(duration);
+        }
+
+        let durationEndDateTime = new Date(durationStartDateTime);
+        durationEndDateTime.setHours(durationEndDateTime.getHours() + parseInt(duration));
+        
+
+        operationalDateTime.currentDateTime = currentDateTime.toLocaleDateString('fr-CA', {year: "numeric", month: "2-digit", day: "2-digit"});
+        operationalDateTime.currentDateTime += " " + currentDateTime.toLocaleTimeString("en-US", {hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit"});
+        
+        operationalDateTime.operationalStartDate = durationStartDateTime.toLocaleDateString('fr-CA', {year: "numeric", month: "2-digit", day: "2-digit"});
+        operationalDateTime.operationalStartTime = durationStartDateTime.toLocaleTimeString("en-US", {hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit"});
+        
+        operationalDateTime.operationalEndDate = durationEndDateTime.toLocaleDateString('fr-CA', {year: "numeric", month: "2-digit", day: "2-digit"});
+        operationalDateTime.operationalEndTime = durationEndDateTime.toLocaleTimeString("en-US", {hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit"});
+
+        operationalDateTime.operationalStartDateTime = operationalDateTime.operationalStartDate + " " + operationalDateTime.operationalStartTime;
+
+        operationalDateTime.operationalEndDateTime = operationalDateTime.operationalEndDate + " " + operationalDateTime.operationalEndTime;
+        
+        return operationalDateTime;
+    }
 }
 
 export default Services;

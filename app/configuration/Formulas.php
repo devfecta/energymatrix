@@ -75,7 +75,7 @@
             // Calculates the range average.
             $currentAverage = ($count > 0) ? $sum / $count : 0;
 
-            return round($currentAverage, 1);
+            return round($currentAverage, 2);
         }
 
         /**
