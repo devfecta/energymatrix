@@ -133,6 +133,9 @@ class DataPoints extends DataPoint {
             $statement->execute();
             $sensorData = $statement->fetch(PDO::FETCH_ASSOC);
 
+            $dataCustomType = null;
+            $dataCustomValue = 0;
+
             // Gets the data type and value.
             if (strpos($sensor['plotLabels'], '|')) {
                 $plotLabelArray = explode('|', $sensor['plotLabels']);
@@ -140,6 +143,14 @@ class DataPoints extends DataPoint {
 
                 $plotValueArray = explode('|', $sensor['plotValues']);
                 $dataValue = $plotValueArray[0];
+
+                // Amp Hours get the Avg Current
+                $dataType = trim($dataType);
+                if ($dataType == "Amp Hours") {
+                    $dataCustomType = $plotLabelArray[1];
+                    $dataCustomValue = $plotValueArray[1];
+                }
+                else {}
             }
             else {
                 $dataType = $sensor['plotLabels'];
@@ -180,23 +191,22 @@ class DataPoints extends DataPoint {
                 }
                 
             }
-            // NOT NEEDED anymore
-            //$plotLabels = $sensor['plotLabels'];
-            //$plotValues = $sensor['plotValues'];
 
             $statement = $connection->prepare("INSERT INTO `dataPoints` (
                 `user_id`,
                 `sensor_id`,
                 `date_time`,
                 `data_type`,
-                `data_value`
+                `data_value`,
+                `custom_value`
             ) 
             VALUES (
                 :user_id,
                 :sensor_id,
                 :date_time,
                 :data_type,
-                :data_value
+                :data_value,
+                :custom_value
             )");
 
             $statement->bindValue(":user_id", $userId, PDO::PARAM_INT); 
@@ -204,6 +214,7 @@ class DataPoints extends DataPoint {
             $statement->bindParam(":date_time", $sensor['messageDate'], PDO::PARAM_STR);
             $statement->bindParam(":data_type", $dataType, PDO::PARAM_STR);
             $statement->bindValue(":data_value", $dataValue);
+            $statement->bindValue(":custom_value", $dataAverageValue);
 
             // Insert Raw Data Point
             $connection->beginTransaction();
