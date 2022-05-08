@@ -50,6 +50,9 @@ final class DataPointsTest extends TestCase
                             , {
                                 "sensorID":"528880" , "sensorName":"528880 | 0-20mA Current | Test Company | 2", "applicationID":"22", "networkID":"3", "dataMessageGUID":"72feb5dc-08a9-4b65-8beb-278311e0499b", "state": "2", "messageDate": "'. date("Y-m-d H:i:s") .'", "rawData":"0", "dataType": "mA", "dataValue": "11.0", "plotValues": "11.25", "plotLabels": "mA", "batteryLevel": "0", "signalStrength": "0", "pendingChange": "False", "voltage": "2.15"
                             }
+                            ,{
+                                "sensorID":"528888","sensorName":"528888 | Current Meter 20 Amp | Test Company | 2","applicationID":"93","networkID":"3","dataMessageGUID":"8b7fc2d6-2364-48d1-97c4-d7ab801c3baf","state": "1","messageDate": "'. date("Y-m-d H:i:s") .'","rawData":"0%2c0%2c0%2c0","dataType": "AmpHours|Amps|Amps|Amps","dataValue": "0|0|0|0","plotValues": "0.3|0.4|0.2|0.1","plotLabels": "Amp Hours|AvgCurrent|MaxCurrent|MinCurrent","batteryLevel": "100","signalStrength": "96","pendingChange": "True","voltage": "3.03"
+                            }
                         ]', true);
 
         $this->assertNull($dataPoints->processWebhook($sensorMessages));

@@ -148,7 +148,7 @@ class DataPoints extends DataPoint {
                 $dataType = trim($dataType);
                 if ($dataType == "Amp Hours") {
                     $dataCustomType = $plotLabelArray[1];
-                    $dataCustomValue = $plotValueArray[1];
+                    $dataValue = $plotValueArray[1];
                 }
                 else {}
             }
@@ -214,7 +214,7 @@ class DataPoints extends DataPoint {
             $statement->bindParam(":date_time", $sensor['messageDate'], PDO::PARAM_STR);
             $statement->bindParam(":data_type", $dataType, PDO::PARAM_STR);
             $statement->bindValue(":data_value", $dataValue);
-            $statement->bindValue(":custom_value", $dataAverageValue);
+            $statement->bindValue(":custom_value", $dataCustomValue);
 
             // Insert Raw Data Point
             $connection->beginTransaction();
