@@ -155,9 +155,14 @@ class Services {
         };
 
         let durationStartDateTime = new Date(startDateTime);
+
+/*
+        When changing the date it's better to change the milliseconds of time.
         durationStartDateTime.setFullYear(currentDateTime.getFullYear());
         durationStartDateTime.setMonth(currentDateTime.getMonth());
         durationStartDateTime.setDate(currentDateTime.getDate());
+*/
+        durationStartDateTime.setTime(currentDateTime.getTime());
 
         // Looks to see if the current time is within a shift.
         let startRange = 0;
@@ -166,7 +171,9 @@ class Services {
             let endRange = startRange + parseInt(duration)
 
             if (currentDateTime.getHours() >= startRange && currentDateTime.getHours() < endRange) {
+                
                 durationStartDateTime.setHours(startRange);
+
                 break;
             }
 
@@ -174,8 +181,8 @@ class Services {
         }
 
         let durationEndDateTime = new Date(durationStartDateTime);
-        durationEndDateTime.setHours(durationEndDateTime.getHours() + parseInt(duration));
         
+        durationEndDateTime.setHours(durationEndDateTime.getHours() + parseInt(duration));
 
         operationalDateTime.currentDateTime = currentDateTime.toLocaleDateString('fr-CA', {year: "numeric", month: "2-digit", day: "2-digit"});
         operationalDateTime.currentDateTime += " " + currentDateTime.toLocaleTimeString("en-US", {hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit"});
@@ -190,6 +197,8 @@ class Services {
 
         operationalDateTime.operationalEndDateTime = operationalDateTime.operationalEndDate + " " + operationalDateTime.operationalEndTime;
         
+        //console.log("operationalDateTime", operationalDateTime);
+
         return operationalDateTime;
     }
 }

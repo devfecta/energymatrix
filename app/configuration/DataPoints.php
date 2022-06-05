@@ -145,8 +145,9 @@ class DataPoints extends DataPoint {
                 $dataValue = $plotValueArray[0];
 
                 // Amp Hours get the Avg Current
-                $dataType = trim($dataType);
-                if ($dataType == "Amp Hours") {
+                //$dataType = trim($dataType);
+                if (strpos($dataType, "Amp Hours") !== false) {
+                    $dataType = trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $plotLabelArray[1]));
                     $dataCustomType = $plotLabelArray[1];
                     $dataValue = $plotValueArray[1];
                 }

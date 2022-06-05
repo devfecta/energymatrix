@@ -51,22 +51,20 @@ class Dashboard extends Services {
             const charting = new Charting();
             const trends = new Trends();
 
-            let visibleTrends = [];
+            //let visibleTrends = [];
             
-            let userTrend = trends.getConfiguredTrends (null, userId)
+            trends.getConfiguredTrends (null, userId)
             .then(userTrends => {
                 // Array of only visible trends under Trends.
                 const visibleTrends = userTrends.filter(userTrend => parseInt(userTrend.isVisible));
 
                 visibleTrends.forEach(visibleTrend => {
 
-                    //console.log(visibleTrend);
-
                     trends.getUserConfiguredTrends(visibleTrend.id)
                     .then(userConfiguredTrend => {
 
                         const visibleUserTrends = userConfiguredTrend.filter(userTrend => parseInt(userTrend.isVisible));
-                    
+    
                         if (visibleUserTrends.length) {
                             visibleUserTrends.forEach(trend => {
 
@@ -80,9 +78,7 @@ class Dashboard extends Services {
                                 // Get the last data point's date for the initial load of the dashboard.
                                 this.getMinMaxDates(userId, sensorId)
                                 .then( dates => {
-            //Put new function
-            
-            
+            //Put new function            
                                     let operationalDuration = this.getOperationalDuration(new Date(dates.maximum), trend.operationalStartTime, trend.operationalDuration);
                                     //let operationalDuration = this.getOperationalDuration(new Date(), trend.operationalStartTime, trend.operationalDuration);
                                     
@@ -101,7 +97,6 @@ class Dashboard extends Services {
                                             
                                             trend.unit = visibleTrend.unit;
                                             trend.trendName = visibleTrend.trendName;
-                                            
 
                                             const bulletChartDiv = document.createElement("div");
                                             bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
@@ -122,12 +117,9 @@ class Dashboard extends Services {
                                                                     + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${durationStartDateTime} - ${durationEndDateTime}</span></p>`;
                     
                                             dashboard.append(bulletChartDiv);
-
-                                            console.log(trend);
                     
                                             charting.getBulletChart(bulletChartDiv, trend);
                                             */
-                                            //console.log(visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
                                             // Creates Line Chart
                                             let trendRawDataChart = document.createElement("div");
                                             trendRawDataChart.setAttribute("id", "lineChartTrend" + trend.id);
@@ -136,7 +128,6 @@ class Dashboard extends Services {
                                             ////let sesnorChart = charting.getSensorChart(trendRawDataChart, visibleTrend.sensorId, trend.operationalEndTime, trend.operationalStartTime);
                                             let sesnorChart = charting.getTrendLineChart(trendRawDataChart, trend.trendId, trend.operationalStartTime, trend.operationalEndTime);
 
-                                            //console.log(sesnorChart);
                                             //trendRawDataChart.append(sesnorChart);
                                             dashboard.append(trendRawDataChart);
                                                         

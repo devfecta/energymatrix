@@ -83,6 +83,15 @@ final class TrendsTest extends TestCase
         $this->assertIsArray($trends->getConfiguredTrend($trend));
     }
 
+    public function testGetUserConfiguredTrends(): void 
+    {
+        $trends = new Trends();
+
+        $trend["trendId"] = 83;
+        var_dump($trends->getUserConfiguredTrends($trend));
+        $this->assertIsArray($trends->getUserConfiguredTrends($trend));
+    }
+
     
     public function OtestGetConfiguredTrendCurrentAverage(): void
     {
