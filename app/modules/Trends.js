@@ -911,6 +911,15 @@ class Trends extends Services {
                 .then(response => inputsGroup.append(response))
                 .catch(e => console.error(e));
                 break;
+            case "averaging":
+                // Averaging
+                inputGroup = document.createElement("div");
+                inputGroup.setAttribute("class", "col-md-12 my-1 form-group");
+
+                this.createAssociatedSensorsDropDown(userId, "Associated Sensors", true)
+                .then(response => inputsGroup.append(response))
+                .catch(e => console.error(e));
+                
             case "addition":
             case "subtraction":
             case "multiplication":
@@ -1230,6 +1239,7 @@ class Trends extends Services {
                 else {
                     // Creates another asscociate sensor dropdown menu.
                     if (additionalSenorTrends) {
+// NEED
                         // Limits the number of associated sensors to 3 on screen.
                         if (document.querySelectorAll("#associatedSensor").length <= 2) {
                             this.createAssociatedSensorsDropDown(userId, dropdownLabel, true).then(response => formulaInputs.append(response)).catch(e => console.error(e));

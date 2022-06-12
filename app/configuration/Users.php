@@ -32,10 +32,10 @@
 
             }
             catch(PDOException $pdo) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 Configuration::closeConnection();
@@ -47,7 +47,7 @@
         public function deleteCompany($userInfo) {
             $result = false;
             $data = json_decode(json_encode($userInfo), false);
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorId . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $sensorId . "\n", 3, ERROR_LOG);
 
             try {
                 $connection = Configuration::openConnection();
@@ -65,10 +65,10 @@
                 }
             }
             catch(PDOException $pdo) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 Configuration::closeConnection();

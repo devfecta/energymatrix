@@ -153,17 +153,17 @@ class Services {
             , operationalEndDateTime: ""
             , inRange: false
         };
-
+        /*
+        // OLD Way START
         let durationStartDateTime = new Date(startDateTime);
 
-/*
-        When changing the date it's better to change the milliseconds of time.
+        //When changing the date it's better to change the milliseconds of time.
         durationStartDateTime.setFullYear(currentDateTime.getFullYear());
         durationStartDateTime.setMonth(currentDateTime.getMonth());
         durationStartDateTime.setDate(currentDateTime.getDate());
-*/
+        
         durationStartDateTime.setTime(currentDateTime.getTime());
-
+        
         // Looks to see if the current time is within a shift.
         let startRange = 0;
         while (startRange < 24) {
@@ -179,10 +179,24 @@ class Services {
 
             startRange += parseInt(duration);
         }
+        
 
         let durationEndDateTime = new Date(durationStartDateTime);
         
-        durationEndDateTime.setHours(durationEndDateTime.getHours() + parseInt(duration));
+        durationEndDateTime.setTime(durationEndDateTime.getTime() + parseInt(duration));
+        / OLD Way END
+        */
+        
+        // NEW Way START
+        let durationEndDateTime = new Date(startDateTime);
+        durationEndDateTime.setTime(currentDateTime.getTime());
+
+        let durationStartDateTime = new Date(durationEndDateTime);
+        
+        durationStartDateTime.setTime(durationStartDateTime.getTime() - (parseInt(duration) * 60 * 60 * 1000));
+        // NEW Way END
+        
+        console.log(durationStartDateTime, durationEndDateTime, duration);
 
         operationalDateTime.currentDateTime = currentDateTime.toLocaleDateString('fr-CA', {year: "numeric", month: "2-digit", day: "2-digit"});
         operationalDateTime.currentDateTime += " " + currentDateTime.toLocaleTimeString("en-US", {hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit"});

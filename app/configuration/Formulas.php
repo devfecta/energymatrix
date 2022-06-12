@@ -56,10 +56,10 @@
 
             $data = array();
             // Creates an array data points that are greater than the constraint.
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " NEW SET" . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " NEW SET" . "\n", 3, ERROR_LOG);
             foreach ($dataPoints as $dataPoint) {
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $dataPoint->getDataValue() . " = " . $dataPoint->getDate() . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $dataPoint->getDataValue() . " = " . $dataPoint->getDate() . "\n", 3, ERROR_LOG);
                 
 
                 if ($dataPoint->getDataValue() > $constraint) {
@@ -82,29 +82,29 @@
          * General Formulas
          */
         public function addition($value1, $value2) {
-            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
             return $value1 + $value2;
         }
 
         public function subtraction($value1, $value2) {
-            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
             // Flipped values because value2 is the sensor data.
             return $value1 - $value2;
         }
 
         public function multiplication($value1, $value2) {
-            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
             return $value1 * $value2;
         }
 
         public function division($value1, $value2) {
-            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
             // Flipped values because value2 is the sensor data.
             return $value1 / $value2;
         }
 
         public function exponentiation($value1, $value2) {
-            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("value1" => $value1, "value2" => $value2), JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
             return $value1 ^ $value2;
         }
         /**
@@ -147,7 +147,7 @@
          * c = Power Factor (%) (input value)
         */
         public function power($current, $voltage, $phaseNumber, $powerFactor) {
-            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("current" => $current, "voltage" => $voltage, "phaseNumber" => $phaseNumber, "powerFactor" => $powerFactor), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("File: " . __FILE__ . "\nLine: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode(array("current" => $current, "voltage" => $voltage, "phaseNumber" => $phaseNumber, "powerFactor" => $powerFactor), JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
             $kw = $current * $voltage * sqrt($phaseNumber) * $powerFactor / 1000;
             return $kw;
         }

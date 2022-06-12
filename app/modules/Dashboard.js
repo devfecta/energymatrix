@@ -101,7 +101,7 @@ class Dashboard extends Services {
                                             const bulletChartDiv = document.createElement("div");
                                             bulletChartDiv.setAttribute("id", "bulletChart" + trend.id);
                                             bulletChartDiv.setAttribute("class", "col-md-6 m-2 p-1");
-                                            bulletChartDiv.innerHTML = `<p style="font-weight: bold">` + trend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue + trend.unit
+                                            bulletChartDiv.innerHTML = `<p id=bulletChartHeader${trend.id} style="font-weight: bold">` + trend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue.toFixed(3) + trend.unit
                                                                     + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${trend.operationalStartTime} - ${trend.operationalEndTime}</span></p>`;
                                             // Need to append to dashboard to get the clientWidth.                        
                                             dashboard.append(bulletChartDiv);
@@ -196,6 +196,10 @@ class Dashboard extends Services {
                                                     
                                                     trend.unit = visibleTrend.unit;
                                                     const bulletChartDiv = document.querySelector("#bulletChart" + trend.id);
+                                                    bulletChartDiv.innerHTML = `<p id=bulletChartHeader${trend.id} style="font-weight: bold">` + trend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue.toFixed(3) + trend.unit
+                                                                    + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${trend.operationalStartTime} - ${trend.operationalEndTime}</span></p>`;
+                                                    bulletChartDiv.querySelector("#bulletChartHeader" + trend.id).innerHTML = trend.trendName + ` <span style="color: #e8ab02">(Latest Data Point: ` + trend.latestDataPointValue.toFixed(3) + trend.unit
+                                                    + `)</span><br/><span style="font-size: 85%; color: #aaa">Duration: ${trend.operationalStartTime} - ${trend.operationalEndTime}</span>`;
                                                     // Recreates Bullet Chart
                                                     charting.getBulletChart(bulletChartDiv, trend);
 

@@ -32,36 +32,48 @@
         case 'POST':
             //$content = '';
 
-            if (sizeof($webhookArray['sensorMessages']) > 0) {
+            try {
 
-                $dataPoints = new DataPoints();
-                $dataPoints->processWebhook($webhookArray['sensorMessages']);
-                /*
-                // Each Sensor
-                foreach($webhookArray['sensorMessages'] as $sensor) {
-                            
-                    $userId = (int)explode(' | ', $sensor['sensorName'])[0];
-                    companyExists($userId);
+                if (sizeof($webhookArray['sensorMessages']) > 0) {
 
-                    // Needed to convert the time stamp from UTC to CST
-                    $utcDateTime = new DateTime($sensor['messageDate'], new DateTimeZone('UTC'));
-                    $utcDateTime->setTimezone(new DateTimeZone('America/Chicago'));
-                    $sensor['messageDate'] = $utcDateTime->format('Y-m-d H:i:s');
-
-                    $result = $dataPoints->addDataPoint($userId, $sensor);
-                    //echo var_dump($result);
+                    $dataPoints = new DataPoints();
+                    $dataPoints->processWebhook($webhookArray['sensorMessages']);
+                    /*
+                    // Each Sensor
+                    foreach($webhookArray['sensorMessages'] as $sensor) {
+                                
+                        $userId = (int)explode(' | ', $sensor['sensorName'])[0];
+                        companyExists($userId);
+    
+                        // Needed to convert the time stamp from UTC to CST
+                        $utcDateTime = new DateTime($sensor['messageDate'], new DateTimeZone('UTC'));
+                        $utcDateTime->setTimezone(new DateTimeZone('America/Chicago'));
+                        $sensor['messageDate'] = $utcDateTime->format('Y-m-d H:i:s');
+    
+                        $result = $dataPoints->addDataPoint($userId, $sensor);
+                        //echo var_dump($result);
+                    }
+                    */
                 }
-                */
+                else {
+                    mail("devfecta@gmail.com", "Kinergetics's Webhook Data", "Webhook didn't send any sensor data.");
+                }
+    
             }
-            else {
-                mail("monitor@gmail.com", "Kinergetics's Webhook Data", "Webhook didn't send any sensor data.");
+            catch (PDOException $pdo) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/home/vg011web10/90/57/2025790/web/app/php-errors.log");
             }
+            catch (Exception $e) {
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/home/vg011web10/90/57/2025790/web/app/php-errors.log");
+            }
+
+            
 
             //file_put_contents('data.json', $content, FILE_APPEND);
 
             break;
         default:
-            mail("monitor@gmail.com", "Kinergetics's Webhook Data", "Webhook didn't send a POST");
+            mail("devfecta@gmail.com", "Kinergetics's Webhook Data", "Webhook didn't send a POST");
             break;
     }
 

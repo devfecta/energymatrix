@@ -68,10 +68,10 @@
 
             }
             catch(PDOException $pdo) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
@@ -99,16 +99,16 @@
 
             }
             catch(PDOException $pdo) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
             }
 
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends, JSON_PRETTY_PRINT). "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trends, JSON_PRETTY_PRINT). "\n", 3, ERROR_LOG);
 
             return $trends;
 
@@ -122,7 +122,7 @@
 
                 $trend = json_decode($trend["trend"], false);
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " trend=" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " trend=" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
                 
                 $lastAverage = 0;
                 $currentAverage = 0;
@@ -134,7 +134,7 @@
                 error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . 
                 " operationalStartTime=" . $trend->operationalStartTime . 
                 " operationalEndTime=" . $trend->operationalEndTime . 
-                "\n", 3, "/var/www/html/app/php-errors.log");
+                "\n", 3, ERROR_LOG);
                 */
                 $trendSearchData = array("trendId" => $trend->trendId, "startDate" => $trend->operationalStartTime, "endDate" => $trend->operationalEndTime);
 
@@ -164,10 +164,10 @@
 
                         // Gets all of the Min and Max data points that fall within the Operational Duration
                         $dataPointDateTime = strtotime($point["date_time"]);
-                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " dataPointDateTime=" . $dataPointDateTime . " operationalEndTime=" . $operationalEndTime . " operationalStartTime=" . $operationalStartTime . "\n", 3, "/var/www/html/app/php-errors.log");
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " dataPointDateTime=" . $dataPointDateTime . " operationalEndTime=" . $operationalEndTime . " operationalStartTime=" . $operationalStartTime . "\n", 3, ERROR_LOG);
                         if ($dataPointDateTime >= $operationalStartTime && $dataPointDateTime <= $operationalEndTime) {
 
-                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " point=" . json_encode($point, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " point=" . json_encode($point, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
                     
                             $dataPoint = new DataPoint();
                             $dataPoint->setDataPointId($point["id"]);
@@ -193,7 +193,7 @@
                 error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . 
                 " lastOperationalStartTime=" . $lastOperationalStartTime . 
                 " lastOperationalEndTime=" . $lastOperationalEndTime . 
-                "\n", 3, "/var/www/html/app/php-errors.log");
+                "\n", 3, ERROR_LOG);
                 */
                 $trendSearchData = array("trendId" => $trend->trendId, "startDate" => $lastOperationalStartTime, "endDate" => $lastOperationalEndTime);
 
@@ -212,11 +212,11 @@
                     
                     // Gets all data points that only fall within the Operational Min and Max
                     if ($dataPointDataValue >= $operationalMinimum && $dataPointDataValue <= $operationalMaximum) {
-                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " test " ."\n", 3, "/var/www/html/app/php-errors.log");
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " test " ."\n", 3, ERROR_LOG);
                         $dataPointDateTime = strtotime($point["date_time"]);
 
                         if ($dataPointDateTime >= $lastOperationalStartTime && $dataPointDateTime <= $lastOperationalEndTime) {
-                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " point=" . json_encode($point, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " point=" . json_encode($point, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
                             $dataPoint = new DataPoint();
                             $dataPoint->setDataPointId($point["id"]);
                             $dataPoint->setUserId($point["user_id"]);
@@ -242,7 +242,7 @@
 
             }
             catch (Exception $e) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
 
             // Gets the last data point inserted from the web hook for the trend
@@ -265,7 +265,7 @@
          */
         public function insertUserConfiguredTrend($formData) {
 
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($formData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($formData, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
 
             $result = array();
 
@@ -316,10 +316,10 @@
             }
             catch(PDOException $pdo) {
                 $connection->rollback();
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
@@ -445,10 +445,10 @@
 
             }
             catch(PDOException $pdo) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
@@ -459,7 +459,7 @@
 
         public function getConfiguredTrend($trendSearchData) {
 
-            // error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            // error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
             $trend = array();
             $currentTrend = array();
 
@@ -477,7 +477,7 @@
                 $currentTrend['userId'] = $trend['userId'];
                 $currentTrend['sensorId'] = $trend['sensorId'];
 
-                // error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                // error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
 
                 // Associated Trends
                 $associatedTrends = json_decode($trend['associatedTrends'], true);
@@ -492,22 +492,22 @@
 
                     $trendArray = $statement->rowCount() > 0 ? $statement->fetchAll(PDO::FETCH_ASSOC) : array();
 
-                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trendArray, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trendArray, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
                     
                     foreach ($trendArray as $associatedTrendTemp) {
                         $tempTrendSearchData['trendId'] = (int) $associatedTrendTemp["id"];
                         $tempTrendSearchData['startDate'] = $trendSearchData['startDate'];
                         $tempTrendSearchData['endDate'] = $trendSearchData['endDate'];
-                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($this->getConfiguredTrend($tempID), JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                        //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($this->getConfiguredTrend($tempID), JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
                 
                         $associatedTrendsArray[] = $this->getConfiguredTrend($tempTrendSearchData);
                     }
                     
                 }
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($associatedTrendsArray, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($associatedTrendsArray, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
 
                 $trend["associatedTrends"] = $associatedTrendsArray;
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
                             
                 // Inputs
                 $inputs = json_decode($trend['inputs'], true);
@@ -522,29 +522,29 @@
 
                 $trend["inputs"] = $inputsArray;
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
                 
                 $sensor = Sensor::getSensor($trend["sensorId"]);
                 /*
                 error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                     "StartDate: " . $trendSearchData['startDate'] . " EndDate: " . $trendSearchData['endDate']
-                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                    . "\n", 3, ERROR_LOG);
                 */
                 $DataPoints = new DataPoints();
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . "userId=" . $trend["userId"] . " sensorId=" .  $trend["sensorId"] . " startDate=" .  $trendSearchData['startDate'] . " endDate=" .  $trendSearchData['endDate'] . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trendSearchData, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . "userId=" . $trend["userId"] . " sensorId=" .  $trend["sensorId"] . " startDate=" .  $trendSearchData['startDate'] . " endDate=" .  $trendSearchData['endDate'] . "\n", 3, ERROR_LOG);
                 // Array of Raw Data Points
                 $rawDataPoints = $DataPoints->getSensorDataPoints($trend["userId"], $trend["sensorId"], $trendSearchData['startDate'], $trendSearchData['endDate']);
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($rawDataPoints, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($rawDataPoints, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
                 /*
                 error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                     "userId=" . $trend["userId"] . " sensorId=" . $trend["sensorId"] . " startDate=" . $trendSearchData['startDate'] . " endDate=" . $trendSearchData['endDate']
-                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                    . "\n", 3, ERROR_LOG);
                 */
                 /*
                 error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                 "rawDataPoints sizeof: " . sizeof($rawDataPoints)
-                . "\n", 3, "/var/www/html/app/php-errors.log");
+                . "\n", 3, ERROR_LOG);
                 */
                 $trendDataPoints = array(
                     "trend" => $trend
@@ -557,7 +557,7 @@
                 /*
                 error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                     "rawDataPoints sizeof: " . sizeof($rawDataPoints)
-                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                    . "\n", 3, ERROR_LOG);
                 */
                 $tempTrendSearchData['startDate'] = $trendSearchData['startDate'];
                 $tempTrendSearchData['endDate'] = $trendSearchData['endDate'];
@@ -577,15 +577,15 @@
 /*
                     error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                     "1 TrendData: " . json_encode($trend, JSON_PRETTY_PRINT)
-                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                    . "\n", 3, ERROR_LOG);
                   error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                     "1 TrendData: " . json_encode($trend["inputs"]["general"]["secondTrendParameter"] .",". $trend["associatedTrends"][1]["trend"]["id"], JSON_PRETTY_PRINT)
-                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                    . "\n", 3, ERROR_LOG);
 */
 /*
                     error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                     "1 TrendData: " . json_encode($tempTrendSearchData, JSON_PRETTY_PRINT)
-                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                    . "\n", 3, ERROR_LOG);
 */
                     if (isset($trend["inputs"]["general"]["secondTrendParameter"]) && $trend["inputs"]["general"]["secondTrendParameter"] == $trend["associatedTrends"][1]["trend"]["id"]) {
                         $tempTrendSearchData['trendId'] = (int) $trend["inputs"]["general"]["secondTrendParameter"];
@@ -600,7 +600,7 @@
 /*
                     error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                     "1 TrendData: " . json_encode($tempTrendSearchData, JSON_PRETTY_PRINT)
-                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                    . "\n", 3, ERROR_LOG);
 */
                     $associatedTrendsArray2 = ($tempTrendSearchData['trendId']) ? $this->getConfiguredTrend($tempTrendSearchData) : array();
                 }
@@ -611,7 +611,7 @@
                     $firstValue = 0;
                     $secondValue = 0;
 
-                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend["inputs"]["general"], JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+                    //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend["inputs"]["general"], JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
 
                     if (isset($trend["inputs"]["general"])) {
                         if (!isset($trend["inputs"]["general"]["firstParameter"])) {
@@ -633,7 +633,7 @@
                             /*
                             error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" 
                                     . json_encode($associatedTrendsArray2, JSON_PRETTY_PRINT) 
-                                    . "\n", 3, "/var/www/html/app/php-errors.log");
+                                    . "\n", 3, ERROR_LOG);
                             */
                             $secondValue = $associatedTrendsArray2["points"][$index]["data_value"];
 // ADD BACK IN
@@ -656,12 +656,12 @@
                     /*
                     error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                         "F: " . $firstValue . " S: " . $secondValue
-                        . "\n", 3, "/var/www/html/app/php-errors.log");
+                        . "\n", 3, ERROR_LOG);
                     */
                     /*
                     error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                         json_encode($trend["inputs"], JSON_PRETTY_PRINT)
-                        . "\n", 3, "/var/www/html/app/php-errors.log");
+                        . "\n", 3, ERROR_LOG);
                     */
                     if ($rawDataPoint->getDataPointId() > 0) {
                         switch ($trend["trendFormula"]) {
@@ -695,7 +695,7 @@
                             case "chillerEfficiency":
                                 // WIP chillerEfficiency($massFlow, $heatCapacity, $chilledMediaReturn, $chilledMediaSupply, $power);
                             default:
-                                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $trend["trendFormula"] . " Formula Not Found" . "\n", 3, "/var/www/html/app/php-errors.log");
+                                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $trend["trendFormula"] . " Formula Not Found" . "\n", 3, ERROR_LOG);
                                 break;
                         }
                     }
@@ -706,7 +706,7 @@
                     /*
                     error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . 
                                 "DataPointValue: " . json_encode($trendDataPoints["points"], JSON_PRETTY_PRINT)
-                                . "\n", 3, "/var/www/html/app/php-errors.log");
+                                . "\n", 3, ERROR_LOG);
                     */
                     $dataPointType = ($trend["unit"]) ? $trend["unit"] : 'undefined';
 
@@ -736,19 +736,19 @@
                 $trend['startDate'] = $trendDates['startDate'];
                 $trend['endDate'] = $trendDates['endDate'];
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend) . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend) . "\n", 3, ERROR_LOG);
             }
             catch(PDOException $pdo) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
             }
             
-            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . "\n" . json_encode($trend, JSON_PRETTY_PRINT) . "\n", 3, ERROR_LOG);
 
             return $trend;
         }
@@ -804,10 +804,10 @@
             }
             catch(PDOException $pdo) {
                 $connection->rollback();
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
@@ -825,7 +825,7 @@
         public function deleteConfiguredTrend($trendId) {
 
             $result = false;
-            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Trend ID: " . $trendId . "\n", 3, "/var/www/html/app/php-errors.log");
+            //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Trend ID: " . $trendId . "\n", 3, ERROR_LOG);
            
             try {
                 $connection = Configuration::openConnection();
@@ -840,7 +840,7 @@
 
                 foreach ($associatedTrends as $associatedTrend) {
                     if(isset($associatedTrend->trendId)) {
-                        //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Associated Trend ID: " . $associatedTrend->trendId . "\n", 3, "/var/www/html/app/php-errors.log");
+                        //error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " Associated Trend ID: " . $associatedTrend->trendId . "\n", 3, ERROR_LOG);
                         $this->deleteConfiguredTrend($associatedTrend->trendId);
                     }
                 }
@@ -851,10 +851,10 @@
                 
             }
             catch(PDOException $pdo) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 Configuration::closeConnection();
@@ -881,10 +881,10 @@
                 
             }
             catch(PDOException $pdo) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 Configuration::closeConnection();
@@ -910,17 +910,17 @@
 
                 $isVisible = ($data->isVisible === 'true')? 1 : 0;
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $data->trendId . " == " . $data->isVisible . " == " . $isVisible . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $data->trendId . " == " . $data->isVisible . " == " . $isVisible . "\n", 3, ERROR_LOG);
 
                 $statement->bindParam(":trendId", $data->trendId, PDO::PARAM_INT);
                 $statement->bindParam(":isVisible", $isVisible, PDO::PARAM_INT);
                 $result = $statement->execute() ? true : false;
             }
             catch(PDOException $pdo) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
@@ -945,17 +945,17 @@
 
                 $isVisible = ($data->isVisible === 'true')? 1 : 0;
 
-                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $data->trendId . " == " . $data->isVisible . " == " . $isVisible . "\n", 3, "/var/www/html/app/php-errors.log");
+                //error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $data->trendId . " == " . $data->isVisible . " == " . $isVisible . "\n", 3, ERROR_LOG);
 
                 $statement->bindParam(":trendId", $data->trendId, PDO::PARAM_INT);
                 $statement->bindParam(":isVisible", $isVisible, PDO::PARAM_INT);
                 $result = $statement->execute() ? true : false;
             }
             catch(PDOException $pdo) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(__FILE__ . " Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
@@ -980,10 +980,10 @@
 
             }
             catch(PDOException $pdo) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
@@ -1009,10 +1009,10 @@
 
             }
             catch(PDOException $pdo) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log("Line: " . __LINE__ . " - " . date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();

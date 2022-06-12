@@ -44,10 +44,10 @@
                 $sensor->setSensorDataType($results['dataType']);
             }
             catch (PDOException $pdo) {
-                error_log(date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(date('Y-m-d H:i:s') . " " . $pdo->getMessage() . "\n", 3, ERROR_LOG);
             }
             catch (Exception $e) {
-                error_log(date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, "/var/www/html/app/php-errors.log");
+                error_log(date('Y-m-d H:i:s') . " " . $e->getMessage() . "\n", 3, ERROR_LOG);
             }
             finally {
                 $connection = Configuration::closeConnection();
